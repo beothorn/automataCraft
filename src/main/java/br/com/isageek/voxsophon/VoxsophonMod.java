@@ -19,26 +19,22 @@ public class VoxsophonMod
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        TileEntitySupplierPlaceholder voxsophonReaderSupplierPlaceholder = new TileEntitySupplierPlaceholder();
         RegisterStuff.registerBlockWithTileEntity(
             VoxsophonMod.MOD_ID,
             modEventBus,
-            voxsophonReaderSupplierPlaceholder,
             "voxsophon_reader",
-            () -> new BlockWithTileEntity(
+            (voxsophonReaderSupplierPlaceholder) -> new BlockWithTileEntity(
                 voxsophonReaderSupplierPlaceholder,
                 Block.Properties.of(Material.STONE, MaterialColor.STONE)
             ),
             (registry) -> new VoxsophonReaderTileEntity((TileEntityType<VoxsophonReaderTileEntity>) registry.get())
         );
 
-        TileEntitySupplierPlaceholder voxsophonMoverSupplierPlaceholder = new TileEntitySupplierPlaceholder();
         RegisterStuff.registerBlockWithTileEntity(
                 VoxsophonMod.MOD_ID,
                 modEventBus,
-                voxsophonMoverSupplierPlaceholder,
                 "voxsophon_mover",
-                () -> new BlockWithTileEntity(
+                (voxsophonMoverSupplierPlaceholder) -> new BlockWithTileEntity(
                         voxsophonMoverSupplierPlaceholder,
                         Block.Properties.of(Material.STONE, MaterialColor.STONE)
                 ),

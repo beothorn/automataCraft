@@ -19,16 +19,17 @@ public class RegisterStuff {
     public static void registerBlockWithTileEntity(
             String modId,
             IEventBus modEventBus,
-            TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder,
             String blockName,
-            Supplier<Block> blockSupplier,
+            Function<TileEntitySupplierPlaceholder, Block> blockSupplier,
             Function<RegistryObject<TileEntityType<? extends TileEntity>>, ? extends TileEntity> tileEntitySupplier
     ) {
+        TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder = new TileEntitySupplierPlaceholder();
+
         RegistryObject<Block> blockRegister = registerBlock(
             modId,
             modEventBus,
             blockName,
-            blockSupplier
+            () -> blockSupplier.apply(tileEntitySupplierPlaceholder)
         );
 
         DeferredRegister<TileEntityType<?>> tileEntityTypeDeferredRegister = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, modId);
