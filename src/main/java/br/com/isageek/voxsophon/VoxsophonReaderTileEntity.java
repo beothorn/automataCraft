@@ -8,11 +8,11 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class VoxsophonTileEntity extends TileEntity implements ITickableTileEntity {
+public class VoxsophonReaderTileEntity extends TileEntity implements ITickableTileEntity {
 
     private int moveCount = 0;
 
-    public VoxsophonTileEntity(TileEntityType<VoxsophonTileEntity> tileEntityType) {
+    public VoxsophonReaderTileEntity(TileEntityType<VoxsophonReaderTileEntity> tileEntityType) {
         super(tileEntityType);
     }
 
@@ -37,7 +37,7 @@ public class VoxsophonTileEntity extends TileEntity implements ITickableTileEnti
                     0,
                     0
             );
-            VoxsophonTileEntity blockEntity = (VoxsophonTileEntity)world.getBlockEntity(newBlockPosition);
+            VoxsophonReaderTileEntity blockEntity = (VoxsophonReaderTileEntity)world.getBlockEntity(newBlockPosition);
             blockEntity.setMoveCount(moveCount + 1);
             world.removeBlock(
                     blockPos,

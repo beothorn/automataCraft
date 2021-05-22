@@ -7,11 +7,11 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-public class VoxsophonBlock extends Block {
+public class BlockWithTileEntity extends Block {
 
-    private VoxsophonMod.TileEntitySupplierPlaceholder tileEntityType;
+    private TileEntitySupplierPlaceholder tileEntityType;
 
-    public VoxsophonBlock(VoxsophonMod.TileEntitySupplierPlaceholder tileEntityType, Properties props) {
+    public BlockWithTileEntity(TileEntitySupplierPlaceholder tileEntityType, Properties props) {
         super(props);
         this.tileEntityType = tileEntityType;
     }
