@@ -1,4 +1,4 @@
-package br.com.isageek.voxsophon;
+package br.com.isageek.voxsophon.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,7 +11,10 @@ public class BlockWithTileEntity extends Block {
 
     private TileEntitySupplierPlaceholder tileEntityType;
 
-    public BlockWithTileEntity(TileEntitySupplierPlaceholder tileEntityType, Properties props) {
+    public BlockWithTileEntity(
+        TileEntitySupplierPlaceholder tileEntityType,
+        Properties props
+    ) {
         super(props);
         this.tileEntityType = tileEntityType;
     }
@@ -26,4 +29,5 @@ public class BlockWithTileEntity extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return this.tileEntityType.get();
     }
+
 }

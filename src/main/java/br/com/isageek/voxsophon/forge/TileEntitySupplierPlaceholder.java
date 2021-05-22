@@ -1,4 +1,4 @@
-package br.com.isageek.voxsophon;
+package br.com.isageek.voxsophon.forge;
 
 import net.minecraft.tileentity.TileEntity;
 

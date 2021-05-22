@@ -1,4 +1,4 @@
-package br.com.isageek.voxsophon;
+package br.com.isageek.voxsophon.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -14,9 +14,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class RegisterStuff {
+public class Register {
 
-    public static void registerBlockWithTileEntity(
+    public static void blockWithTileEntity(
             String modId,
             IEventBus modEventBus,
             String blockName,
@@ -25,7 +25,7 @@ public class RegisterStuff {
     ) {
         TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder = new TileEntitySupplierPlaceholder();
 
-        RegistryObject<Block> blockRegister = registerBlock(
+        RegistryObject<Block> blockRegister = block(
             modId,
             modEventBus,
             blockName,
@@ -42,7 +42,7 @@ public class RegisterStuff {
         tileEntityTypeDeferredRegister.register(modEventBus);
     }
 
-    private static RegistryObject<Block> registerBlock(
+    private static RegistryObject<Block> block(
         String modId,
         IEventBus modEventBus,
         String blockName,
