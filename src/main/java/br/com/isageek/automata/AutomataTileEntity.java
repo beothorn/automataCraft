@@ -1,8 +1,6 @@
-package br.com.isageek.voxsophon;
+package br.com.isageek.automata;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -12,12 +10,12 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoxsophonMoverTileEntity extends TileEntity implements ITickableTileEntity {
+public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
     List<BlockState> replication;
 
-    public VoxsophonMoverTileEntity(
-        TileEntityType<VoxsophonMoverTileEntity> tileEntityType
+    public AutomataTileEntity(
+        TileEntityType<AutomataTileEntity> tileEntityType
     ) {
         super(tileEntityType);
     }
@@ -58,8 +56,10 @@ public class VoxsophonMoverTileEntity extends TileEntity implements ITickableTil
                             0,
                             0
                     );
-                    VoxsophonMoverTileEntity blockEntity = (VoxsophonMoverTileEntity) world.getBlockEntity(newBlockPosition);
+                    AutomataTileEntity blockEntity = (AutomataTileEntity) world.getBlockEntity(newBlockPosition);
                     blockEntity.setReplication(newReplication);
+                }else{
+                    return;
                 }
             } else {
                 ArrayList<BlockState> newReplication = new ArrayList<>();
@@ -76,7 +76,7 @@ public class VoxsophonMoverTileEntity extends TileEntity implements ITickableTil
                         0,
                         0
                 );
-                VoxsophonMoverTileEntity blockEntity = (VoxsophonMoverTileEntity) world.getBlockEntity(newBlockPosition);
+                AutomataTileEntity blockEntity = (AutomataTileEntity) world.getBlockEntity(newBlockPosition);
                 blockEntity.setReplication(newReplication);
             }
 

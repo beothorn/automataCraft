@@ -1,4 +1,4 @@
-package br.com.isageek.voxsophon.forge;
+package br.com.isageek.automata.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;

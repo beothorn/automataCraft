@@ -1,7 +1,7 @@
-package br.com.isageek.voxsophon;
+package br.com.isageek.automata;
 
-import br.com.isageek.voxsophon.forge.BlockWithTileEntity;
-import br.com.isageek.voxsophon.forge.TileEntitySupplierPlaceholder;
+import br.com.isageek.automata.forge.BlockWithTileEntity;
+import br.com.isageek.automata.forge.TileEntitySupplierPlaceholder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -9,12 +9,12 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 
-public class VoxsophonBlock extends BlockWithTileEntity {
+public class AutomataBlock extends BlockWithTileEntity {
 
     public static final BooleanProperty loaded = BooleanProperty.create("loaded");
 
-    public VoxsophonBlock(TileEntitySupplierPlaceholder tileEntityType) {
-        super(tileEntityType, Block.Properties.of(Material.STONE, MaterialColor.STONE));
+    public AutomataBlock(TileEntitySupplierPlaceholder tileEntityType) {
+        super(tileEntityType, Block.Properties.of(Material.STONE, MaterialColor.STONE).harvestLevel(0));
     }
 
     @Override

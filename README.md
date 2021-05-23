@@ -1,85 +1,75 @@
-# Voxsophon
-
-## Idea
+# AutomataCraft
 
 A minecraft mod that adds a block that displaces other blocks.
 
-The block is programmable with other blocks by giving two patterns, previous state and nex state.
+The block is programmable with other blocks by giving two patterns, 
+match blocks and result blocks.
 
-Suppose you want to create a voxsophon that pulls a dirty block one position up.
+This mod adds:
 
-To code this into the voxsophon you start with a redstone block, then the Voxsophon
-and then add 6 blocks representing the previous state and 7 for the next state.
+- An automata block
+- A termination block
+- An air placeholder block
+- A automata placeholder block
 
-After that the terminator block.
+To use it add a terminator block, a 3x3 block construction for the match blocks,
+another 3x3 block construction for the result blocks, another terminator and the automata block.
 
-The Voxsophon never moves when in contact with a redstone block. 
+After creating the pattern, the automata will start working when the Terminator block is removed.
 
-Onm the pattern, a block of Redstone is the Voxsophon and a 
-block of Lapis Lazuli matches any block.
+Empty blocks (air) matches any block type.
 
-The order of the blocks is:
+## Example 1: pulls a dirty block one position up
 
-For the previous state
+Suppose you want to create an automata that pulls a dirty block one position up and moves one block.
 
-UP DOWN LEFT RIGHT BACK FRONT
+You could do this:
 
-and then the next state
+🟠 : Automata block
 
-UP CENTER DOWN LEFT RIGHT BACK FRONT
+🟦 : Automata placeholder block
 
-The amount of blocks of one type on the previous state must be the same as the next state.
+🟥 : Terminator
 
-So for example, if you want to make the voxsophon pull one dirt block up 
-the y axis you would have:
+🟨 : Empty (air)
 
-🟠 : Voxsophon block
+🟫 : Dirt
 
-🟥 : Block of Redstone
+🟪 : Not evaluated
 
-🟦 : Block of Lapis Lazuli
-
-🟨 : air
-
-🟪 : crafting table
-
-🟫 : dirt
-
+Side view:
 ```
-🟥      🟠         🟨 🟫  🟦   🟦   🟦   🟦     🟨 🟥    🟫   🟦  🟦    🟦  🟦      🟪
-Start | Voxsophon | UP DOWN LEFT RIGHT BACK FRONT | UP CENTER DOWN LEFT RIGHT BACK FRONT | Terminator
-            ^Previous                       ^Next
+🟪🟨🟨🟨🟨🟨🟨🟪
+🟥🟨🟪🟨🟨🟫🟦🟥🟠
+🟪🟨🟫🟨🟨🟨🟨🟪
 ```
-  
+ 
 Explanation:
 
-First block is a Redstone block. It is the first for two reasons. It gives the direction
-of the pattern and it holds the Voxsophon in place.
+First column has the terminator block. Anything around it is not taken into consideration.
 
-Second one is the Voxsophon. If the pattern is correct it will change textures to show
-it is loaded.
+Second has 9 empty (air) blocks. When evaluated this will match any configuration of blocks.
 
-First 6 blocks describes one possible configuration of blocks.
+On the third column, the center block is not considered because it will always be an automata block.
+The block under the automata is dirt (that is different from grass)
 
-It is understood that the Voxsophon is at the center.
+Fourth column has 9 empty (air) blocks. When evaluated this will match any configuration of blocks.
 
-We only care if the block above is free (air) and the one below is dirt.
+This is the last column from the matcher blocks. If the blocks around the automata matches this, 
+it will replace all blocks with the blocks from the result.
 
-So up is air, down is dirt, left right back and front are Lapis Lazuli, wich means any.
+Fifth column has 9 empty (air) blocks, this means that whatever blocks are there, they will not be replaced.
 
-After that comes 7 blocks describing what should be the next configuration after one tick.
+Sixth column has a dirt block in the center, this will replace the automata block.
 
-It is 7 because the center block now is included.
+Seventh block has an Automata placeholder. When the automata runs it will add a new automata block at this position.
 
-On the next configuration, we just swap air and dirt from the up and down positions.
+There is a maximun number of automata blocks that can be created this way.
 
-Up is dirt, center is the Voxsophon, down is air and we use "any" for the rest.
-
-The amount of blocks in must be the amount out, so one air, one dirt and 
-one Voxsophon.
-
-More than one pattern can be added after the first one.
-
-The last block is the termination block (a crafting table).
+# Example 2: Many patterns
 
 If you want more than one pattern just add the next sequence and then the terminator at the end.
+
+# Example 3: Glass corridor downwards
+
+# Example 4: Maze solver
