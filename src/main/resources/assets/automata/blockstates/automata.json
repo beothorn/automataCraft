@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "loaded=false": { "model": "automata:block/automata" },
+    "loaded=true": { "model": "automata:block/automata" }
+  }
+}

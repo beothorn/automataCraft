@@ -12,6 +12,7 @@ This mod adds:
 - An air placeholder block
 - A water placeholder block
 - A magma placeholder block
+- A bedrock placeholder block
 - A automata placeholder block
 
 To use it add a terminator block, a 3x3 block construction for the match blocks,
@@ -68,10 +69,20 @@ Seventh column has an Automata placeholder. When the automata runs it will add a
 
 Then a terminator and up to 20 ignored blocks before the autoata block.
 
-# Example 2: Many patterns
+# Example: Many patterns
+
+TODO:
 
 If you want more than one pattern just add the next sequence and then the terminator at the end.
 
-# Example 3: Glass corridor downwards
+# Example: Game of life
 
-# Example 4: Maze solver
+TODO:
+
+# Example: Glass corridor downwards
+
+TODO:
+
+# Example: Maze solver
+
+TODO:
