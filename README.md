@@ -10,6 +10,8 @@ This mod adds:
 - An automata block
 - A termination block
 - An air placeholder block
+- A water placeholder block
+- A magma placeholder block
 - A automata placeholder block
 
 To use it add a terminator block, a 3x3 block construction for the match blocks,
@@ -40,7 +42,7 @@ You could do this:
 Side view:
 ```
 🟪🟨🟨🟨🟨🟨🟨🟪
-🟥🟨🟪🟨🟨🟫🟦🟥🟠
+🟥🟨🟪🟨🟨🟫🟦🟥??????🟠
 🟪🟨🟫🟨🟨🟨🟨🟪
 ```
  
@@ -62,9 +64,9 @@ Fifth column has 9 empty (air) blocks, this means that whatever blocks are there
 
 Sixth column has a dirt block in the center, this will replace the automata block.
 
-Seventh block has an Automata placeholder. When the automata runs it will add a new automata block at this position.
+Seventh column has an Automata placeholder. When the automata runs it will add a new automata block at this position.
 
-There is a maximun number of automata blocks that can be created this way.
+Then a terminator and up to 20 ignored blocks before the autoata block.
 
 # Example 2: Many patterns
 

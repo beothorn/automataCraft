@@ -42,7 +42,7 @@ public class Register {
         tileEntityTypeDeferredRegister.register(modEventBus);
     }
 
-    private static RegistryObject<Block> block(
+    public static RegistryObject<Block> block(
         String modId,
         IEventBus modEventBus,
         String blockName,
