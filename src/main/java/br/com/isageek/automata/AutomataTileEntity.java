@@ -9,8 +9,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import static br.com.isageek.automata.BlockStateHolder.b;
-
 public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
     private BlockTree blockTree;
@@ -19,10 +17,11 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     private final Block airPlaceholder;
     private final Block waterPlaceholder;
     private final Block lavaPlaceholder;
+    private final Block bedrockPlaceholder;
     private final TileEntityType<AutomataTileEntity> tileEntityType;
 
     private boolean loaded = false;
-    private int wait = 30;
+    private int wait = 10;
 
     public AutomataTileEntity(
             TileEntityType<AutomataTileEntity> tileEntityType,
@@ -31,7 +30,8 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block termination,
             Block airPlaceholder,
             Block waterPlaceholder,
-            Block lavaPlaceholder
+            Block lavaPlaceholder,
+            Block bedrockPlaceholder
     ) {
         super(tileEntityType);
         this.tileEntityType = tileEntityType;
@@ -41,6 +41,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         this.airPlaceholder = airPlaceholder;
         this.waterPlaceholder = waterPlaceholder;
         this.lavaPlaceholder = lavaPlaceholder;
+        this.bedrockPlaceholder = bedrockPlaceholder;
     }
 
     public void setBlockTree(BlockTree blockTree){
@@ -55,37 +56,37 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         int yOffset,
         int zOffset
     ){
-        return BlockStateHolder.b(world.getBlockState(automataBlockPosition.offset(xOffset, yOffset, zOffset)));
+        BlockState blockState = world.getBlockState(automataBlockPosition.offset(xOffset, yOffset, zOffset));
+        if(blockState.getBlock() == airPlaceholder) return BlockStateHolder.b(Blocks.AIR.defaultBlockState());
+        if(blockState.getBlock() == waterPlaceholder) return BlockStateHolder.b(Blocks.WATER.defaultBlockState());
+        if(blockState.getBlock() == lavaPlaceholder) return BlockStateHolder.b(Blocks.LAVA.defaultBlockState());
+        if(blockState.getBlock() == bedrockPlaceholder) return BlockStateHolder.b(Blocks.BEDROCK.defaultBlockState());
+        return BlockStateHolder.b(blockState);
     }
 
-    private BlockStateHolder[] startingAt(
+    private BlockStateHolder[] surrounding(
             World world,
-            BlockPos blockPos,
-            int axis,
-            int xOffset,
-            int yOffset,
-            int zOffset
+            BlockPos blockPos
     ){
         BlockStateHolder[] result = new BlockStateHolder[27];
 
         int i = 0;
-        for (int a = 0; a < 3; a++) {
-            for (int b = 0; b < 3; b++) {
-                for (int c = 0; c < 3; c++) {
-                    if(axis == 0){
-                        result[i++] =  newStateHolderForRelativePosition(
-                                world,
-                                blockPos,
-                                a+xOffset,
-                                b+yOffset,
-                                c+zOffset
-                        );
-                    }
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    result[i++] =  newStateHolderForRelativePosition(
+                        world,
+                        blockPos,
+                        x,
+                        y,
+                        z
+                    );
                 }
             }
         }
 
         return result;
+
     }
 
     @Override
@@ -118,15 +119,14 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block maybeTerminator = w.getBlockState(maybeTerminatorPosition).getBlock();
             if(maybeTerminator == termination){
                 loaded = true;
-
-                BlockStateHolder[] match1 = startingAt(w, p,0, -7, -1, -1);
-                BlockStateHolder[] result1 = startingAt(w, p, 0, -4, -1, -1);
+                BlockStateHolder[] match1 = surrounding(w, p.offset(-6, 0, 0));
+                BlockStateHolder[] result1 = surrounding(w, p.offset(-3, 0, 0));
                 blockTree.addPattern(match1, result1);
             }
         }else{
             if(loaded){
                 BlockState defaultBlockState = getBlockState().getBlock().defaultBlockState();
-                BlockStateHolder[] toReplace = blockTree.getResultFor(startingAt(w, p,0, -3, -1, -1));
+                BlockStateHolder[] toReplace = blockTree.getReplacementFor(surrounding(w, p));
                 if(toReplace != null){
                     int i = 0;
                     for (int x = -1; x <= 1; x++) {
@@ -134,36 +134,41 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
                             for (int z = -1; z <= 1; z++) {
                                 BlockStateHolder blockStateHolder = toReplace[i++];
 
-                                if(blockStateHolder.blockState.getBlock() == automataPlaceholder){
-                                    w.setBlock(
-                                            p.offset(x, y, z),
-                                            defaultBlockState,
-                                            0,
-                                            0
-                                    );
+                                if(w.getBlockState(p.offset(x, y, z)).getBlock() != Blocks.BEDROCK){
+                                    if(blockStateHolder.blockState.getBlock() == automataPlaceholder){
+                                        w.setBlock(
+                                                p.offset(x, y, z),
+                                                defaultBlockState,
+                                                0,
+                                                0
+                                        );
 
-                                    AutomataTileEntity blockEntity = (AutomataTileEntity) w.getBlockEntity(p.offset(x, y, z));
-                                    blockEntity.setBlockTree(this.blockTree);
-                                } else{
+                                        AutomataTileEntity blockEntity = (AutomataTileEntity) w.getBlockEntity(p.offset(x, y, z));
+                                        blockEntity.setBlockTree(this.blockTree);
+                                    } else{
 
-                                    BlockState blockState = blockStateHolder.blockState;
-                                    if(blockStateHolder.blockState.getBlock() == airPlaceholder){
-                                        blockState = Blocks.AIR.defaultBlockState();
+                                        BlockState blockState = blockStateHolder.blockState;
+                                        if(blockStateHolder.blockState.getBlock() == airPlaceholder){
+                                            blockState = Blocks.AIR.defaultBlockState();
+                                        }
+                                        if(blockStateHolder.blockState.getBlock() == waterPlaceholder){
+                                            blockState = Blocks.WATER.defaultBlockState();
+                                        }
+                                        if(blockStateHolder.blockState.getBlock() == lavaPlaceholder){
+                                            blockState = Blocks.LAVA.defaultBlockState();
+                                        }
+                                        if(blockStateHolder.blockState.getBlock() == bedrockPlaceholder){
+                                            blockState = Blocks.OBSIDIAN.defaultBlockState();
+                                        }
+
+
+                                        w.setBlock(
+                                                p.offset(x, y, z),
+                                                blockState,
+                                                0,
+                                                0
+                                        );
                                     }
-                                    if(blockStateHolder.blockState.getBlock() == waterPlaceholder){
-                                        blockState = Blocks.WATER.defaultBlockState();
-                                    }
-                                    if(blockStateHolder.blockState.getBlock() == lavaPlaceholder){
-                                        blockState = Blocks.LAVA.defaultBlockState();
-                                    }
-
-
-                                    w.setBlock(
-                                            p.offset(x, y, z),
-                                            blockState,
-                                            0,
-                                            0
-                                    );
                                 }
                             }
                         }

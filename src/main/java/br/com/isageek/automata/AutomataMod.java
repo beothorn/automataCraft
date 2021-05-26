@@ -50,6 +50,13 @@ public class AutomataMod
                 () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
         );
 
+        RegistryObject<Block> automata_bedrock_placeholder = Register.block(
+                AutomataMod.MOD_ID,
+                modEventBus,
+                "automata_bedrock_placeholder",
+                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
+        );
+
         RegistryObject<Block> automata_placeholder = Register.block(
                 AutomataMod.MOD_ID,
                 modEventBus,
@@ -69,7 +76,8 @@ public class AutomataMod
                     automata_termination.get(),
                     automata_air_placeholder.get(),
                     automata_water_placeholder.get(),
-                    automata_lava_placeholder.get()
+                    automata_lava_placeholder.get(),
+                    automata_bedrock_placeholder.get()
             )
         );
     }

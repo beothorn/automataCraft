@@ -69,7 +69,7 @@ public class BlockTreeTest {
             b("b"),b("b"),b("b"),
         };
 
-        BlockStateHolder[] actual = patterns.getResultFor(currentState);
+        BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
         Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
@@ -136,7 +136,7 @@ public class BlockTreeTest {
                 b("b"),b("b"),b("b"),
         };
 
-        BlockStateHolder[] actual = patterns.getResultFor(currentState);
+        BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
         Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
@@ -232,7 +232,7 @@ public class BlockTreeTest {
                 b("b"),b("b"),b("b"),
         };
 
-        BlockStateHolder[] actual = patterns.getResultFor(currentState);
+        BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
         Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
@@ -328,7 +328,7 @@ public class BlockTreeTest {
                 b("c"),b("c"),b("c"),
         };
 
-        BlockStateHolder[] actual = patterns.getResultFor(currentState);
+        BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
         Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 

@@ -48,7 +48,7 @@ public class BlockTree {
         current.result = result;
     }
 
-    public BlockStateHolder[] getResultFor(BlockStateHolder[] state) {
+    public BlockStateHolder[] getReplacementFor(BlockStateHolder[] state) {
         Node current = root;
         for (int i = 0; i < state.length; i++) {
             if(i == AUTOMATA_BLOCK_POSITION){
