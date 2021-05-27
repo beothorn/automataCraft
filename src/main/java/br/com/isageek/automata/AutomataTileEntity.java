@@ -121,6 +121,19 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         Block immediateBlockZPlus = w.getBlockState(p.offset
                 (0, 0, 1)).getBlock();
 
+        if(immediateBlockXPlus == termination){
+            w.removeBlock(p.offset(1, 0, 0), false);
+            return;
+        }
+        if(immediateBlockZMinus == termination){
+            w.removeBlock(p.offset(0, 0, -1), false);
+            return;
+        }
+        if(immediateBlockZPlus == termination){
+            w.removeBlock(p.offset(0, 0, 1), false);
+            return;
+        }
+
         if(immediateBlockXMinus == automataOff
             || immediateBlockXPlus == automataOff
             || immediateBlockZMinus == automataOff
@@ -193,14 +206,6 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         }
 
 
-        if(immediateBlockXPlus == termination){
-            w.removeBlock(p.offset(1, 0, 0), false);
-        }
-        if(immediateBlockZMinus == termination){
-            w.removeBlock(p.offset(0, 0, -1), false);
-        }
-        if(immediateBlockZPlus == termination){
-            w.removeBlock(p.offset(0, 0, 1), false);
-        }
+
     }
 }
