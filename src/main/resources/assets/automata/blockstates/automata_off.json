@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "automata:block/automata_off" }
+  }
+}

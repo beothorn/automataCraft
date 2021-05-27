@@ -29,6 +29,13 @@ public class AutomataMod
                 () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
         );
 
+        RegistryObject<Block> automata_start = Register.block(
+                AutomataMod.MOD_ID,
+                modEventBus,
+                "automata_start",
+                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
+        );
+
         RegistryObject<Block> automata_air_placeholder = Register.block(
                 AutomataMod.MOD_ID,
                 modEventBus,
@@ -57,6 +64,13 @@ public class AutomataMod
                 () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
         );
 
+        RegistryObject<Block> automata_off = Register.block(
+                AutomataMod.MOD_ID,
+                modEventBus,
+                "automata_off",
+                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
+        );
+
         RegistryObject<Block> automata_placeholder = Register.block(
                 AutomataMod.MOD_ID,
                 modEventBus,
@@ -73,7 +87,9 @@ public class AutomataMod
                 (TileEntityType<AutomataTileEntity>) registry.get(),
                 new BlockTree(Blocks.AIR.getDescriptionId()),
                     automata_placeholder.get(),
+                    automata_start.get(),
                     automata_termination.get(),
+                    automata_off.get(),
                     automata_air_placeholder.get(),
                     automata_water_placeholder.get(),
                     automata_lava_placeholder.get(),

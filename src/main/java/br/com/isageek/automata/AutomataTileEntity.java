@@ -12,7 +12,9 @@ import net.minecraft.world.World;
 public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
     private BlockTree blockTree;
+    private final Block start;
     private final Block termination;
+    private final Block automataOff;
     private final Block automataPlaceholder;
     private final Block airPlaceholder;
     private final Block waterPlaceholder;
@@ -27,7 +29,9 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             TileEntityType<AutomataTileEntity> tileEntityType,
             BlockTree blockTree,
             Block automataPlaceholder,
+            Block start,
             Block termination,
+            Block automataOff,
             Block airPlaceholder,
             Block waterPlaceholder,
             Block lavaPlaceholder,
@@ -36,7 +40,9 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         super(tileEntityType);
         this.tileEntityType = tileEntityType;
         this.blockTree = blockTree;
+        this.start = start;
         this.termination = termination;
+        this.automataOff = automataOff;
         this.automataPlaceholder = automataPlaceholder;
         this.airPlaceholder = airPlaceholder;
         this.waterPlaceholder = waterPlaceholder;
@@ -114,7 +120,16 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
                 (0, 0, -1)).getBlock();
         Block immediateBlockZPlus = w.getBlockState(p.offset
                 (0, 0, 1)).getBlock();
-        if(immediateBlockXMinus == termination && !loaded){
+
+        if(immediateBlockXMinus == automataOff
+            || immediateBlockXPlus == automataOff
+            || immediateBlockZMinus == automataOff
+            || immediateBlockZPlus == automataOff
+        ){
+            return;
+        }
+
+        if(immediateBlockXMinus == start && !loaded){
             BlockPos maybeTerminatorPosition = p.offset(-8, 0, 0);
             Block maybeTerminator = w.getBlockState(maybeTerminatorPosition).getBlock();
             if(maybeTerminator == termination){
