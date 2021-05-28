@@ -11,6 +11,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -21,7 +22,7 @@ public class Register {
             IEventBus modEventBus,
             String blockName,
             Function<TileEntitySupplierPlaceholder, Block> blockSupplier,
-            Function<RegistryObject<TileEntityType<? extends TileEntity>>, ? extends TileEntity> tileEntitySupplier
+            BiFunction<RegistryObject<TileEntityType<? extends TileEntity>>, RegistryObject<Block>, ? extends TileEntity> tileEntitySupplier
     ) {
         TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder = new TileEntitySupplierPlaceholder();
 
@@ -37,7 +38,7 @@ public class Register {
         RegistryObject<TileEntityType<? extends TileEntity>> tileEntityRegistry = tileEntityTypeDeferredRegister.register(blockName +"_tile_entity", () ->
             TileEntityType.Builder.of(tileEntitySupplierPlaceholder, blockRegister.get()).build(null)
         );
-        Supplier<? extends TileEntity> supplier = () -> tileEntitySupplier.apply(tileEntityRegistry);
+        Supplier<? extends TileEntity> supplier = () -> tileEntitySupplier.apply(tileEntityRegistry, blockRegister);
         tileEntitySupplierPlaceholder.setRealSupplier(supplier);
         tileEntityTypeDeferredRegister.register(modEventBus);
     }

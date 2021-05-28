@@ -83,18 +83,22 @@ public class AutomataMod
             modEventBus,
             "automata",
             (voxsophonMoverSupplierPlaceholder) -> new AutomataBlock(voxsophonMoverSupplierPlaceholder),
-            (registry) -> new AutomataTileEntity(
-                (TileEntityType<AutomataTileEntity>) registry.get(),
-                new BlockTree(Blocks.AIR.getDescriptionId()),
-                    automata_placeholder.get(),
-                    automata_start.get(),
-                    automata_termination.get(),
-                    automata_off.get(),
-                    automata_air_placeholder.get(),
-                    automata_water_placeholder.get(),
-                    automata_lava_placeholder.get(),
-                    automata_bedrock_placeholder.get()
-            )
+            (tileEntityRegistry, automataBlock) -> {
+                AutomataTileEntity automataTileEntity = new AutomataTileEntity(
+                        (TileEntityType<AutomataTileEntity>) tileEntityRegistry.get(),
+                        automataBlock.get(),
+                        automata_placeholder.get(),
+                        automata_start.get(),
+                        automata_termination.get(),
+                        automata_off.get(),
+                        automata_air_placeholder.get(),
+                        automata_water_placeholder.get(),
+                        automata_lava_placeholder.get(),
+                        automata_bedrock_placeholder.get()
+                );
+                automataTileEntity.setAutomataStepper(new AutomataStepper(Blocks.AIR.getDescriptionId()));
+                return automataTileEntity;
+            }
         );
     }
 

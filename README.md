@@ -69,6 +69,10 @@ Seventh column has an Automata placeholder. When the automata runs it will add a
 
 Then a terminator and up to 20 ignored blocks before the autoata block.
 
+# Example: Simple block multiplier
+
+# Example: Door that opens with block
+
 # Example: Many patterns
 
 TODO:
@@ -86,3 +90,10 @@ TODO:
 # Example: Maze solver
 
 TODO:
+
+# TODO:
+
+Limit automata block replication
+Automata loads any pattern in a 20 x 20 radius
+Multiple patterns
+youtube lets play video

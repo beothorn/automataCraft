@@ -1,11 +1,13 @@
 package br.com.isageek.automata;
 
+import br.com.isageek.automata.forge.BlockStateHolder;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static br.com.isageek.automata.BlockStateHolder.b;
+import static br.com.isageek.automata.forge.BlockStateHolder.b;
+import static org.junit.Assert.assertEquals;
 
 public class BlockTreeTest {
 
@@ -70,7 +72,7 @@ public class BlockTreeTest {
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
-        Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
     @Test
@@ -137,7 +139,7 @@ public class BlockTreeTest {
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
-        Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
     @Test
@@ -233,7 +235,7 @@ public class BlockTreeTest {
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
-        Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
     @Test
@@ -329,7 +331,7 @@ public class BlockTreeTest {
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
-        Assert.assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
 }

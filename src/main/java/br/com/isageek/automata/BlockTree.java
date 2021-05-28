@@ -1,6 +1,7 @@
 package br.com.isageek.automata;
 
-import java.util.Collection;
+import br.com.isageek.automata.forge.BlockStateHolder;
+
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -17,8 +18,8 @@ public class BlockTree {
 
     private static final int AUTOMATA_BLOCK_POSITION = 13;
 
-    public BlockTree(String any){
-        this.any = any;
+    public BlockTree(String descriptionIdForBlockRepresentingAny){
+        this.any = descriptionIdForBlockRepresentingAny;
     }
 
     public void addPattern(

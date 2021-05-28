@@ -1,5 +1,6 @@
-package br.com.isageek.automata;
+package br.com.isageek.automata.forge;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 
 public class BlockStateHolder {
@@ -25,5 +26,9 @@ public class BlockStateHolder {
     @Override
     public String toString() {
         return descriptionId;
+    }
+
+    public boolean is(Block block) {
+        return blockState.getBlock() == block;
     }
 }
