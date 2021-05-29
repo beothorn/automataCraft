@@ -9,9 +9,23 @@ public class AutomataStepper {
 
     private BlockTree blockTree;
     private boolean loaded = false;
+    private BlockStateHolder air;
+    private BlockStateHolder water;
+    private BlockStateHolder lava;
+    private BlockStateHolder obsidian;
 
-    public AutomataStepper(String descriptionIdForBlockRepresentingAny){
+    public AutomataStepper(
+        String descriptionIdForBlockRepresentingAny,
+        BlockStateHolder air,
+        BlockStateHolder water,
+        BlockStateHolder lava,
+        BlockStateHolder obsidian
+    ){
         blockTree = new BlockTree(descriptionIdForBlockRepresentingAny);
+        this.air = air;
+        this.water = water;
+        this.lava = lava;
+        this.obsidian = obsidian;
     }
 
     public boolean isLoaded(){
@@ -73,18 +87,18 @@ public class AutomataStepper {
                                         blockEntity.setAutomataStepper(this);
                                     } else{
 
-                                        BlockState blockState = blockStateHolder.blockState;
+                                        BlockStateHolder blockState = blockStateHolder;
                                         if(worldController.isAirPlaceholder(blockStateHolder)){
-                                            blockState = Blocks.AIR.defaultBlockState();
+                                            blockState = air;
                                         }
                                         if(worldController.isWaterPlaceholder(blockStateHolder)){
-                                            blockState = Blocks.WATER.defaultBlockState();
+                                            blockState = water;
                                         }
                                         if(worldController.isLavaPlaceholder(blockStateHolder)){
-                                            blockState = Blocks.LAVA.defaultBlockState();
+                                            blockState = lava;
                                         }
                                         if(worldController.isBedrockPlaceholder(blockStateHolder)){
-                                            blockState = Blocks.OBSIDIAN.defaultBlockState();
+                                            blockState = obsidian;
                                         }
                                         worldController.setBlock(
                                             x,

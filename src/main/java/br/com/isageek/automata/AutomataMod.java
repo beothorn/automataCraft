@@ -1,5 +1,6 @@
 package br.com.isageek.automata;
 
+import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Register;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -96,7 +97,15 @@ public class AutomataMod
                         automata_lava_placeholder.get(),
                         automata_bedrock_placeholder.get()
                 );
-                automataTileEntity.setAutomataStepper(new AutomataStepper(Blocks.AIR.getDescriptionId()));
+                automataTileEntity.setAutomataStepper(
+                    new AutomataStepper(
+                        Blocks.AIR.getDescriptionId(),
+                        BlockStateHolder.b(Blocks.AIR.defaultBlockState()),
+                        BlockStateHolder.b(Blocks.WATER.defaultBlockState()),
+                        BlockStateHolder.b(Blocks.LAVA.defaultBlockState()),
+                        BlockStateHolder.b(Blocks.OBSIDIAN.defaultBlockState())
+                    )
+                );
                 return automataTileEntity;
             }
         );

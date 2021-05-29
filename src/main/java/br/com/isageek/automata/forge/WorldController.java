@@ -72,11 +72,11 @@ public class WorldController {
             int x,
             int y,
             int z,
-            BlockState blockState
+            BlockStateHolder blockState
     ) {
         world.setBlock(
                 center.offset(x, y, z),
-                blockState,
+                blockState.blockState,
                 0,
                 0
         );
