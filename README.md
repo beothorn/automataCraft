@@ -96,4 +96,5 @@ TODO:
 Limit automata block replication
 Automata loads any pattern in a 20 x 20 radius
 Multiple patterns
+Start block must be powered up with redstone, surrounding automatas turn on
 youtube lets play video

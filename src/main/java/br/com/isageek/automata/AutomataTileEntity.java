@@ -24,7 +24,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     private final WorldController worldController;
     private AutomataStepper automataStepper;
 
-    private int wait = 10;
+    private int wait = 30;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
