@@ -60,12 +60,16 @@ public class WorldController {
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] =  newStateHolderForRelativePosition(x, y, z);
+                    result[i++] =  newStateHolderForRelativePosition(x+ix, y+iy, z+iz);
                 }
             }
         }
 
         return result;
+    }
+
+    public BlockStateHolder[] surrounding(Coord c){
+        return surrounding(c.x, c.y, c.z);
     }
 
     public void setBlock(
@@ -102,6 +106,10 @@ public class WorldController {
     public boolean isTerminator(int x, int y, int z) {
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
         return blockState.getBlock() == terminator;
+    }
+
+    public boolean isTerminator(Coord c) {
+        return isTerminator(c.x, c.y, c.z);
     }
 
     public boolean isAutomataOff(int x, int y, int z) {

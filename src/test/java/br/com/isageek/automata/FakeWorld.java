@@ -30,7 +30,7 @@ public class FakeWorld extends WorldController {
 
     public FakeWorld() {
         super(null, null, null, null, null, null, null, null, null);
-        fakeWorld = new BlockStateHolder[40][40][40];
+        fakeWorld = new BlockStateHolder[CENTER * 2][CENTER * 2][CENTER * 2];
         for (int x = 0; x < CENTER * 2; x++) {
             for (int y = 0; y < CENTER * 2; y++) {
                 for (int z = 0; z < CENTER * 2; z++) {
@@ -62,26 +62,76 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isAutomataOff(int x, int y, int z) {
+        if(
+                x >= CENTER / 2
+                        || x <=  - CENTER / 2
+                        || z >=  CENTER / 2
+                        || z <=  - CENTER / 2
+                        || y >=  CENTER / 2
+                        || y <=  - CENTER / 2
+        ){
+            return false;
+        }
         return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == AUTOMATA_OFF;
     }
 
     @Override
     public boolean isTerminator(int x, int y, int z) {
+        if(
+                x + CENTER >= CENTER * 2
+                        || x + CENTER <  0
+                        || z + CENTER >=  CENTER * 2
+                        || z + CENTER <  0
+                        || y + CENTER >=  CENTER * 2
+                        || y + CENTER <  0
+        ){
+            return false;
+        }
         return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == TERMINATOR;
     }
 
     @Override
     public boolean isAutomataStart(int x, int y, int z) {
+        if(
+               x + CENTER >= CENTER * 2
+            || x + CENTER <  0
+            || z + CENTER >=  CENTER * 2
+            || z + CENTER <  0
+            || y + CENTER >=  CENTER * 2
+            || y + CENTER <  0
+        ){
+            return false;
+        }
         return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == AUTOMATA_START;
     }
 
     @Override
     public boolean isBedrock(int x, int y, int z) {
+        if(
+                x + CENTER >= CENTER * 2
+                        || x + CENTER <  0
+                        || z + CENTER >=  CENTER * 2
+                        || z + CENTER <  0
+                        || y + CENTER >=  CENTER * 2
+                        || y + CENTER <  0
+        ){
+            return false;
+        }
         return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == BEDROCK;
     }
 
     @Override
     public boolean isAutomata(int x, int y, int z) {
+        if(
+                x + CENTER >= CENTER * 2
+                        || x + CENTER <  0
+                        || z + CENTER >=  CENTER * 2
+                        || z + CENTER <  0
+                        || y + CENTER >=  CENTER * 2
+                        || y + CENTER <  0
+        ){
+            return false;
+        }
         return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == AUTOMATA;
     }
 
