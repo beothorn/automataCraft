@@ -2,7 +2,7 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 
 import static br.com.isageek.automata.forge.BlockStateHolder.b;
 
@@ -29,7 +29,7 @@ public class FakeWorld extends WorldController {
     public boolean calledSet = false;
 
     public FakeWorld() {
-        super(null, null, null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null, null, null);
         fakeWorld = new BlockStateHolder[CENTER * 2][CENTER * 2][CENTER * 2];
         for (int x = 0; x < CENTER * 2; x++) {
             for (int y = 0; y < CENTER * 2; y++) {
@@ -173,6 +173,23 @@ public class FakeWorld extends WorldController {
         }
 
         return result;
+    }
+
+    @Override
+    public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
+        if(isAirPlaceholder(blockState)){
+            return b(AIR);
+        }
+        if(isWaterPlaceholder(blockState)) {
+            return b(WATER);
+        }
+        if(isLavaPlaceholder(blockState)) {
+            return b(LAVA);
+        }
+        if(isBedrockPlaceholder(blockState)) {
+            return b(BEDROCK);
+        }
+        return blockState;
     }
 
     public String[][][] getSurroundingIds(int x, int y, int z) {

@@ -1,11 +1,11 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 
+import static br.com.isageek.automata.BlockTree.ANY;
 import static br.com.isageek.automata.forge.BlockStateHolder.b;
 import static org.junit.Assert.assertEquals;
 
@@ -54,7 +54,7 @@ public class BlockTreeTest {
             b("b"),b("b"),b("b"),
             b("b"),b("b"),b("b"),
         };
-        BlockTree patterns = new BlockTree("any");
+        BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
@@ -78,7 +78,6 @@ public class BlockTreeTest {
     @Test
     public void anyMatcherWorks(){
         String automataBlock = "auto";
-        String any = "any";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
                 b("c"),b("d"),b("e"),
@@ -95,9 +94,9 @@ public class BlockTreeTest {
         };
 
         BlockStateHolder[] match1 = new BlockStateHolder[]{
-                b(any),b(any),b(any),
-                b(any),b(any),b(any),
-                b(any),b(any),b(any),
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
 
                 b("a"),b("a"),b("a"),
                 b("a"),b("a"),b("a"),
@@ -121,7 +120,7 @@ public class BlockTreeTest {
                 b("b"),b("b"),b("b"),
         };
 
-        BlockTree patterns = new BlockTree(any);
+        BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
@@ -145,7 +144,6 @@ public class BlockTreeTest {
     @Test
     public void matcherPriorityFirstAny(){
         String automataBlock = "auto";
-        String any = "any";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
                 b("a"),b("a"),b("a"),
@@ -163,9 +161,9 @@ public class BlockTreeTest {
 
         // This matches first
         BlockStateHolder[] match1 = new BlockStateHolder[]{
-                b(any),b(any),b(any),
-                b(any),b(any),b(any),
-                b(any),b(any),b(any),
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
 
                 b("a"),b("a"),b("a"),
                 b("a"),b("a"),b("a"),
@@ -216,7 +214,7 @@ public class BlockTreeTest {
                 b("c"),b("c"),b("c"),
         };
 
-        BlockTree patterns = new BlockTree(any);
+        BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
         patterns.addPattern(match2, result2);
 
@@ -241,7 +239,6 @@ public class BlockTreeTest {
     @Test
     public void matcherPriorityFirstBlock(){
         String automataBlock = "auto";
-        String any = "any";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
                 b("a"),b("a"),b("a"),
@@ -286,9 +283,9 @@ public class BlockTreeTest {
         };
 
         BlockStateHolder[] match2 = new BlockStateHolder[]{
-                b(any),b(any),b(any),
-                b(any),b(any),b(any),
-                b(any),b(any),b(any),
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
 
                 b("a"),b("a"),b("a"),
                 b("a"),b("a"),b("a"),
@@ -312,7 +309,7 @@ public class BlockTreeTest {
                 b("b"),b("b"),b("b"),
         };
 
-        BlockTree patterns = new BlockTree(any);
+        BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
         patterns.addPattern(match2, result2);
 

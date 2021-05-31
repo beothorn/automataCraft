@@ -14,13 +14,10 @@ public class BlockTree {
 
     private Node root;
 
-    private final String any;
+
+    public static final BlockStateHolder ANY = BlockStateHolder.b("ANY");
 
     private static final int AUTOMATA_BLOCK_POSITION = 13;
-
-    public BlockTree(String descriptionIdForBlockRepresentingAny){
-        this.any = descriptionIdForBlockRepresentingAny;
-    }
 
     public void addPattern(
         BlockStateHolder[] match,
@@ -33,7 +30,7 @@ public class BlockTree {
         for (int i = 0; i < match.length; i++) {
             if(i == AUTOMATA_BLOCK_POSITION){
                 Node value = new Node();
-                current.nextBlockStateHolder.put(any, value);
+                current.nextBlockStateHolder.put(ANY.descriptionId, value);
                 current = value;
                 continue;
             }
@@ -53,7 +50,7 @@ public class BlockTree {
         Node current = root;
         for (int i = 0; i < state.length; i++) {
             if(i == AUTOMATA_BLOCK_POSITION){
-                current = current.nextBlockStateHolder.get(any);
+                current = current.nextBlockStateHolder.get(ANY.descriptionId);
                 continue;
             }
 
@@ -61,18 +58,18 @@ public class BlockTree {
             String matchingBlock = currentState.descriptionId;
 
             if(current.nextBlockStateHolder.containsKey(matchingBlock)){
-                if(current.nextBlockStateHolder.containsKey(any)){
+                if(current.nextBlockStateHolder.containsKey(ANY.descriptionId)){
                     Set<String> values = current.nextBlockStateHolder.keySet();
                     for (String s: values) {
-                        if(s == currentState.descriptionId || s == any){
+                        if(s == currentState.descriptionId || s == ANY.descriptionId){
                             matchingBlock = s;
                             break;
                         }
                     }
                 }
             }else{
-                if(current.nextBlockStateHolder.containsKey(any)){
-                    matchingBlock = any;
+                if(current.nextBlockStateHolder.containsKey(ANY.descriptionId)){
+                    matchingBlock = ANY.descriptionId;
                 }else{
                     return null;
                 }

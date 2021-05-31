@@ -20,6 +20,7 @@ public class WorldController {
     private final Block waterPlaceholder;
     private final Block lavaPlaceholder;
     private final Block bedrockPlaceholder;
+    private final Block caveAir;
 
     public WorldController(
         Block automata,
@@ -30,7 +31,8 @@ public class WorldController {
         Block airPlaceholder,
         Block waterPlaceholder,
         Block lavaPlaceholder,
-        Block bedrockPlaceholder
+        Block bedrockPlaceholder,
+        Block caveAir
     ) {
         this.automata = automata;
         this.terminator = terminator;
@@ -41,6 +43,7 @@ public class WorldController {
         this.waterPlaceholder = waterPlaceholder;
         this.lavaPlaceholder = lavaPlaceholder;
         this.bedrockPlaceholder = bedrockPlaceholder;
+        this.caveAir = caveAir;
     }
 
     public void set(World world, BlockPos center){
@@ -60,7 +63,7 @@ public class WorldController {
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] =  newStateHolderForRelativePosition(x+ix, y+iy, z+iz);
+                    result[i++] =  createStateHolderFor(x+ix, y+iy, z+iz);
                 }
             }
         }
@@ -90,12 +93,8 @@ public class WorldController {
         return surrounding(0, 0, 0);
     }
 
-    private BlockStateHolder newStateHolderForRelativePosition(int x, int y, int z){
+    private BlockStateHolder createStateHolderFor(int x, int y, int z){
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
-        if(blockState.getBlock() == airPlaceholder)     return BlockStateHolder.b(Blocks.AIR.defaultBlockState());
-        if(blockState.getBlock() == waterPlaceholder)   return BlockStateHolder.b(Blocks.WATER.defaultBlockState());
-        if(blockState.getBlock() == lavaPlaceholder)    return BlockStateHolder.b(Blocks.LAVA.defaultBlockState());
-        if(blockState.getBlock() == bedrockPlaceholder) return BlockStateHolder.b(Blocks.BEDROCK.defaultBlockState());
         return BlockStateHolder.b(blockState);
     }
 
@@ -159,5 +158,21 @@ public class WorldController {
             0,
             0
         );
+    }
+
+    public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
+        if(isAirPlaceholder(blockState)){
+            return BlockStateHolder.b(Blocks.AIR.defaultBlockState());
+        }
+        if(isWaterPlaceholder(blockState)) {
+            return BlockStateHolder.b(Blocks.WATER.defaultBlockState());
+        }
+        if(isLavaPlaceholder(blockState)) {
+            return BlockStateHolder.b(Blocks.LAVA.defaultBlockState());
+        }
+        if(isBedrockPlaceholder(blockState)) {
+            return BlockStateHolder.b(Blocks.BEDROCK.defaultBlockState());
+        }
+        return blockState;
     }
 }

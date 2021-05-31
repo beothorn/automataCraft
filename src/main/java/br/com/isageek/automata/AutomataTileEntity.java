@@ -11,16 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
-    private final Block start;
-    private final Block termination;
-    private final Block automataOff;
-    private final Block automata;
-    private final Block automataPlaceholder;
-    private final Block airPlaceholder;
-    private final Block waterPlaceholder;
-    private final Block lavaPlaceholder;
-    private final Block bedrockPlaceholder;
-    private final TileEntityType<AutomataTileEntity> tileEntityType;
     private final WorldController worldController;
     private AutomataStepper automataStepper;
 
@@ -38,19 +28,10 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block airPlaceholder,
             Block waterPlaceholder,
             Block lavaPlaceholder,
-            Block bedrockPlaceholder
+            Block bedrockPlaceholder,
+            Block caveAir
     ) {
         super(tileEntityType);
-        this.tileEntityType = tileEntityType;
-        this.automata = automata;
-        this.start = start;
-        this.termination = termination;
-        this.automataOff = automataOff;
-        this.automataPlaceholder = automataPlaceholder;
-        this.airPlaceholder = airPlaceholder;
-        this.waterPlaceholder = waterPlaceholder;
-        this.lavaPlaceholder = lavaPlaceholder;
-        this.bedrockPlaceholder = bedrockPlaceholder;
         worldController = new WorldController(
                 automata,
                 termination,
@@ -60,7 +41,8 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
                 airPlaceholder,
                 waterPlaceholder,
                 lavaPlaceholder,
-                bedrockPlaceholder
+                bedrockPlaceholder,
+                caveAir
         );
     }
 

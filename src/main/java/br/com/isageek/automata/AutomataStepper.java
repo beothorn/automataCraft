@@ -3,6 +3,7 @@ package br.com.isageek.automata;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.block.Blocks;
 
 public class AutomataStepper {
 
@@ -24,7 +25,7 @@ public class AutomataStepper {
         BlockStateHolder lava,
         BlockStateHolder obsidian
     ){
-        blockTree = new BlockTree(descriptionIdForBlockRepresentingAny);
+        blockTree = new BlockTree();
         this.descriptionIdForBlockRepresentingAny = descriptionIdForBlockRepresentingAny;
         this.air = air;
         this.water = water;
@@ -134,7 +135,7 @@ public class AutomataStepper {
 
                         if(
                             !worldController.isBedrock(x, y, z)
-                            && blockStateHolder.descriptionId != descriptionIdForBlockRepresentingAny
+                            && blockStateHolder.descriptionId != BlockTree.ANY.descriptionId
                         ){
                             if(worldController.isAutomataPlaceholder(blockStateHolder)){
                                 worldController.setBlockAutomata(
@@ -185,20 +186,45 @@ public class AutomataStepper {
                 cursor.moveTowards(terminator, 1);
                 while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
                     cursor.moveTowards(terminator, 1);
-                    BlockStateHolder[] firstPart = worldController.surrounding(cursor);
-                    cursor.moveTowards(terminator, 3);
-                    BlockStateHolder[] secondPart = worldController.surrounding(cursor);
 
                     if(cursor.x < terminator.x || cursor.z < terminator.z){
-                        blockTree.addPattern(secondPart, firstPart);
+                        BlockStateHolder[] result = worldController.surrounding(cursor);
+                        replaceBlockWithAnyMatcherBlock(result);
+                        replacePlaceHoldersIn(worldController, result);
+                        cursor.moveTowards(terminator, 3);
+                        BlockStateHolder[] match = worldController.surrounding(cursor);
+                        replaceBlockWithAnyMatcherBlock(match);
+                        replacePlaceHoldersIn(worldController, match);
+                        blockTree.addPattern(match, result);
                     }else{
-                        blockTree.addPattern(firstPart, secondPart);
+                        BlockStateHolder[] match = worldController.surrounding(cursor);
+                        replaceBlockWithAnyMatcherBlock(match);
+                        replacePlaceHoldersIn(worldController, match);
+                        cursor.moveTowards(terminator, 3);
+                        BlockStateHolder[] result = worldController.surrounding(cursor);
+                        replaceBlockWithAnyMatcherBlock(result);
+                        replacePlaceHoldersIn(worldController, result);
+                        blockTree.addPattern(match, result);
                     }
-
 
                     cursor.moveTowards(terminator, 2);
                     count++;
                 };
+            }
+        }
+    }
+
+    private void replacePlaceHoldersIn(WorldController worldController, BlockStateHolder[] blockStates) {
+        for (int i = 0; i < blockStates.length; i++) {
+            blockStates[i] = worldController.replacePlaceholder(blockStates[i]);
+        }
+    }
+
+    private void replaceBlockWithAnyMatcherBlock(BlockStateHolder[] blockStates) {
+        for (int i = 0; i < blockStates.length; i++) {
+            BlockStateHolder blockState = blockStates[i];
+            if(blockState.descriptionId == descriptionIdForBlockRepresentingAny){
+                blockStates[i] = BlockTree.ANY;
             }
         }
     }

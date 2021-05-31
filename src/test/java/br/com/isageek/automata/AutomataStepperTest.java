@@ -237,4 +237,89 @@ public class AutomataStepperTest {
         }, result);
     }
 
+    @Test
+    public void replaceAllWithAir(){
+        String[][][] state = cubeWithSameBlockType("SomeBlock");
+        String[][][] match = cubeWithSameBlockType(FakeWorld.AIR);
+        String[][][] result = cubeWithSameBlockType(FakeWorld.AIR_PLACEHOLDER);
+        String[][][] expected = cubeWithSameBlockType(FakeWorld.AIR);
+
+        testPattern(state, match, result, expected);
+    }
+
+    @Test
+    public void replaceAirWithX(){
+        String[][][] state = cubeWithSameBlockType(FakeWorld.AIR);
+        String[][][] match = cubeWithSameBlockType(FakeWorld.AIR_PLACEHOLDER);
+        String[][][] result = cubeWithSameBlockType("X");
+        String[][][] expected = cubeWithSameBlockType("X");
+
+        testPattern(state, match, result, expected);
+    }
+
+    private void testPattern(
+        String[][][] state,
+        String[][][] match,
+        String[][][] result,
+        String[][][] expected
+    ) {
+        AutomataStepper automataStepper = new AutomataStepper(
+                FakeWorld.AIR,
+                BlockStateHolder.b(FakeWorld.AIR),
+                BlockStateHolder.b(FakeWorld.WATER),
+                BlockStateHolder.b(FakeWorld.LAVA),
+                BlockStateHolder.b(FakeWorld.OBSIDIAN)
+        );
+
+        FakeWorld fakeWorld = new FakeWorld();
+        fakeWorld.setSurrounding(0, 0, 0, state);
+
+        fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
+        fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
+        fakeWorld.setSurrounding(12, 0, 0, result);
+        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
+        automataStepper.automataTick(fakeWorld);
+        Assert.assertTrue(automataStepper.isLoaded());
+
+        automataStepper.automataTick(fakeWorld);
+        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+
+        Assert.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void replacesNothing(){
+        AutomataStepper automataStepper = new AutomataStepper(
+                FakeWorld.AIR,
+                BlockStateHolder.b(FakeWorld.AIR),
+                BlockStateHolder.b(FakeWorld.WATER),
+                BlockStateHolder.b(FakeWorld.LAVA),
+                BlockStateHolder.b(FakeWorld.OBSIDIAN)
+        );
+
+        FakeWorld fakeWorld = new FakeWorld();
+
+        fakeWorld.setSurrounding(0, 0, 0, cubeWithSameBlockType("X"));
+
+        fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
+
+        fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
+        String[][][] match = cubeWithSameBlockType(FakeWorld.AIR);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        String[][][] result = cubeWithSameBlockType(FakeWorld.AIR);
+        fakeWorld.setSurrounding(15, 0, 0, result);
+
+        fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
+
+        automataStepper.automataTick(fakeWorld);
+        Assert.assertTrue(automataStepper.isLoaded());
+
+        automataStepper.automataTick(fakeWorld);
+        fakeWorld.setAt(0, 0, 0, "X");
+        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+
+        Assert.assertArrayEquals(cubeWithSameBlockType("X"), actual);
+    }
+
 }
