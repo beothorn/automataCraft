@@ -101,8 +101,22 @@ TODO:
 
 # TODO:
 
-Automata loads any pattern in a 20 x 20 radius
 Limit automata block replication
-Multiple patterns
+BUG: any matcher needs backtracking
+
+Example:
+
+match:result
+any, x: a, a
+y, any: b, b
+
+y, y matches first any but not second and this returns null  
+
+
+BUG:
+
+Loaded/unloaded is not changing texture
+
+
 Start block must be powered up with redstone, surrounding automatas turn on
 youtube lets play video
