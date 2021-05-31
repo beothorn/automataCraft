@@ -98,8 +98,8 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(-10, 0, 0, FakeWorld.AUTOMATA_START);
-        fakeWorld.setSurrounding(-12, 0, 0, cubeWithSameBlockType("a"));
-        fakeWorld.setSurrounding(-15, 0, 0, cubeWithSameBlockType("b"));
+        fakeWorld.setSurrounding(-12, 0, 0, cubeWithSameBlockType("b"));
+        fakeWorld.setSurrounding(-15, 0, 0, cubeWithSameBlockType("a"));
         fakeWorld.setAt(-17, 0, 0, FakeWorld.TERMINATOR);
 
         automataStepper.automataTick(fakeWorld);
@@ -320,6 +320,44 @@ public class AutomataStepperTest {
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         Assert.assertArrayEquals(cubeWithSameBlockType("X"), actual);
+    }
+
+    @Test
+    public void multiplePatternsSimpleTickClock(){
+        AutomataStepper automataStepper = new AutomataStepper(
+                "a",
+                BlockStateHolder.b(FakeWorld.AIR),
+                BlockStateHolder.b(FakeWorld.WATER),
+                BlockStateHolder.b(FakeWorld.LAVA),
+                BlockStateHolder.b(FakeWorld.OBSIDIAN)
+        );
+
+        FakeWorld fakeWorld = new FakeWorld();
+
+        fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
+        fakeWorld.setAt(-10, 0, 0, FakeWorld.AUTOMATA_START);
+        int cubePosition = -12;
+        fakeWorld.setSurrounding(cubePosition, 0, 0, cubeWithSameBlockType("c"));
+        cubePosition -= 3;
+        fakeWorld.setSurrounding(cubePosition, 0, 0, cubeWithSameBlockType("b"));
+        cubePosition -= 3;
+        fakeWorld.setSurrounding(cubePosition, 0, 0, cubeWithSameBlockType("b"));
+        cubePosition -= 3;
+        fakeWorld.setSurrounding(cubePosition, 0, 0, cubeWithSameBlockType("a"));
+        cubePosition -= 2;
+        fakeWorld.setAt(cubePosition, 0, 0, FakeWorld.TERMINATOR);
+
+        automataStepper.automataTick(fakeWorld);
+        Assert.assertTrue(automataStepper.isLoaded());
+
+        automataStepper.automataTick(fakeWorld);
+        String[][][] resultTickOne = fakeWorld.getSurroundingIds(0, 0, 0);
+
+        Assert.assertArrayEquals(cubeWithSameBlockType("b"), resultTickOne);
+
+        automataStepper.automataTick(fakeWorld);
+        String[][][] resultTickTwo = fakeWorld.getSurroundingIds(0, 0, 0);
+        Assert.assertArrayEquals(cubeWithSameBlockType("c"), resultTickTwo);
     }
 
 }

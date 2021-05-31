@@ -125,7 +125,8 @@ public class AutomataStepper {
     }
 
     private void executePattern(WorldController worldController) {
-        BlockStateHolder[] toReplace = blockTree.getReplacementFor(worldController.surrounding());
+        BlockStateHolder[] toBeReplaced = worldController.surrounding();
+        BlockStateHolder[] toReplace = blockTree.getReplacementFor(toBeReplaced);
         if(toReplace != null){
             int i = 0;
             for (int x = -1; x <= 1; x++) {
@@ -187,25 +188,14 @@ public class AutomataStepper {
                 while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
                     cursor.moveTowards(terminator, 1);
 
-                    if(cursor.x < terminator.x || cursor.z < terminator.z){
-                        BlockStateHolder[] result = worldController.surrounding(cursor);
-                        replaceBlockWithAnyMatcherBlock(result);
-                        replacePlaceHoldersIn(worldController, result);
-                        cursor.moveTowards(terminator, 3);
-                        BlockStateHolder[] match = worldController.surrounding(cursor);
-                        replaceBlockWithAnyMatcherBlock(match);
-                        replacePlaceHoldersIn(worldController, match);
-                        blockTree.addPattern(match, result);
-                    }else{
-                        BlockStateHolder[] match = worldController.surrounding(cursor);
-                        replaceBlockWithAnyMatcherBlock(match);
-                        replacePlaceHoldersIn(worldController, match);
-                        cursor.moveTowards(terminator, 3);
-                        BlockStateHolder[] result = worldController.surrounding(cursor);
-                        replaceBlockWithAnyMatcherBlock(result);
-                        replacePlaceHoldersIn(worldController, result);
-                        blockTree.addPattern(match, result);
-                    }
+                    BlockStateHolder[] result = worldController.surrounding(cursor);
+                    replaceBlockWithAnyMatcherBlock(result);
+                    replacePlaceHoldersIn(worldController, result);
+                    cursor.moveTowards(terminator, 3);
+                    BlockStateHolder[] match = worldController.surrounding(cursor);
+                    replaceBlockWithAnyMatcherBlock(match);
+                    replacePlaceHoldersIn(worldController, match);
+                    blockTree.addPattern(match, result);
 
                     cursor.moveTowards(terminator, 2);
                     count++;

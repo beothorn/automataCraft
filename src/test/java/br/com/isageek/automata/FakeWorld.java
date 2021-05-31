@@ -2,7 +2,6 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.Blocks;
 
 import static br.com.isageek.automata.forge.BlockStateHolder.b;
 
@@ -24,7 +23,7 @@ public class FakeWorld extends WorldController {
     public static final String AIR = "air";
 
     private BlockStateHolder[][][] fakeWorld;
-    private static final int CENTER = 20;
+    private static final int CENTER = 100;
 
     public boolean calledSet = false;
 

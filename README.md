@@ -67,11 +67,19 @@ Sixth column has a dirt block in the center, this will replace the automata bloc
 
 Seventh column has an Automata placeholder. When the automata runs it will add a new automata block at this position.
 
-Then a terminator and up to 20 ignored blocks before the autoata block.
+Then a terminator and up to 20 ignored blocks before the automata block.
+
+# Priority
+
+Closer to the start block has higher priority in case of ambiguity.
 
 # Example: Simple block multiplier
 
+# Example: Tick clock
+
 # Example: Lava door that opens with block
+
+# Redstone activated with pistone
 
 # Example: Many patterns
 
