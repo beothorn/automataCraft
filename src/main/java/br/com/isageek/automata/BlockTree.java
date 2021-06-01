@@ -2,7 +2,9 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class BlockTree {
@@ -46,9 +48,8 @@ public class BlockTree {
         current.result = result;
     }
 
-    public BlockStateHolder[] getReplacementFor(BlockStateHolder[] state) {
-        Node current = root;
-        for (int i = 0; i < state.length; i++) {
+    private BlockStateHolder[] internalGetReplacementFor(BlockStateHolder[] state, Node current, int index) {
+        for (int i = index; i < state.length; i++) {
             if(i == AUTOMATA_BLOCK_POSITION){
                 current = current.nextBlockStateHolder.get(ANY.descriptionId);
                 continue;
@@ -59,11 +60,12 @@ public class BlockTree {
 
             if(current.nextBlockStateHolder.containsKey(matchingBlock)){
                 if(current.nextBlockStateHolder.containsKey(ANY.descriptionId)){
-                    Set<String> values = current.nextBlockStateHolder.keySet();
-                    for (String s: values) {
-                        if(s == currentState.descriptionId || s == ANY.descriptionId){
-                            matchingBlock = s;
-                            break;
+                    Set<Map.Entry<String, Node>> entries = current.nextBlockStateHolder.entrySet();
+                    for (Map.Entry<String, Node> entry: entries) {
+                        String descriptionId = entry.getKey();
+                        if(descriptionId == currentState.descriptionId || descriptionId == ANY.descriptionId){
+                            BlockStateHolder[] blockStateHolders = internalGetReplacementFor(state, entry.getValue(), i+1);
+                            if(blockStateHolders != null) return blockStateHolders;
                         }
                     }
                 }
@@ -78,5 +80,9 @@ public class BlockTree {
             current = current.nextBlockStateHolder.get(matchingBlock);
         }
         return current.result;
+    }
+
+    public BlockStateHolder[] getReplacementFor(BlockStateHolder[] state) {
+        return internalGetReplacementFor(state, root, 0);
     }
 }

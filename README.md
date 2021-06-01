@@ -15,12 +15,15 @@ This mod adds:
 - A bedrock placeholder block
 - A automata placeholder block
 
-To use it add a terminator block, a 3x3 block construction for the match blocks,
-another 3x3 block construction for the result blocks, another terminator and the automata block.
+To use it add a start block, a 3x3 block construction for the result blocks, another 3x3 block construction for the pattern match blocks and another terminator and the automata block.
 
 After creating the pattern, the automata will start working when the Terminator block is removed.
 
 Empty blocks (air) matches any block type.
+
+# Instalation
+
+First install https://files.minecraftforge.net/net/minecraftforge/forge/
 
 ## Example 1: pulls a dirty block one position up
 
@@ -102,15 +105,6 @@ TODO:
 # TODO:
 
 Limit automata block replication
-BUG: any matcher needs backtracking
-
-Example:
-
-match:result
-any, x: a, a
-y, any: b, b
-
-y, y matches first any but not second and this returns null  
 
 
 BUG:

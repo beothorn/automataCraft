@@ -331,4 +331,99 @@ public class BlockTreeTest {
         assertEquals(Arrays.toString(expected), Arrays.toString(actual));
     }
 
+    @Test
+    public void matcherPriorityFallback(){
+        String automataBlock = "auto";
+
+        BlockStateHolder[] currentState = new BlockStateHolder[]{
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+
+                b("a"),b("a"),b("a"),
+                b("a"),b(automataBlock),b("a"),
+                b("a"),b("a"),b("a"),
+
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+        };
+
+        // This matches first
+        BlockStateHolder[] match1 = new BlockStateHolder[]{
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+
+                ANY, ANY, ANY,
+                ANY, ANY, ANY,
+                ANY, ANY, b("b")
+        };
+        BlockStateHolder[] result1 = new BlockStateHolder[]{
+                b("b"),b("b"),b("b"),
+                b("b"),b("b"),b("b"),
+                b("b"),b("b"),b("b"),
+
+                b("b"),b("b"),b("b"),
+                b("b"),b("b"),b("b"),
+                b("b"),b("b"),b("b"),
+
+                b("b"),b("b"),b("b"),
+                b("b"),b("b"),b("b"),
+                b("b"),b("b"),b("b"),
+        };
+
+        BlockStateHolder[] match2 = new BlockStateHolder[]{
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+
+                b("a"),b("a"),b("a"),
+                b("a"),b(automataBlock),b("a"),
+                b("a"),b("a"),b("a"),
+
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+                b("a"),b("a"),b("a"),
+        };
+        BlockStateHolder[] result2 = new BlockStateHolder[]{
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+        };
+
+        BlockTree patterns = new BlockTree();
+        patterns.addPattern(match1, result1);
+        patterns.addPattern(match2, result2);
+
+        BlockStateHolder[] expected = new BlockStateHolder[]{
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+                b("c"),b("c"),b("c"),
+        };
+
+        BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+    }
+
 }
