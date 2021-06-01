@@ -1,6 +1,6 @@
 # AutomataCraft
 
-A minecraft mod that adds a block that displaces other blocks.
+A minecraft mod that adds a block that replaces a 3x3 block pattern with another blocks.
 
 The block is programmable with other blocks by giving two patterns, 
 match blocks and result blocks.
@@ -8,6 +8,7 @@ match blocks and result blocks.
 This mod adds:
 
 - An automata block
+- A start block
 - A termination block
 - An air placeholder block
 - A water placeholder block
@@ -17,7 +18,7 @@ This mod adds:
 
 To use it add a start block, a 3x3 block construction for the result blocks, another 3x3 block construction for the pattern match blocks and another terminator and the automata block.
 
-After creating the pattern, the automata will start working when the Terminator block is removed.
+After creating the pattern, place the automata block and it will load the pattern.
 
 Empty blocks (air) matches any block type.
 
@@ -25,34 +26,19 @@ Empty blocks (air) matches any block type.
 
 First install https://files.minecraftforge.net/net/minecraftforge/forge/
 
+Then open the mod folder and copy the jar from releases.
+
 ## Example 1: pulls a dirty block one position up
 
 Suppose you want to create an automata that pulls a dirty block one position up and moves one block.
 
 You could do this:
 
-🟠 : Automata block
-
-🟦 : Automata placeholder block
-
-🟥 : Terminator
-
-🟨 : Empty (air)
-
-🟫 : Dirt
-
-🟪 : Not evaluated
-
-Side view:
-```
-🟪🟨🟨🟨🟨🟨🟨🟪
-🟥🟨🟪🟨🟨🟫🟦🟥??????🟠
-🟪🟨🟫🟨🟨🟨🟨🟪
-```
+Image goes here
  
 Explanation:
 
-First column has the terminator block. Anything around it is not taken into consideration.
+First column has the start block. Anything around it is not taken into consideration.
 
 Second has 9 empty (air) blocks. When evaluated this will match any configuration of blocks.
 
@@ -86,28 +72,12 @@ Closer to the start block has higher priority in case of ambiguity.
 
 # Example: Many patterns
 
-TODO:
-
-If you want more than one pattern just add the next sequence and then the terminator at the end.
-
-# Example: Game of life
-
-TODO:
-
 # Example: Glass corridor downwards
-
-TODO:
 
 # Example: Maze solver
 
 TODO:
 
-# TODO:
-
-Limit automata block 
-
 recipes
 
-
-Start block must be powered up with redstone, surrounding automatas turn on
 youtube lets play video
