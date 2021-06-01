@@ -104,12 +104,9 @@ TODO:
 
 # TODO:
 
-Limit automata block replication
+Limit automata block 
 
-
-BUG:
-
-Loaded/unloaded is not changing texture
+recipes
 
 
 Start block must be powered up with redstone, surrounding automatas turn on

@@ -2,7 +2,6 @@
   "block.automata.automata": "Automata",
   "block.automata.automata_termination": "Automata termination",
   "block.automata.automata_start": "Automata start",
-  "block.automata.automata_off": "Automata off",
   "block.automata.automata_water_placeholder": "Water placeholder",
   "block.automata.automata_air_placeholder": "Air placeholder",
   "block.automata.automata_lava_placeholder": "Lava placeholder",

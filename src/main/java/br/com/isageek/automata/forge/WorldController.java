@@ -1,5 +1,6 @@
 package br.com.isageek.automata.forge;
 
+import br.com.isageek.automata.AutomataBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,7 +14,6 @@ public class WorldController {
     private BlockPos center;
     private final Block automata;
     private final Block terminator;
-    private final Block automataOff;
     private final Block start;
     private final Block automataPlaceholder;
     private final Block airPlaceholder;
@@ -25,7 +25,6 @@ public class WorldController {
     public WorldController(
         Block automata,
         Block terminator,
-        Block automataOff,
         Block start,
         Block automataPlaceholder,
         Block airPlaceholder,
@@ -36,7 +35,6 @@ public class WorldController {
     ) {
         this.automata = automata;
         this.terminator = terminator;
-        this.automataOff = automataOff;
         this.start = start;
         this.automataPlaceholder = automataPlaceholder;
         this.airPlaceholder = airPlaceholder;
@@ -111,11 +109,6 @@ public class WorldController {
         return isTerminator(c.x, c.y, c.z);
     }
 
-    public boolean isAutomataOff(int x, int y, int z) {
-        BlockState blockState = world.getBlockState(center.offset(x, y, z));
-        return blockState.getBlock() == automataOff;
-    }
-
     public boolean isAutomataStart(int x, int y, int z) {
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
         return blockState.getBlock() == start;
@@ -151,10 +144,11 @@ public class WorldController {
         return blockState.getBlock() == automata;
     }
 
-    public void setBlockAutomata(int x, int y, int z) {
+    public void setBlockAutomata(int x, int y, int z, boolean loaded) {
+        BlockState blockState = automata.defaultBlockState().setValue(AutomataBlock.loaded, loaded);
         world.setBlock(
             center.offset(x, y, z),
-            automata.defaultBlockState(),
+            blockState,
             0,
             0
         );

@@ -107,16 +107,6 @@ public class AutomataStepper {
     }
 
     public void automataTick(WorldController worldController) {
-        if(worldController.isAutomataOff(-1, 0, 0)
-            || worldController.isAutomataOff(1, 0, 0)
-            || worldController.isAutomataOff(0, 0, -1)
-            || worldController.isAutomataOff(0, 0, 1)
-            || worldController.isAutomataOff(0, 1, 0)
-            || worldController.isAutomataOff(0, -1, 0)
-        ){
-            return;
-        }
-
         if(loaded){
             executePattern(worldController);
         }else{
@@ -142,7 +132,8 @@ public class AutomataStepper {
                                 worldController.setBlockAutomata(
                                         x,
                                         y,
-                                        z
+                                        z,
+                                        true
                                 );
 
                                 AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);

@@ -15,12 +15,13 @@ public class AutomataBlock extends BlockWithTileEntity {
 
     public AutomataBlock(TileEntitySupplierPlaceholder tileEntityType) {
         super(tileEntityType, Block.Properties.of(Material.STONE, MaterialColor.STONE).harvestLevel(0));
+        registerDefaultState(defaultBlockState().setValue(loaded, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> stateBuilder) {
-        stateBuilder.add(loaded);
         super.createBlockStateDefinition(stateBuilder);
+        stateBuilder.add(loaded);
     }
 
 }

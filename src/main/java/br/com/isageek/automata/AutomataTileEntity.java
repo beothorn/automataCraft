@@ -2,19 +2,23 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.Property;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
+
 public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
     private final WorldController worldController;
     private AutomataStepper automataStepper;
 
-    private int wait = 30;
+    private final int evaluateOnEveryNTicks = 30;
+    private int currentTickCounter = 0;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -24,7 +28,6 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block automataPlaceholder,
             Block start,
             Block termination,
-            Block automataOff,
             Block airPlaceholder,
             Block waterPlaceholder,
             Block lavaPlaceholder,
@@ -35,7 +38,6 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         worldController = new WorldController(
                 automata,
                 termination,
-                automataOff,
                 start,
                 automataPlaceholder,
                 airPlaceholder,
@@ -48,6 +50,20 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
 
     public void setAutomataStepper(AutomataStepper automataStepper){
         this.automataStepper = automataStepper;
+        updateLoadState(automataStepper);
+    }
+
+    private void updateLoadState(AutomataStepper automataStepper) {
+        if(this.level != null){
+            boolean loaded = automataStepper.isLoaded();
+            BlockState blockState = getBlockState().setValue(AutomataBlock.loaded, loaded);
+            this.level.setBlock(
+                    getBlockPos(),
+                    blockState,
+                    0,
+                    0
+            );
+        }
     }
 
     @Override
@@ -60,12 +76,17 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     private void internalTick() {
-        if(wait > 0){
-            wait--;
+        if(currentTickCounter < evaluateOnEveryNTicks){
+            currentTickCounter++;
             return;
         }
         worldController.set(level, getBlockPos());
+        boolean previousLoaded = automataStepper.isLoaded();
         automataStepper.automataTick(worldController);
+        if(previousLoaded != automataStepper.isLoaded()){
+            updateLoadState(automataStepper);
+        }
+        currentTickCounter = 0;
     }
 
 }

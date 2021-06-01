@@ -28,7 +28,7 @@ public class FakeWorld extends WorldController {
     public boolean calledSet = false;
 
     public FakeWorld() {
-        super(null, null, null, null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null, null);
         fakeWorld = new BlockStateHolder[CENTER * 2][CENTER * 2][CENTER * 2];
         for (int x = 0; x < CENTER * 2; x++) {
             for (int y = 0; y < CENTER * 2; y++) {
@@ -57,21 +57,6 @@ public class FakeWorld extends WorldController {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isAutomataOff(int x, int y, int z) {
-        if(
-                x >= CENTER / 2
-                        || x <=  - CENTER / 2
-                        || z >=  CENTER / 2
-                        || z <=  - CENTER / 2
-                        || y >=  CENTER / 2
-                        || y <=  - CENTER / 2
-        ){
-            return false;
-        }
-        return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == AUTOMATA_OFF;
     }
 
     @Override
