@@ -137,7 +137,7 @@ public class AutomataStepper {
                                 );
 
                                 AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);
-                                blockEntity.setAutomataStepper(this);
+                                if(blockEntity != null) blockEntity.setAutomataStepper(this);
                             } else{
 
                                 BlockStateHolder blockState = blockStateHolder;

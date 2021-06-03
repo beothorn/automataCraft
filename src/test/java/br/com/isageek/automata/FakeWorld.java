@@ -2,6 +2,8 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.TileEntity;
 
 import static br.com.isageek.automata.forge.BlockStateHolder.b;
 
@@ -10,7 +12,6 @@ public class FakeWorld extends WorldController {
     public static final String WATER = "Water";
     public static final String LAVA = "Lava";
     public static final String OBSIDIAN = "Obsidian";
-    public static final String AUTOMATA_OFF = "AutomataOff";
     public static final String AUTOMATA = "Automata";
     public static final String AUTOMATA_START = "AutomataStart";
     public static final String AUTOMATA_PLACEHOLDER = "AutomataPlaceholder";
@@ -174,6 +175,16 @@ public class FakeWorld extends WorldController {
             return b(BEDROCK);
         }
         return blockState;
+    }
+
+    @Override
+    public void setBlockAutomata(int x, int y, int z, boolean loaded) {
+        setAt(x, y, z, AUTOMATA);
+    }
+
+    @Override
+    public TileEntity getBlockEntity(int x, int y, int z) {
+        return null;
     }
 
     public String[][][] getSurroundingIds(int x, int y, int z) {
