@@ -76,7 +76,7 @@ public class AutomataMod
             AutomataMod.MOD_ID,
             modEventBus,
             "automata",
-            (voxsophonMoverSupplierPlaceholder) -> new AutomataBlock(voxsophonMoverSupplierPlaceholder),
+            (tileEntitySupplierPlaceholder) -> new AutomataBlock(tileEntitySupplierPlaceholder),
             (tileEntityRegistry, automataBlock) -> {
                 AutomataTileEntity automataTileEntity = new AutomataTileEntity(
                         (TileEntityType<AutomataTileEntity>) tileEntityRegistry.get(),
