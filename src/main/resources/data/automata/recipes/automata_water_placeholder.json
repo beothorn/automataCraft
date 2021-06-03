@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " x ",
+        "  x",
+        "xxx"
+    ],
+    "key":{
+      "x": {"item": "minecraft:water_bucket"}
+    },
+    "result": {"item": "automata:automata_water_placeholder_item"}
+}

@@ -9,7 +9,7 @@ modLoader="javafml" #mandatory
 loaderVersion="[36,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
-license="All rights reserved"
+license="Apache License 2.0"
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/beothorn/automataCraft/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
@@ -27,14 +27,14 @@ displayName="Automata" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://github.com/beothorn/automataCraft" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="examplemod.png" #optional
+logoFile="logo.png" #optional
 # A text field displayed in the mod UI
-credits="Thanks for this example mod goes to Java" #optional
+credits="Developed by Beothorn" #optional
 # A text field displayed in the mod UI
 authors="Beothorn" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-A minecraft mod that adds a block that displaces other blocks.
+A minecraft mod that adds a block that replaces a 3x3 block pattern with another blocks.
 
 The block is programmable with other blocks by giving two patterns,
 match blocks and result blocks.
@@ -42,14 +42,20 @@ match blocks and result blocks.
 This mod adds:
 
 - An automata block
+- A start block
 - A termination block
 - An air placeholder block
+- A water placeholder block
+- A magma placeholder block
+- A bedrock placeholder block
 - A automata placeholder block
 
-To use it add a terminator block, a 3x3 block construction for the match blocks,
-another 3x3 block construction for the result blocks, another terminator and the automata block.
+To use it add a start block, a 3x3 block construction for the result blocks, another 3x3
+block construction for the pattern match blocks and another terminator and
+the automata block.
 
-After creating the pattern, the automata will start working when the Terminator block is removed.
+After creating the pattern, place the automata block. The patterns will
+be loaded and the automata block will change from black to red.
 
 Empty blocks (air) matches any block type.
 '''

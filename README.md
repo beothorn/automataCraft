@@ -16,9 +16,12 @@ This mod adds:
 - A bedrock placeholder block
 - A automata placeholder block
 
-To use it add a start block, a 3x3 block construction for the result blocks, another 3x3 block construction for the pattern match blocks and another terminator and the automata block.
+To use it add a start block, a 3x3 block construction for the result blocks, another 3x3 
+block construction for the pattern match blocks and another terminator and 
+the automata block.
 
-After creating the pattern, place the automata block and it will load the pattern.
+After creating the pattern, place the automata block. The patterns will 
+be loaded and the automata block will change from black to red.
 
 Empty blocks (air) matches any block type.
 
