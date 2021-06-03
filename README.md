@@ -67,11 +67,15 @@ Closer to the start block has higher priority in case of ambiguity.
 
 # Example: Simple block multiplier
 
+# Example: Digger
+
+# Example: Expanding digger
+
 # Example: Tick clock
 
 # Example: Lava door that opens with block
 
-# Redstone activated with pistone
+# Redstone activated with piston
 
 # Example: Many patterns
 
