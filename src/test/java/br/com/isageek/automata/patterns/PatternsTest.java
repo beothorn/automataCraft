@@ -2,6 +2,7 @@ package br.com.isageek.automata.patterns;
 
 import br.com.isageek.automata.AutomataStepper;
 import br.com.isageek.automata.FakeWorld;
+import br.com.isageek.automata.forge.BlockStateHolder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,10 +33,10 @@ public class PatternsTest {
         fakeWorld.setSurrounding(12, 0, 0, result);
         fakeWorld.setSurrounding(15, 0, 0, match);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         Assert.assertArrayEquals(expected, actual);
@@ -93,14 +94,14 @@ public class PatternsTest {
         fakeWorld.setSurrounding(18, 0, 0, result2);
         fakeWorld.setSurrounding(21, 0, 0, match2);
         fakeWorld.setAt(23, 0, 0, FakeWorld.TERMINATOR);
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
 
         // If key block is present, replace the other block
         state[0][0][1] = "keyBlock";
         fakeWorld.setSurrounding(0, 0, 0, state);
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         expected[1][0][0] = "replacement";
@@ -110,7 +111,7 @@ public class PatternsTest {
         state[0][0][1] = AIR;
         state[1][0][0] = "replacement";
         fakeWorld.setSurrounding(0, 0, 0, state);
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 0);
 
         expected[1][0][0] = AIR;
@@ -143,15 +144,15 @@ public class PatternsTest {
         cubePosition -= 2;
         fakeWorld.setAt(cubePosition, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] resultTickOne = fakeWorld.getSurroundingIds(0, 0, 0);
 
         Assert.assertArrayEquals(cubeWithSameBlockType("b"), resultTickOne);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] resultTickTwo = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(cubeWithSameBlockType("c"), resultTickTwo);
     }

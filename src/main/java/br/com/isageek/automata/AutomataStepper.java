@@ -3,6 +3,7 @@ package br.com.isageek.automata;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.block.Blocks;
 
 public class AutomataStepper {
 
@@ -105,34 +106,18 @@ public class AutomataStepper {
         return null;
     }
 
-    public void automataTick(WorldController worldController, int availableAutomataBlocks) {
+    public void automataTick(WorldController worldController) {
         if(loaded){
-            executePattern(worldController, availableAutomataBlocks);
+            executePattern(worldController);
         }else{
             tryToLoadPattern(worldController);
         }
     }
 
-    private void executePattern(WorldController worldController, int availableAutomataBlocks) {
+    private void executePattern(WorldController worldController) {
         BlockStateHolder[] toBeReplaced = worldController.surrounding();
         BlockStateHolder[] toReplace = blockTree.getReplacementFor(toBeReplaced);
         if(toReplace != null){
-            int automataCount = 0;
-            int counter = 0;
-            for (int x = -1; x <= 1; x++) {
-                for (int y = -1; y <= 1; y++) {
-                    for (int z = -1; z <= 1; z++) {
-                        BlockStateHolder blockStateHolder = toReplace[counter++];
-                        if(worldController.isAutomataPlaceholder(blockStateHolder)){
-                            automataCount++;
-                        }
-                    }
-                }
-            }
-
-            final int maxDuplicationForEach = availableAutomataBlocks / ((automataCount == 0) ? 1 : automataCount);
-            int remainingAutomataBlocks = availableAutomataBlocks % ((automataCount == 0) ? 1 : automataCount);
-
             int i = 0;
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
@@ -144,22 +129,15 @@ public class AutomataStepper {
                             && blockStateHolder.descriptionId != BlockTree.ANY.descriptionId
                         ){
                             if(worldController.isAutomataPlaceholder(blockStateHolder)){
-                                if(maxDuplicationForEach > 0){
-                                    worldController.setBlockAutomata(
-                                            x,
-                                            y,
-                                            z,
-                                            true
-                                    );
+                                worldController.setBlockAutomata(
+                                        x,
+                                        y,
+                                        z,
+                                        true
+                                );
 
-                                    AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);
-                                    if(remainingAutomataBlocks > 0){
-                                        blockEntity.setAutomataStepper(this, maxDuplicationForEach + remainingAutomataBlocks);
-                                        remainingAutomataBlocks--;
-                                    }else{
-                                        blockEntity.setAutomataStepper(this, maxDuplicationForEach);
-                                    }
-                                }
+                                AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);
+                                if(blockEntity != null) blockEntity.setAutomataStepper(this);
                             } else{
 
                                 BlockStateHolder blockState = blockStateHolder;

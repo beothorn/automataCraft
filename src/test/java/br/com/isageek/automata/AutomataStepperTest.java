@@ -19,7 +19,7 @@ public class AutomataStepperTest {
                 b(OBSIDIAN)
         );
         FakeWorld fakeWorld = new FakeWorld();
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertFalse(automataStepper.isLoaded());
     }
 
@@ -37,7 +37,7 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(-1, 0 ,0, AUTOMATA_START);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertFalse(automataStepper.isLoaded());
     }
 
@@ -62,10 +62,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(-15, 0, 0, matcher);
         fakeWorld.setAt(-17, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -93,10 +93,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(6, 0, 0, matcher);
         fakeWorld.setAt(8, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -176,10 +176,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(15, 0, 0, matcher);
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = {
@@ -239,60 +239,21 @@ public class AutomataStepperTest {
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
-        String[][][] result = PatternsTest.cubeWithSameBlockType(AIR);
-        fakeWorld.setSurrounding(12, 0, 0, result);
         String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        String[][][] result = PatternsTest.cubeWithSameBlockType(AIR);
+        fakeWorld.setSurrounding(15, 0, 0, result);
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld, 42);
+        automataStepper.automataTick(fakeWorld);
         fakeWorld.setAt(0, 0, 0, "X");
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("X"), actual);
-    }
-
-    @Test
-    public void limitTicks(){
-        AutomataStepper automataStepper = new AutomataStepper(
-                AIR,
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
-        );
-
-        FakeWorld fakeWorld = new FakeWorld();
-
-        fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType("X"));
-
-        fakeWorld.setAt(0, 0, 0, AUTOMATA);
-
-        fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
-        String[][][] result = PatternsTest.cubeWithSameBlockType(AUTOMATA_PLACEHOLDER);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
-        fakeWorld.setSurrounding(15, 0, 0, match);
-
-        fakeWorld.setAt(17, 0, 0, TERMINATOR);
-
-        automataStepper.automataTick(fakeWorld, 1000);
-        Assert.assertTrue(automataStepper.isLoaded());
-
-        automataStepper.automataTick(fakeWorld, 1000);
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
-
-        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType(AUTOMATA), actual);
-
-        fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType("X"));
-        automataStepper.automataTick(fakeWorld, 0);
-        String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 0);
-
-        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("X"), actual2);
     }
 
 }
