@@ -19,6 +19,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
 
     private final int evaluateOnEveryNTicks = 30;
     private int currentTickCounter = 0;
+    private int availableAutomataBlocks;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -48,8 +49,12 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         );
     }
 
-    public void setAutomataStepper(AutomataStepper automataStepper){
+    public void setAutomataStepper(
+            AutomataStepper automataStepper,
+            int availableAutomataBlocks
+    ){
         this.automataStepper = automataStepper;
+        this.availableAutomataBlocks = availableAutomataBlocks;
         updateLoadState(automataStepper);
     }
 
@@ -82,7 +87,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         }
         worldController.set(level, getBlockPos());
         boolean previousLoaded = automataStepper.isLoaded();
-        automataStepper.automataTick(worldController);
+        automataStepper.automataTick(worldController, availableAutomataBlocks);
         if(previousLoaded != automataStepper.isLoaded()){
             updateLoadState(automataStepper);
         }

@@ -2,8 +2,8 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
+import org.mockito.Mockito;
 
 import static br.com.isageek.automata.forge.BlockStateHolder.b;
 
@@ -27,6 +27,7 @@ public class FakeWorld extends WorldController {
     private static final int CENTER = 100;
 
     public boolean calledSet = false;
+    public AutomataTileEntity tileEntity = Mockito.mock(AutomataTileEntity.class);
 
     public FakeWorld() {
         super(null, null, null, null, null, null, null, null, null);
@@ -43,6 +44,10 @@ public class FakeWorld extends WorldController {
     public void setAt(int x, int y, int z, String id){
         calledSet = true;
         fakeWorld[CENTER+x][CENTER+y][CENTER+z] = b(id);
+    }
+
+    public AutomataTileEntity getAutomataTileEntity(){
+        return tileEntity;
     }
 
     @Override
@@ -184,7 +189,7 @@ public class FakeWorld extends WorldController {
 
     @Override
     public TileEntity getBlockEntity(int x, int y, int z) {
-        return null;
+        return tileEntity;
     }
 
     public String[][][] getSurroundingIds(int x, int y, int z) {

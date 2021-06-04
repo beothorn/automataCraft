@@ -17,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class AutomataMod
 {
     public static final String MOD_ID = "automata";
+    private static final int MAX_AUTOMATA_BLOCKS = 1000;
 
     public AutomataMod() {
         MinecraftForge.EVENT_BUS.register(this);
@@ -90,6 +91,7 @@ public class AutomataMod
                         automata_bedrock_placeholder.get(),
                         Blocks.CAVE_AIR
                 );
+
                 automataTileEntity.setAutomataStepper(
                     new AutomataStepper(
                         Blocks.AIR.getDescriptionId(),
@@ -97,7 +99,7 @@ public class AutomataMod
                         BlockStateHolder.b(Blocks.WATER.defaultBlockState()),
                         BlockStateHolder.b(Blocks.LAVA.defaultBlockState()),
                         BlockStateHolder.b(Blocks.OBSIDIAN.defaultBlockState())
-                    )
+                    ), MAX_AUTOMATA_BLOCKS
                 );
                 return automataTileEntity;
             }
