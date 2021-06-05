@@ -17,7 +17,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     private final WorldController worldController;
     private AutomataStepper automataStepper;
 
-    private final int evaluateOnEveryNTicks = 5;
+    private final int evaluateOnEveryNTicks = 15;
     private int currentTickCounter = 0;
 
     private static final Logger LOGGER = LogManager.getLogger();
