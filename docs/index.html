@@ -6,41 +6,7 @@
     <meta name="keywords" content="minecraft" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/styles.css" type="text/css"/>
-    <style>
-
-    :root {
-        --text-color: #bfbfbf;
-        --lighter-text-color: #919191;
-        --background-color: #1c1c1c;
-        --middle-color: #444;
-        --link-color: #5992b5;
-    }
-
-    body{
-        margin:40px auto;
-        max-width:1200px;
-        line-height:1.6;
-        font-size:18px;
-        padding:0 10px;
-        color: var(--text-color);
-        background: var(--background-color);
-    }
-
-    #wrapper{
-        background-color: var(--middle-color);
-        padding: 10px;
-        border-radius: 10px;
-        margin: 5px;
-        margin-bottom: 5px;
-        margin-bottom: 30px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.42);
-	}
-
-	a{
-	    color: var(--link-color);
-    }
-</style>
+    <link rel="stylesheet" href="./styles.css" type="text/css"/>
 </head>
 
 <body>
@@ -49,7 +15,7 @@
 
         <h1>AutomataCraft</h1>
 
-        <p>A minecraft mod that adds a block that replaces a 3x3 block pattern with another blocks.</p>
+        <p>A minecraft mod that adds a block that replaces a 3x3x3 block pattern with another blocks.</p>
 
         <p>The block is programmable with other blocks by giving two patterns,
             match blocks and result blocks.</p>
@@ -85,61 +51,273 @@
 
         <h2>Instalation</h2>
 
-        <p>First install <a href="https://files.minecraftforge.net/net/minecraftforge/forge/">https://files.minecraftforge.net/net/minecraftforge/forge/</a></p>
+        <p>First install <a href="https://files.minecraftforge.net/net/minecraftforge/forge/">Forge</a></p>
 
         <p>Then <a href="https://github.com/beothorn/automataCraft/releases/download/1.0/automataCraft1_0.jar">Download the mod</a>
             and copy the jar inside %appdata%/.minecraft/mods</p>
 
         <h2>How to play:</h2>
 
-        <p>Suppose you want to create an automata that pulls a dirty block one position up and moves one block.</p>
+        <p>Suppose you want to create an automata that replaces all blocks with dirt.</p>
 
         <p>You could do this:</p>
 
-        <p>Image goes here</p>
+        <div class="pattern-wrapper">
+            <div class="pattern pattern-one-top">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
 
-        <p>Explanation:</p>
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+            </div>
+
+            <div class="pattern pattern-one-middle">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/automata_start.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/automata_termination.png">
+                <img class="block" src="./imgs/nothing.png">
+            </div>
+
+            <div class="pattern pattern-one-bottom">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+                <img class="block" src="./imgs/dirt.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+            </div>
+        </div>
 
         <p>First column has the start block. Anything around it is not taken into consideration.</p>
 
-        <p>Second has 9 empty (air) blocks. When evaluated this will match any configuration of blocks.</p>
+        <p>The next 3x3x3 blocks are the replacement blocks. This tells the automata that when the pattern matches,
+            this blocks should replace wathever blocks are around the automata position</p>
 
-        <p>On the third column, the center block is not considered because it will always be an automata block.
-            The block under the automata is dirt (that is different from grass)</p>
+        <p>The next 3x3x3 blocks are the pattern to replace. Empty (air) is a special case that matches any lock.
+        It means that when comparing the blocks aroiund the automata with the pattern, it will always match.</p>
 
-        <p>Fourth column has 9 empty (air) blocks. When evaluated this will match any configuration of blocks.</p>
+        <p>The center block is ignored because it will always be the automata block.</p>
 
-        <p>This is the last column from the matcher blocks. If the blocks around the automata matches this,
-            it will replace all blocks with the blocks from the result.</p>
+        <p>Then a terminator block.</p>
 
-        <p>Fifth column has 9 empty (air) blocks, this means that whatever blocks are there, they will not be replaced.</p>
+        <p>After creating this block pattern, if an automata <img src="./imgs/automata_unloaded.png"/> block is placed
+        anywhere in a 20x20 radius from this pattern, it will load it <img src="./imgs/automata_loaded.png"/> and start
+        executing.</p>
 
-        <p>Sixth column has a dirt block in the center, this will replace the automata block.</p>
+        <h2>Automata blocks replication</h2>
 
-        <p>Seventh column has an Automata placeholder. When the automata runs it will add a new automata block at this position.</p>
+        <h3>Digger</h3>
 
-        <p>Then a terminator and up to 20 ignored blocks before the automata block.</p>
+        <div class="pattern-wrapper">
+            <div class="pattern pattern-one-top">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
 
-        <h2>Priority</h2>
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
 
-        <p>Closer to the start block has higher priority in case of ambiguity.</p>
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
 
-        <h2>Limit</h2>
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
 
-        <p>Only 1000 automata blocks will be created from a single pattern.</p>
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
 
-        <h2>Video:</h2>
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+            </div>
+
+            <div class="pattern pattern-one-middle">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/automata_start.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/automata_termination.png">
+                <img class="block" src="./imgs/nothing.png">
+            </div>
+
+            <div class="pattern pattern-one-bottom">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+                <img class="block" src="./imgs/automata_air_placeholder.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+                <img class="block" src="./imgs/nothing.png">
+            </div>
+        </div>
+
+        <p>The air placeholder ,when used on the replacement section, will replace blocks with air. The automata placeholder
+        will create another automata and replicate the pattern. The new automata will repeat the pattern and this will
+        keep going until it hits bedrock. Bedrock is not replaced by the automata so the digger stops.</p>
+
+        <h2>More matchers</h2>
+
+        <p>More matchers are allowed, just add more 9x3x3 sequences and then the terminator.</p>
+        <p>Closer to the start block patterns have higher priority in case of ambiguity.</p>
+
+        <h2>Videos:</h2>
 
         <ul>
-            <li>Installation</li>
-            <li>Simple block multiplier</li>
-            <li>Digger</li>
-            <li>Stairway down</li>
-            <li>Expanding digger</li>
-            <li>Tick clock</li>
-            <li>Lava door that opens with redstone lever</li>
-            <li>Maze solver</li>
-            <li>Sort blocks</li>
+            <li>Installation: todo</li>
+            <li>Simple block multiplier: todo</li>
+            <li>Digger: todo</li>
+            <li>Stairway down: todo</li>
+            <li>Expanding digger: todo</li>
+            <li>Tick clock: todo</li>
+            <li>Lava door that opens with redstone lever: todo</li>
+            <li>Maze solver: todo</li>
+            <li>Sort blocks: todo</li>
+        </ul>
+
+        <h2>Planned</h2>
+
+        <ul>
+            <li>Limit block total count to avoid crashing the game</li>
+            <li>Not air block</li>
+            <li>X axis block, when added to the center of the match pattern, pattern will match in any axis rotetion</li>
+            <li>Y axis block, when added to the center of the match pattern, pattern will match in any axis rotetion</li>
+            <li>Z axis block, when added to the center of the match pattern, pattern will match in any axis rotetion</li>
+            <li>Not block, when added to the center of the match pattern, pattern will match any pattern that is not the current pattern</li>
         </ul>
 
 </div>
