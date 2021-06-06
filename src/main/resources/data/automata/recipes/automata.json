@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " x ",
+        "  x",
+        "xxx"
+    ],
+    "key":{
+      "x": {"item": "minecraft:diamond_block"}
+    },
+    "result": {"item": "automata:automata_item"}
+}

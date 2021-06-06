@@ -2,7 +2,6 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 
 import static br.com.isageek.automata.forge.BlockStateHolder.b;
@@ -24,6 +23,7 @@ public class FakeWorld extends WorldController {
     public static final String AIR = "air";
 
     private BlockStateHolder[][][] fakeWorld;
+    private AutomataTileEntity[][][] fakeWorldEntities;
     private static final int CENTER = 100;
 
     public boolean calledSet = false;
@@ -31,6 +31,7 @@ public class FakeWorld extends WorldController {
     public FakeWorld() {
         super(null, null, null, null, null, null, null, null, null);
         fakeWorld = new BlockStateHolder[CENTER * 2][CENTER * 2][CENTER * 2];
+        fakeWorldEntities = new AutomataTileEntity[CENTER * 2][CENTER * 2][CENTER * 2];
         for (int x = 0; x < CENTER * 2; x++) {
             for (int y = 0; y < CENTER * 2; y++) {
                 for (int z = 0; z < CENTER * 2; z++) {
@@ -184,7 +185,7 @@ public class FakeWorld extends WorldController {
 
     @Override
     public TileEntity getBlockEntity(int x, int y, int z) {
-        return null;
+        return fakeWorldEntities[x][y][z];
     }
 
     public String[][][] getSurroundingIds(int x, int y, int z) {
