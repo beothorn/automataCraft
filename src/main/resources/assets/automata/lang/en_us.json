@@ -6,5 +6,6 @@
   "block.automata.automata_air_placeholder": "Air placeholder",
   "block.automata.automata_lava_placeholder": "Lava placeholder",
   "block.automata.automata_bedrock_placeholder": "Bedrock placeholder",
-  "block.automata.automata_placeholder": "Automata placeholder"
+  "block.automata.automata_placeholder": "Automata placeholder",
+  "block.automata.automata_y_rotation": "Automata Y rotation"
 }

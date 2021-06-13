@@ -1,7 +1,6 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
-import br.com.isageek.automata.forge.Register;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -13,6 +12,11 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.function.Supplier;
+
+import static br.com.isageek.automata.forge.Register.block;
+import static br.com.isageek.automata.forge.Register.blockWithTileEntity;
+
 @Mod(AutomataMod.MOD_ID)
 public class AutomataMod
 {
@@ -23,58 +27,27 @@ public class AutomataMod
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        RegistryObject<Block> automata_termination = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
+        Supplier<Block> regularBlock = () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE));
+
+        RegistryObject<Block> automata_termination = block(
                 "automata_termination",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_start = block("automata_start",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_air_placeholder = block("automata_air_placeholder",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_water_placeholder = block("automata_water_placeholder",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_placeholder = block("automata_placeholder",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_y_rotation = block("automata_y_rotation",
+                AutomataMod.MOD_ID, modEventBus, regularBlock);
 
-        RegistryObject<Block> automata_start = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
-                "automata_start",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
-
-        RegistryObject<Block> automata_air_placeholder = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
-                "automata_air_placeholder",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
-
-        RegistryObject<Block> automata_water_placeholder = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
-                "automata_water_placeholder",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
-
-        RegistryObject<Block> automata_lava_placeholder = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
-                "automata_lava_placeholder",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
-
-        RegistryObject<Block> automata_bedrock_placeholder = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
-                "automata_bedrock_placeholder",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
-
-        RegistryObject<Block> automata_placeholder = Register.block(
-                AutomataMod.MOD_ID,
-                modEventBus,
-                "automata_placeholder",
-                () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE))
-        );
-
-        Register.blockWithTileEntity(
-            AutomataMod.MOD_ID,
-            modEventBus,
+        blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
             "automata",
             (tileEntitySupplierPlaceholder) -> new AutomataBlock(tileEntitySupplierPlaceholder),
             (tileEntityRegistry, automataBlock) -> {

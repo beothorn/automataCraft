@@ -27,10 +27,9 @@ public class Register {
         TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder = new TileEntitySupplierPlaceholder();
 
         RegistryObject<Block> blockRegister = block(
-            modId,
+                blockName, modId,
             modEventBus,
-            blockName,
-            () -> blockSupplier.apply(tileEntitySupplierPlaceholder)
+                () -> blockSupplier.apply(tileEntitySupplierPlaceholder)
         );
 
         DeferredRegister<TileEntityType<?>> tileEntityTypeDeferredRegister = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, modId);
@@ -44,10 +43,10 @@ public class Register {
     }
 
     public static RegistryObject<Block> block(
-        String modId,
-        IEventBus modEventBus,
-        String blockName,
-        Supplier<Block> blockSupplier
+            String blockName,
+            String modId,
+            IEventBus modEventBus,
+            Supplier<Block> blockSupplier
     ) {
 
         DeferredRegister<Block> blockDeferredRegister = DeferredRegister.create(ForgeRegistries.BLOCKS, modId);

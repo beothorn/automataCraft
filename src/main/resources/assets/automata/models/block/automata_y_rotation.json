@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "automata:block/automata_y_rotation",
+    "north": "automata:block/automata_y_rotation",
+    "south": "automata:block/automata_y_rotation",
+    "east": "automata:block/automata_y_rotation",
+    "west": "automata:block/automata_y_rotation",
+    "up": "automata:block/automata_blank",
+    "down": "automata:block/automata_blank"
+  }
+}

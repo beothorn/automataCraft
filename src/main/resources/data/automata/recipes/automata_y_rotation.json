@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " y ",
+        "  x",
+        "xxx"
+    ],
+    "key":{
+      "x": {"item": "minecraft:dirt"},
+      "y": {"item": "minecraft:cobblestone"}
+    },
+    "result": {"item": "automata:automata_start_item"}
+},
