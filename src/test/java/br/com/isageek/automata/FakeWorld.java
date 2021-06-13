@@ -24,6 +24,7 @@ public class FakeWorld extends WorldController {
     public static final String WATER_PLACEHOLDER = "WaterPlaceholder";
     public static final String LAVA_PLACEHOLDER = "LavaPlaceholder";
     public static final String BEDROCK_PLACEHOLDER = "BedrockPlaceholder";
+    public static final String AUTOMATA_Y_ROTATION = "AutomataYRotation";
     public static final String TERMINATOR = "Terminator";
     public static final String BEDROCK = "Bedrock";
     public static final String AIR = "air";
@@ -41,7 +42,7 @@ public class FakeWorld extends WorldController {
     public boolean calledSet = false;
 
     public FakeWorld(AutomataStepper automataStepper) {
-        super(null, null, null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null, null, null);
         this.automataStepper = automataStepper;
         fakeWorld = new BlockStateHolder[CENTER * 2][CENTER * 2][CENTER * 2];
         for (int x = 0; x < CENTER * 2; x++) {
@@ -197,6 +198,11 @@ public class FakeWorld extends WorldController {
     @Override
     public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId == BEDROCK_PLACEHOLDER;
+    }
+
+    @Override
+    public boolean isYRotation(BlockStateHolder blockStateHolder) {
+        return blockStateHolder.descriptionId == AUTOMATA_Y_ROTATION;
     }
 
     @Override

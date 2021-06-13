@@ -38,7 +38,8 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block waterPlaceholder,
             Block lavaPlaceholder,
             Block bedrockPlaceholder,
-            Block caveAir
+            Block caveAir,
+            Block yRotation
     ) {
         this(tileEntityType, new WorldController(
             automata,
@@ -49,7 +50,8 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             waterPlaceholder,
             lavaPlaceholder,
             bedrockPlaceholder,
-            caveAir
+            caveAir,
+            yRotation
         ));
     }
 

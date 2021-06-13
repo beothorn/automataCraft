@@ -19,7 +19,7 @@ public class BlockTree {
 
     public static final BlockStateHolder ANY = BlockStateHolder.b("ANY");
 
-    private static final int AUTOMATA_BLOCK_POSITION = 13;
+    public static final int AUTOMATA_BLOCK_POSITION = 13;
 
     public void addPattern(
         BlockStateHolder[] match,

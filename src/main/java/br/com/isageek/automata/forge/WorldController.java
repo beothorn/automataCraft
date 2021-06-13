@@ -21,6 +21,7 @@ public class WorldController {
     private final Block lavaPlaceholder;
     private final Block bedrockPlaceholder;
     private final Block caveAir;
+    private final Block yRotation;
 
     public WorldController(
         Block automata,
@@ -31,7 +32,8 @@ public class WorldController {
         Block waterPlaceholder,
         Block lavaPlaceholder,
         Block bedrockPlaceholder,
-        Block caveAir
+        Block caveAir,
+        Block yRotation
     ) {
         this.automata = automata;
         this.terminator = terminator;
@@ -42,6 +44,7 @@ public class WorldController {
         this.lavaPlaceholder = lavaPlaceholder;
         this.bedrockPlaceholder = bedrockPlaceholder;
         this.caveAir = caveAir;
+        this.yRotation = yRotation;
     }
 
     public void set(World world, BlockPos center){
@@ -132,6 +135,10 @@ public class WorldController {
 
     public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) {
         return blockStateHolder.is(bedrockPlaceholder);
+    }
+
+    public boolean isYRotation(BlockStateHolder blockStateHolder) {
+        return blockStateHolder.is(yRotation);
     }
 
     public boolean isBedrock(int x, int y, int z) {

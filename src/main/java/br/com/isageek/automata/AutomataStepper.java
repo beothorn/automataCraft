@@ -182,9 +182,15 @@ public class AutomataStepper {
                     replacePlaceHoldersIn(worldController, result);
                     cursor.moveTowards(terminator, 3);
                     BlockStateHolder[] match = worldController.surrounding(cursor);
+                    BlockStateHolder center = match[BlockTree.AUTOMATA_BLOCK_POSITION];
+
                     replaceBlockWithAnyMatcherBlock(match);
                     replacePlaceHoldersIn(worldController, match);
                     blockTree.addPattern(match, result);
+
+                    if(worldController.isYRotation(center)){
+                        // rotate?
+                    }
 
                     cursor.moveTowards(terminator, 2);
                     count++;

@@ -61,7 +61,8 @@ public class AutomataMod
                         automata_water_placeholder.get(),
                         automata_lava_placeholder.get(),
                         automata_bedrock_placeholder.get(),
-                        Blocks.CAVE_AIR
+                        Blocks.CAVE_AIR,
+                        automata_y_rotation.get()
                 );
                 automataTileEntity.setAutomataStepper(
                     new AutomataStepper(

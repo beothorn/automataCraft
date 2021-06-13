@@ -224,13 +224,7 @@ public class AutomataStepperTest {
 
     @Test
     public void replacesNothing(){
-        AutomataStepper automataStepper = new AutomataStepper(
-                AIR,
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
-        );
+        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
@@ -239,10 +233,10 @@ public class AutomataStepperTest {
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
-        fakeWorld.setSurrounding(12, 0, 0, match);
         String[][][] result = PatternsTest.cubeWithSameBlockType(AIR);
-        fakeWorld.setSurrounding(15, 0, 0, result);
+        fakeWorld.setSurrounding(12, 0, 0, result);
+        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
+        fakeWorld.setSurrounding(15, 0, 0, match);
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
 
@@ -254,6 +248,40 @@ public class AutomataStepperTest {
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("X"), actual);
+    }
+
+    @Test
+    public void usesYRotationBlock(){
+        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
+
+        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
+        match[0][1][1] = "SomeBlock";
+        match[1][1][1] = AUTOMATA_Y_ROTATION;
+
+        String[][][] result = PatternsTest.cubeWithSameBlockType("Matched");
+
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
+        fakeWorld.setAt(0, 0, 0, AUTOMATA);
+
+        fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.setSurrounding(12, 0, 0, result);
+        fakeWorld.setSurrounding(15, 0, 0, match);
+
+        fakeWorld.setAt(17, 0, 0, TERMINATOR);
+
+        fakeWorld.tick();
+        Assert.assertTrue(automataStepper.isLoaded());
+
+        fakeWorld.setAt(-1, 0, 0, "SomeBlock");
+        fakeWorld.tick();
+        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
+
+        fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setAt(0, 0, 0, AUTOMATA);
+
+        fakeWorld.setAt(1, 0, 0, "SomeBlock");
+        fakeWorld.tick();
+        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
     }
 
 }
