@@ -131,8 +131,7 @@ public class AutomataStepper {
                                 worldController.setBlockAutomata(
                                         x,
                                         y,
-                                        z,
-                                        true
+                                        z
                                 );
 
                                 AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);

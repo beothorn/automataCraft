@@ -19,7 +19,7 @@ public class AutomataStepperTest {
                 b(OBSIDIAN)
         );
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         Assert.assertFalse(automataStepper.isLoaded());
     }
 
@@ -37,7 +37,7 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(-1, 0 ,0, AUTOMATA_START);
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         Assert.assertFalse(automataStepper.isLoaded());
     }
 
@@ -62,10 +62,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(-15, 0, 0, matcher);
         fakeWorld.setAt(-17, 0, 0, TERMINATOR);
 
-        fakeWorld.tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+        fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+        fakeWorld.tick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -93,10 +93,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(6, 0, 0, matcher);
         fakeWorld.setAt(8, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -176,10 +176,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(15, 0, 0, matcher);
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = {
@@ -246,10 +246,10 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick();
         fakeWorld.setAt(0, 0, 0, "X");
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 

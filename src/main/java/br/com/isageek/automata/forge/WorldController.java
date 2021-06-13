@@ -144,8 +144,8 @@ public class WorldController {
         return blockState.getBlock() == automata;
     }
 
-    public void setBlockAutomata(int x, int y, int z, boolean loaded) {
-        BlockState blockState = automata.defaultBlockState().setValue(AutomataBlock.loaded, loaded);
+    public void setBlockAutomata(int x, int y, int z) {
+        BlockState blockState = automata.defaultBlockState().setValue(AutomataBlock.loaded, true);
         world.setBlock(
             center.offset(x, y, z),
             blockState,

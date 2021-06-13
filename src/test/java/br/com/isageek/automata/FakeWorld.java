@@ -53,6 +53,10 @@ public class FakeWorld extends WorldController {
         }
     }
 
+    public void tick(){
+        tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+    }
+
     public void tick(int ticks){
         for (int i = 0; i < ticks; i++) {
             Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
@@ -65,11 +69,18 @@ public class FakeWorld extends WorldController {
 
     public void setAt(int x, int y, int z, String id){
         calledSet = true;
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         fakeWorld[CENTER+x][CENTER+y][CENTER+z] = b(id);
         if(id == AUTOMATA){
             AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
             automataTileEntity.setAutomataStepper(automataStepper);
             entitiesOnPositions.put(Coord.coord(x, y, z), automataTileEntity);
+        }else{
+            if(entitiesOnPositions.containsKey(Coord.coord(x, y, z))){
+                entitiesOnPositions.remove(Coord.coord(x, y, z));
+            }
         }
     }
 
@@ -79,6 +90,9 @@ public class FakeWorld extends WorldController {
     }
 
     public void setSurrounding(int x, int y, int z, String[][][] surroundingIds){
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
@@ -90,6 +104,9 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isTerminator(int x, int y, int z) {
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         if(
                 x + CENTER >= CENTER * 2
                         || x + CENTER <  0
@@ -105,6 +122,9 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isAutomataStart(int x, int y, int z) {
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         if(
                x + CENTER >= CENTER * 2
             || x + CENTER <  0
@@ -120,6 +140,9 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isBedrock(int x, int y, int z) {
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         if(
                 x + CENTER >= CENTER * 2
                         || x + CENTER <  0
@@ -135,6 +158,9 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isAutomata(int x, int y, int z) {
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         if(
                 x + CENTER >= CENTER * 2
                         || x + CENTER <  0
@@ -175,6 +201,9 @@ public class FakeWorld extends WorldController {
 
     @Override
     public BlockStateHolder[] surrounding(int x, int y, int z) {
+        x = x + center.x;
+        y = y + center.y;
+        z = z + center.z;
         BlockStateHolder[] result = new BlockStateHolder[27];
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
@@ -206,7 +235,7 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public void setBlockAutomata(int x, int y, int z, boolean loaded) {
+    public void setBlockAutomata(int x, int y, int z) {
         setAt(x, y, z, AUTOMATA);
     }
 
