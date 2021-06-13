@@ -3,24 +3,30 @@ package br.com.isageek.automata;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.state.Property;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collection;
-
 public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
     private final WorldController worldController;
     private AutomataStepper automataStepper;
 
-    private final int evaluateOnEveryNTicks = 15;
+    public static final int EVAL_EVERY_TICKS = 15;
+    public static final boolean THROW_EXCEPTIONS = true;
     private int currentTickCounter = 0;
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    public AutomataTileEntity(
+            TileEntityType<AutomataTileEntity> tileEntityType,
+            WorldController worldController
+    ) {
+        super(tileEntityType);
+        this.worldController = worldController;
+    }
 
     public AutomataTileEntity(
             TileEntityType<AutomataTileEntity> tileEntityType,
@@ -34,18 +40,17 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block bedrockPlaceholder,
             Block caveAir
     ) {
-        super(tileEntityType);
-        worldController = new WorldController(
-                automata,
-                termination,
-                start,
-                automataPlaceholder,
-                airPlaceholder,
-                waterPlaceholder,
-                lavaPlaceholder,
-                bedrockPlaceholder,
-                caveAir
-        );
+        this(tileEntityType, new WorldController(
+            automata,
+            termination,
+            start,
+            automataPlaceholder,
+            airPlaceholder,
+            waterPlaceholder,
+            lavaPlaceholder,
+            bedrockPlaceholder,
+            caveAir
+        ));
     }
 
     public void setAutomataStepper(AutomataStepper automataStepper){
@@ -72,12 +77,15 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             internalTick();
         }catch (Exception e){
             LOGGER.error(e);
+            if(THROW_EXCEPTIONS){
+                throw e;
+            }
         }
     }
 
     private void internalTick() {
-        if(currentTickCounter < evaluateOnEveryNTicks){
-            currentTickCounter++;
+        currentTickCounter++;
+        if(currentTickCounter < EVAL_EVERY_TICKS){
             return;
         }
         worldController.set(level, getBlockPos());

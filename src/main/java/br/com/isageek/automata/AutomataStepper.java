@@ -3,7 +3,6 @@ package br.com.isageek.automata;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.Blocks;
 
 public class AutomataStepper {
 
@@ -173,7 +172,7 @@ public class AutomataStepper {
             Coord terminator = findTerminatorFor(worldController, nearestStart);
             if(terminator != null){
                 loaded = true;
-                Coord cursor = Coord.c(nearestStart);
+                Coord cursor = Coord.coord(nearestStart);
                 int count = 0;
                 cursor.moveTowards(terminator, 1);
                 while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){

@@ -2,7 +2,6 @@ package br.com.isageek.automata.patterns;
 
 import br.com.isageek.automata.AutomataStepper;
 import br.com.isageek.automata.FakeWorld;
-import br.com.isageek.automata.forge.BlockStateHolder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +24,7 @@ public class PatternsTest {
                 b(OBSIDIAN)
         );
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.setSurrounding(0, 0, 0, state);
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
@@ -85,7 +84,7 @@ public class PatternsTest {
         String[][][] expected = PatternsTest.cubeWithSameBlockType(AIR);
         expected[1][1][1] = AUTOMATA;
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
@@ -129,7 +128,7 @@ public class PatternsTest {
                 b(OBSIDIAN)
         );
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(-10, 0, 0, AUTOMATA_START);

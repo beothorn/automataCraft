@@ -18,7 +18,7 @@ public class AutomataStepperTest {
                 b(LAVA),
                 b(OBSIDIAN)
         );
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
         automataStepper.automataTick(fakeWorld);
         Assert.assertFalse(automataStepper.isLoaded());
     }
@@ -33,7 +33,7 @@ public class AutomataStepperTest {
                 b(OBSIDIAN)
         );
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
         fakeWorld.setAt(-1, 0 ,0, AUTOMATA_START);
 
@@ -51,7 +51,7 @@ public class AutomataStepperTest {
                 b(OBSIDIAN)
         );
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
         String[][][] matcher = PatternsTest.cubeWithSameBlockType("a");
         String[][][] replacement = PatternsTest.cubeWithSameBlockType("b");
@@ -62,10 +62,10 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(-15, 0, 0, matcher);
         fakeWorld.setAt(-17, 0, 0, TERMINATOR);
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick(AutomataTileEntity.EVAL_EVERY_TICKS);
         Assert.assertTrue(automataStepper.isLoaded());
 
-        automataStepper.automataTick(fakeWorld);
+        fakeWorld.tick(AutomataTileEntity.EVAL_EVERY_TICKS);
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -85,7 +85,7 @@ public class AutomataStepperTest {
         String[][][] matcher = PatternsTest.cubeWithSameBlockType("a");
         String[][][] replacement = PatternsTest.cubeWithSameBlockType("b");
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(1, 0, 0, AUTOMATA_START);
         fakeWorld.setSurrounding(3, 0, 0, replacement);
@@ -168,7 +168,7 @@ public class AutomataStepperTest {
             }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.setSurrounding(0, 0, 0, state);
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
@@ -232,7 +232,7 @@ public class AutomataStepperTest {
                 b(OBSIDIAN)
         );
 
-        FakeWorld fakeWorld = new FakeWorld();
+        FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
         fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType("X"));
 
