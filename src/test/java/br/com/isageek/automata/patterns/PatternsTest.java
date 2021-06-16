@@ -2,13 +2,29 @@ package br.com.isageek.automata.patterns;
 
 import br.com.isageek.automata.AutomataStepper;
 import br.com.isageek.automata.FakeWorld;
+import br.com.isageek.automata.forge.BlockStateHolder;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static br.com.isageek.automata.FakeWorld.*;
-import static br.com.isageek.automata.forge.BlockStateHolder.b;
+import static br.com.isageek.automata.forge.BlockStateHolder.block;
 
 public class PatternsTest {
+
+    public static BlockStateHolder[] flatten(String[][][] matrix){
+        BlockStateHolder[] result = new BlockStateHolder[27];
+
+        int i = 0;
+        for (int ix = 0; ix < 3; ix++) {
+            for (int iy = 0; iy < 3; iy++) {
+                for (int iz = 0; iz < 3; iz++) {
+                    result[i++] =  block(matrix[ix][iy][iz]);
+                }
+            }
+        }
+
+        return result;
+    }
 
     public static void testPattern(
         String[][][] state,
@@ -38,10 +54,10 @@ public class PatternsTest {
     public static AutomataStepper vanillaStepper() {
         return new AutomataStepper(
                 AIR,
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                block(AIR),
+                block(WATER),
+                block(LAVA),
+                block(OBSIDIAN)
         );
     }
 
@@ -69,10 +85,10 @@ public class PatternsTest {
     public void createBlockWhenAnotherBlockIsAdded(){
         AutomataStepper automataStepper = new AutomataStepper(
                 "anyMatcher",
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                block(AIR),
+                block(WATER),
+                block(LAVA),
+                block(OBSIDIAN)
         );
 
         String[][][] state = PatternsTest.cubeWithSameBlockType(AIR);

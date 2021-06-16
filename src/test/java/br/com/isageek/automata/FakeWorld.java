@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static br.com.isageek.automata.forge.BlockStateHolder.b;
+import static br.com.isageek.automata.forge.BlockStateHolder.block;
 import static br.com.isageek.automata.forge.Coord.coord;
 
 public class FakeWorld extends WorldController {
@@ -48,7 +48,7 @@ public class FakeWorld extends WorldController {
         for (int x = 0; x < CENTER * 2; x++) {
             for (int y = 0; y < CENTER * 2; y++) {
                 for (int z = 0; z < CENTER * 2; z++) {
-                    fakeWorld[x][y][z] = b(AIR);
+                    fakeWorld[x][y][z] = BlockStateHolder.block(AIR);
                 }
             }
         }
@@ -73,7 +73,7 @@ public class FakeWorld extends WorldController {
         x = x + center.x;
         y = y + center.y;
         z = z + center.z;
-        fakeWorld[CENTER+x][CENTER+y][CENTER+z] = b(id);
+        fakeWorld[CENTER+x][CENTER+y][CENTER+z] = BlockStateHolder.block(id);
         if(id == AUTOMATA){
             AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
             automataTileEntity.setAutomataStepper(automataStepper);
@@ -97,7 +97,7 @@ public class FakeWorld extends WorldController {
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    fakeWorld[x+ix+CENTER][y+iy+CENTER][z+iz+CENTER] = b(surroundingIds[ix + 1][iy + 1][iz + 1]);
+                    fakeWorld[x+ix+CENTER][y+iy+CENTER][z+iz+CENTER] = BlockStateHolder.block(surroundingIds[ix + 1][iy + 1][iz + 1]);
                 }
             }
         }
@@ -226,16 +226,16 @@ public class FakeWorld extends WorldController {
     @Override
     public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
         if(isAirPlaceholder(blockState)){
-            return b(AIR);
+            return BlockStateHolder.block(AIR);
         }
         if(isWaterPlaceholder(blockState)) {
-            return b(WATER);
+            return BlockStateHolder.block(WATER);
         }
         if(isLavaPlaceholder(blockState)) {
-            return b(LAVA);
+            return BlockStateHolder.block(LAVA);
         }
         if(isBedrockPlaceholder(blockState)) {
-            return b(BEDROCK);
+            return BlockStateHolder.block(BEDROCK);
         }
         return blockState;
     }

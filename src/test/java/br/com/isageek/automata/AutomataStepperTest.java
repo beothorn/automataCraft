@@ -1,11 +1,12 @@
 package br.com.isageek.automata;
 
+import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.patterns.PatternsTest;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static br.com.isageek.automata.FakeWorld.*;
-import static br.com.isageek.automata.forge.BlockStateHolder.b;
+import static br.com.isageek.automata.forge.BlockStateHolder.block;
 
 public class AutomataStepperTest {
 
@@ -13,10 +14,10 @@ public class AutomataStepperTest {
     public void doesNotLoadWhenThereIsNoStartBlock(){
         AutomataStepper automataStepper = new AutomataStepper(
                 AIR,
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                BlockStateHolder.block(AIR),
+                BlockStateHolder.block(WATER),
+                BlockStateHolder.block(LAVA),
+                BlockStateHolder.block(OBSIDIAN)
         );
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.tick();
@@ -27,10 +28,10 @@ public class AutomataStepperTest {
     public void doesNotLoadWhenThereIsNoTerminator(){
         AutomataStepper automataStepper = new AutomataStepper(
                 AIR,
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                BlockStateHolder.block(AIR),
+                BlockStateHolder.block(WATER),
+                BlockStateHolder.block(LAVA),
+                BlockStateHolder.block(OBSIDIAN)
         );
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
@@ -45,10 +46,10 @@ public class AutomataStepperTest {
     public void loadSimplePatternXAxisDescending(){
         AutomataStepper automataStepper = new AutomataStepper(
                 "a",
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                BlockStateHolder.block(AIR),
+                BlockStateHolder.block(WATER),
+                BlockStateHolder.block(LAVA),
+                BlockStateHolder.block(OBSIDIAN)
         );
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
@@ -76,10 +77,10 @@ public class AutomataStepperTest {
     public void loadSimplePatternXAxisAscending(){
         AutomataStepper automataStepper = new AutomataStepper(
                 "a",
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                BlockStateHolder.block(AIR),
+                BlockStateHolder.block(WATER),
+                BlockStateHolder.block(LAVA),
+                BlockStateHolder.block(OBSIDIAN)
         );
 
         String[][][] matcher = PatternsTest.cubeWithSameBlockType("a");
@@ -107,10 +108,10 @@ public class AutomataStepperTest {
     public void loadComplexPatternXAxisAscending(){
         AutomataStepper automataStepper = new AutomataStepper(
                 "anyMatcher",
-                b(AIR),
-                b(WATER),
-                b(LAVA),
-                b(OBSIDIAN)
+                BlockStateHolder.block(AIR),
+                BlockStateHolder.block(WATER),
+                BlockStateHolder.block(LAVA),
+                BlockStateHolder.block(OBSIDIAN)
         );
 
         String[][][] state = {

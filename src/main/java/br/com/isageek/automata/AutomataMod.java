@@ -67,10 +67,10 @@ public class AutomataMod
                 automataTileEntity.setAutomataStepper(
                     new AutomataStepper(
                         Blocks.AIR.getDescriptionId(),
-                        BlockStateHolder.b(Blocks.AIR.defaultBlockState()),
-                        BlockStateHolder.b(Blocks.WATER.defaultBlockState()),
-                        BlockStateHolder.b(Blocks.LAVA.defaultBlockState()),
-                        BlockStateHolder.b(Blocks.OBSIDIAN.defaultBlockState())
+                        BlockStateHolder.block(Blocks.AIR.defaultBlockState()),
+                        BlockStateHolder.block(Blocks.WATER.defaultBlockState()),
+                        BlockStateHolder.block(Blocks.LAVA.defaultBlockState()),
+                        BlockStateHolder.block(Blocks.OBSIDIAN.defaultBlockState())
                     )
                 );
                 return automataTileEntity;

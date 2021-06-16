@@ -2,7 +2,6 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,7 @@ public class BlockTree {
     private Node root;
 
 
-    public static final BlockStateHolder ANY = BlockStateHolder.b("ANY");
+    public static final BlockStateHolder ANY = BlockStateHolder.block("ANY");
 
     public static final int AUTOMATA_BLOCK_POSITION = 13;
 

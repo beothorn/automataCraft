@@ -1,5 +1,6 @@
 package br.com.isageek.automata;
 
+import br.com.isageek.automata.forge.BlockOperations;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
@@ -122,41 +123,21 @@ public class AutomataStepper {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
                         BlockStateHolder blockStateHolder = toReplace[i++];
-
-                        if(
-                            !worldController.isBedrock(x, y, z)
-                            && blockStateHolder.descriptionId != BlockTree.ANY.descriptionId
-                        ){
+                        boolean isNotBedrock = !worldController.isBedrock(x, y, z);
+                        boolean isNotMatchAll = blockStateHolder.descriptionId != BlockTree.ANY.descriptionId;
+                        boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
+                        if(shouldBeReplaced){
                             if(worldController.isAutomataPlaceholder(blockStateHolder)){
-                                worldController.setBlockAutomata(
-                                        x,
-                                        y,
-                                        z
-                                );
-
+                                worldController.setBlockAutomata(x, y, z);
                                 AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);
                                 if(blockEntity != null) blockEntity.setAutomataStepper(this);
                             } else{
-
                                 BlockStateHolder blockState = blockStateHolder;
-                                if(worldController.isAirPlaceholder(blockStateHolder)){
-                                    blockState = air;
-                                }
-                                if(worldController.isWaterPlaceholder(blockStateHolder)){
-                                    blockState = water;
-                                }
-                                if(worldController.isLavaPlaceholder(blockStateHolder)){
-                                    blockState = lava;
-                                }
-                                if(worldController.isBedrockPlaceholder(blockStateHolder)){
-                                    blockState = obsidian;
-                                }
-                                worldController.setBlock(
-                                        x,
-                                        y,
-                                        z,
-                                        blockState
-                                );
+                                if(worldController.isAirPlaceholder(blockStateHolder)    ) blockState = air;
+                                if(worldController.isWaterPlaceholder(blockStateHolder)  ) blockState = water;
+                                if(worldController.isLavaPlaceholder(blockStateHolder)   ) blockState = lava;
+                                if(worldController.isBedrockPlaceholder(blockStateHolder)) blockState = obsidian;
+                                worldController.setBlock(x, y, z, blockState);
                             }
                         }
                     }
@@ -189,7 +170,15 @@ public class AutomataStepper {
                     blockTree.addPattern(match, result);
 
                     if(worldController.isYRotation(center)){
-                        // rotate?
+                        BlockStateHolder[] match90 = BlockOperations.rotateY(match);
+                        BlockStateHolder[] result90 = BlockOperations.rotateY(result);
+                        blockTree.addPattern(match90, result90);
+                        BlockStateHolder[] match180 = BlockOperations.rotateY(match90);
+                        BlockStateHolder[] result180 = BlockOperations.rotateY(result90);
+                        blockTree.addPattern(match180, result180);
+                        BlockStateHolder[] match270 = BlockOperations.rotateY(match180);
+                        BlockStateHolder[] result270 = BlockOperations.rotateY(result180);
+                        blockTree.addPattern(match270, result270);
                     }
 
                     cursor.moveTowards(terminator, 2);

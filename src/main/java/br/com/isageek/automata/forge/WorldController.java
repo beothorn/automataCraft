@@ -96,7 +96,7 @@ public class WorldController {
 
     private BlockStateHolder createStateHolderFor(int x, int y, int z){
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
-        return BlockStateHolder.b(blockState);
+        return BlockStateHolder.block(blockState);
     }
 
     public TileEntity getBlockEntity(int x, int y, int z) {
@@ -163,16 +163,16 @@ public class WorldController {
 
     public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
         if(isAirPlaceholder(blockState)){
-            return BlockStateHolder.b(Blocks.AIR.defaultBlockState());
+            return BlockStateHolder.block(Blocks.AIR.defaultBlockState());
         }
         if(isWaterPlaceholder(blockState)) {
-            return BlockStateHolder.b(Blocks.WATER.defaultBlockState());
+            return BlockStateHolder.block(Blocks.WATER.defaultBlockState());
         }
         if(isLavaPlaceholder(blockState)) {
-            return BlockStateHolder.b(Blocks.LAVA.defaultBlockState());
+            return BlockStateHolder.block(Blocks.LAVA.defaultBlockState());
         }
         if(isBedrockPlaceholder(blockState)) {
-            return BlockStateHolder.b(Blocks.BEDROCK.defaultBlockState());
+            return BlockStateHolder.block(Blocks.BEDROCK.defaultBlockState());
         }
         return blockState;
     }

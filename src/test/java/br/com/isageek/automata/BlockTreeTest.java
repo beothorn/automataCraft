@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static br.com.isageek.automata.BlockTree.ANY;
-import static br.com.isageek.automata.forge.BlockStateHolder.b;
+import static br.com.isageek.automata.forge.BlockStateHolder.block;
 import static org.junit.Assert.assertEquals;
 
 public class BlockTreeTest {
@@ -15,60 +15,60 @@ public class BlockTreeTest {
     public void findResultForMatch(){
         String automataBlock = "auto";
         BlockStateHolder[] currentState = new BlockStateHolder[]{
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-            b("a"),b("a"),b("a"),
-            b("a"),b(automataBlock),b("a"),
-            b("a"),b("a"),b("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block(automataBlock), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
 
         BlockStateHolder[] match1 = new BlockStateHolder[]{
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
-            b("a"),b("a"),b("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+            BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result1 = new BlockStateHolder[]{
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
         BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
-            b("b"),b("b"),b("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+            BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
@@ -80,17 +80,17 @@ public class BlockTreeTest {
         String automataBlock = "auto";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
-                b("c"),b("d"),b("e"),
-                b("f"),b("g"),b("h"),
-                b("i"),b("j"),b("k"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("d"), BlockStateHolder.block("e"),
+                BlockStateHolder.block("f"), BlockStateHolder.block("g"), BlockStateHolder.block("h"),
+                BlockStateHolder.block("i"), BlockStateHolder.block("j"), BlockStateHolder.block("k"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b(automataBlock),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block(automataBlock), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
 
         BlockStateHolder[] match1 = new BlockStateHolder[]{
@@ -98,43 +98,43 @@ public class BlockTreeTest {
                 ANY, ANY, ANY,
                 ANY, ANY, ANY,
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result1 = new BlockStateHolder[]{
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
@@ -146,17 +146,17 @@ public class BlockTreeTest {
         String automataBlock = "auto";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b(automataBlock),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block(automataBlock), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
 
         // This matches first
@@ -165,53 +165,53 @@ public class BlockTreeTest {
                 ANY, ANY, ANY,
                 ANY, ANY, ANY,
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result1 = new BlockStateHolder[]{
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockStateHolder[] match2 = new BlockStateHolder[]{
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result2 = new BlockStateHolder[]{
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
         };
 
         BlockTree patterns = new BlockTree();
@@ -219,17 +219,17 @@ public class BlockTreeTest {
         patterns.addPattern(match2, result2);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
@@ -241,45 +241,45 @@ public class BlockTreeTest {
         String automataBlock = "auto";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b(automataBlock),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block(automataBlock), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
 
         // This matches first
         BlockStateHolder[] match1 = new BlockStateHolder[]{
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result1 = new BlockStateHolder[]{
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
         };
 
         BlockStateHolder[] match2 = new BlockStateHolder[]{
@@ -287,26 +287,26 @@ public class BlockTreeTest {
                 ANY, ANY, ANY,
                 ANY, ANY, ANY,
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result2 = new BlockStateHolder[]{
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockTree patterns = new BlockTree();
@@ -314,17 +314,17 @@ public class BlockTreeTest {
         patterns.addPattern(match2, result2);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);
@@ -336,17 +336,17 @@ public class BlockTreeTest {
         String automataBlock = "auto";
 
         BlockStateHolder[] currentState = new BlockStateHolder[]{
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b(automataBlock),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block(automataBlock), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
 
         // This matches first
@@ -361,47 +361,47 @@ public class BlockTreeTest {
 
                 ANY, ANY, ANY,
                 ANY, ANY, ANY,
-                ANY, ANY, b("b")
+                ANY, ANY, BlockStateHolder.block("b")
         };
         BlockStateHolder[] result1 = new BlockStateHolder[]{
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
 
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
-                b("b"),b("b"),b("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
+                BlockStateHolder.block("b"), BlockStateHolder.block("b"), BlockStateHolder.block("b"),
         };
 
         BlockStateHolder[] match2 = new BlockStateHolder[]{
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b(automataBlock),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block(automataBlock), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
 
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
-                b("a"),b("a"),b("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
+                BlockStateHolder.block("a"), BlockStateHolder.block("a"), BlockStateHolder.block("a"),
         };
         BlockStateHolder[] result2 = new BlockStateHolder[]{
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
         };
 
         BlockTree patterns = new BlockTree();
@@ -409,17 +409,17 @@ public class BlockTreeTest {
         patterns.addPattern(match2, result2);
 
         BlockStateHolder[] expected = new BlockStateHolder[]{
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
 
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
-                b("c"),b("c"),b("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
+                BlockStateHolder.block("c"), BlockStateHolder.block("c"), BlockStateHolder.block("c"),
         };
 
         BlockStateHolder[] actual = patterns.getReplacementFor(currentState);

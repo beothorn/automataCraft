@@ -3,15 +3,17 @@ package br.com.isageek.automata.forge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 
+import java.util.Objects;
+
 public class BlockStateHolder {
     public final BlockState blockState;
     public final String descriptionId;
 
-    public static BlockStateHolder b(String descriptionId){
+    public static BlockStateHolder block(String descriptionId){
         return new BlockStateHolder(null, descriptionId);
     }
 
-    public static BlockStateHolder b(BlockState b){
+    public static BlockStateHolder block(BlockState b){
         return new BlockStateHolder(b, b.getBlock().getDescriptionId());
     }
 
@@ -31,5 +33,18 @@ public class BlockStateHolder {
     public boolean is(Block block) {
         if(blockState == null) return block.getDescriptionId() == descriptionId;
         return blockState.getBlock() == block;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlockStateHolder that = (BlockStateHolder) o;
+        return descriptionId.equals(that.descriptionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(descriptionId);
     }
 }
