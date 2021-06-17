@@ -1,6 +1,12 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "automata:block/automata_water_placeholder"
+    "particle": "automata:block/automata_water_placeholder",
+    "north": "automata:block/automata_water_placeholder",
+    "south": "automata:block/automata_water_placeholder",
+    "east": "automata:block/automata_water_placeholder",
+    "west": "automata:block/automata_water_placeholder",
+    "up": "automata:block/automata_water_placeholder_top_bottom",
+    "down": "automata:block/automata_water_placeholder_top_bottom"
   }
 }
