@@ -56,10 +56,10 @@ public class TickClock {
         fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] actual1 = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expectedDown, actual1);
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expectedUp, actual2);
     }

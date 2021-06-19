@@ -1,6 +1,5 @@
 package br.com.isageek.automata;
 
-import br.com.isageek.automata.forge.BlockOperations;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
@@ -106,17 +105,28 @@ public class AutomataStepper {
         return null;
     }
 
-    public void automataTick(WorldController worldController) {
-        if(loaded){
-            executePattern(worldController);
-        }else{
-            tryToLoadPattern(worldController);
-        }
+    /***
+     * Loads and returns if just loaded
+     *
+     * @param worldController implementation of the world, fake on tests and controller on minecraft
+     * @return if the load status was false and turned true
+     */
+    public boolean load(WorldController worldController) {
+        if(loaded) return false; // was already loaded, no transition
+        loaded = tryToLoadPattern(worldController);
+        return loaded;
     }
 
-    private void executePattern(WorldController worldController) {
+    public BlockStateHolder[] getReplacement(WorldController worldController) {
+        if(!loaded) return null;
         BlockStateHolder[] toBeReplaced = worldController.surrounding();
-        BlockStateHolder[] toReplace = blockTree.getReplacementFor(toBeReplaced);
+        return blockTree.getReplacementFor(toBeReplaced);
+    }
+
+    public void replace(
+            WorldController worldController,
+            BlockStateHolder[] toReplace
+    ){
         if(toReplace != null){
             int i = 0;
             for (int x = -1; x <= 1; x++) {
@@ -124,7 +134,7 @@ public class AutomataStepper {
                     for (int z = -1; z <= 1; z++) {
                         BlockStateHolder blockStateHolder = toReplace[i++];
                         boolean isNotBedrock = !worldController.isBedrock(x, y, z);
-                        boolean isNotMatchAll = blockStateHolder.descriptionId != BlockTree.ANY.descriptionId;
+                        boolean isNotMatchAll = !blockStateHolder.descriptionId.equals(BlockTree.ANY.descriptionId);
                         boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
                         if(shouldBeReplaced){
                             if(worldController.isAutomataPlaceholder(blockStateHolder)){
@@ -146,12 +156,11 @@ public class AutomataStepper {
         }
     }
 
-    private void tryToLoadPattern(WorldController worldController) {
+    private boolean tryToLoadPattern(WorldController worldController) {
         Coord nearestStart = findNearestStart(worldController);
         if(nearestStart != null){
             Coord terminator = findTerminatorFor(worldController, nearestStart);
             if(terminator != null){
-                loaded = true;
                 Coord cursor = Coord.coord(nearestStart);
                 int count = 0;
                 cursor.moveTowards(terminator, 1);
@@ -177,9 +186,11 @@ public class AutomataStepper {
 
                     cursor.moveTowards(terminator, 2);
                     count++;
-                };
+                }
+                return true;
             }
         }
+        return false;
     }
 
     private void replacePlaceHoldersIn(WorldController worldController, BlockStateHolder[] blockStates) {
@@ -191,7 +202,7 @@ public class AutomataStepper {
     private void replaceBlockWithAnyMatcherBlock(BlockStateHolder[] blockStates) {
         for (int i = 0; i < blockStates.length; i++) {
             BlockStateHolder blockState = blockStates[i];
-            if(blockState.descriptionId == descriptionIdForBlockRepresentingAny){
+            if(blockState.descriptionId.equals(descriptionIdForBlockRepresentingAny)){
                 blockStates[i] = BlockTree.ANY;
             }
         }

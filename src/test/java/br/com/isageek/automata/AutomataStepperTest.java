@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static br.com.isageek.automata.FakeWorld.*;
-import static br.com.isageek.automata.forge.BlockStateHolder.block;
 
 public class AutomataStepperTest {
 
@@ -66,7 +65,7 @@ public class AutomataStepperTest {
         fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -97,7 +96,7 @@ public class AutomataStepperTest {
         fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
@@ -180,7 +179,7 @@ public class AutomataStepperTest {
         fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
         String[][][] expected = {
@@ -274,14 +273,14 @@ public class AutomataStepperTest {
         Assert.assertTrue(automataStepper.isLoaded());
 
         fakeWorld.setAt(-1, 0, 0, "SomeBlock");
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
 
         fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(1, 0, 0, "SomeBlock");
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
     }
 

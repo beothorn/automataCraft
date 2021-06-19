@@ -62,10 +62,10 @@ public class AutomataMoveOneBlock {
         fakeWorld.tick();
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] actual1 = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual1);
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 1);
         Assert.assertArrayEquals(expected, actual2);
     }

@@ -4,12 +4,12 @@ import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static br.com.isageek.automata.forge.BlockStateHolder.block;
 import static br.com.isageek.automata.forge.Coord.coord;
 
 public class FakeWorld extends WorldController {
@@ -58,6 +58,11 @@ public class FakeWorld extends WorldController {
         tick(AutomataTileEntity.EVAL_EVERY_TICKS);
     }
 
+    public void doubleTick(){
+        tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+        tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+    }
+
     public void tick(int ticks){
         for (int i = 0; i < ticks; i++) {
             Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
@@ -74,14 +79,13 @@ public class FakeWorld extends WorldController {
         y = y + center.y;
         z = z + center.z;
         fakeWorld[CENTER+x][CENTER+y][CENTER+z] = BlockStateHolder.block(id);
-        if(id == AUTOMATA){
+        if(id.equals(AUTOMATA)){
             AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
             automataTileEntity.setAutomataStepper(automataStepper);
             entitiesOnPositions.put(Coord.coord(x, y, z), automataTileEntity);
+            automataTileEntity.setPosition(new BlockPos(x, y, z));
         }else{
-            if(entitiesOnPositions.containsKey(Coord.coord(x, y, z))){
-                entitiesOnPositions.remove(Coord.coord(x, y, z));
-            }
+            entitiesOnPositions.remove(Coord.coord(x, y, z));
         }
     }
 
@@ -118,7 +122,7 @@ public class FakeWorld extends WorldController {
         ){
             return false;
         }
-        return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == TERMINATOR;
+        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(TERMINATOR);
     }
 
     @Override
@@ -136,7 +140,7 @@ public class FakeWorld extends WorldController {
         ){
             return false;
         }
-        return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == AUTOMATA_START;
+        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(AUTOMATA_START);
     }
 
     @Override
@@ -154,7 +158,7 @@ public class FakeWorld extends WorldController {
         ){
             return false;
         }
-        return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == BEDROCK;
+        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(BEDROCK);
     }
 
     @Override
@@ -172,37 +176,37 @@ public class FakeWorld extends WorldController {
         ){
             return false;
         }
-        return fakeWorld[CENTER+x][CENTER+y][CENTER+z].descriptionId == AUTOMATA;
+        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(AUTOMATA);
     }
 
     @Override
     public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId == AUTOMATA_PLACEHOLDER;
+        return blockStateHolder.descriptionId.equals(AUTOMATA_PLACEHOLDER);
     }
 
     @Override
     public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId == AIR_PLACEHOLDER;
+        return blockStateHolder.descriptionId.equals(AIR_PLACEHOLDER);
     }
 
     @Override
     public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId == WATER_PLACEHOLDER;
+        return blockStateHolder.descriptionId.equals(WATER_PLACEHOLDER);
     }
 
     @Override
     public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId == LAVA_PLACEHOLDER;
+        return blockStateHolder.descriptionId.equals(LAVA_PLACEHOLDER);
     }
 
     @Override
     public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId == BEDROCK_PLACEHOLDER;
+        return blockStateHolder.descriptionId.equals(BEDROCK_PLACEHOLDER);
     }
 
     @Override
     public boolean isYRotation(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId == AUTOMATA_Y_ROTATION;
+        return blockStateHolder.descriptionId.equals(AUTOMATA_Y_ROTATION);
     }
 
     @Override
@@ -260,5 +264,9 @@ public class FakeWorld extends WorldController {
             }
         }
         return result;
+    }
+
+    public String getAt(int x, int y, int z) {
+        return fakeWorld[x+CENTER][y+CENTER][z+CENTER].descriptionId;
     }
 }

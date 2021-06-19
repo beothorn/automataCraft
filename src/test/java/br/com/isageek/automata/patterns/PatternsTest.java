@@ -42,10 +42,11 @@ public class PatternsTest {
         fakeWorld.setSurrounding(12, 0, 0, result);
         fakeWorld.setSurrounding(15, 0, 0, match);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
-        fakeWorld.tick();
+        fakeWorld.tick(); // One tick to load
         Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.tick();
+        fakeWorld.tick(); // One tick to read world state
+        fakeWorld.tick(); // One tick to replace blocks
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         Assert.assertArrayEquals(expected, actual);
@@ -120,7 +121,7 @@ public class PatternsTest {
         // If key block is present, replace the other block
         state[0][0][1] = "keyBlock";
         fakeWorld.setSurrounding(0, 0, 0, state);
-        fakeWorld.tick();;
+        fakeWorld.doubleTick();
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
         expected[1][0][0] = "replacement";
@@ -130,7 +131,7 @@ public class PatternsTest {
         state[0][0][1] = AIR;
         state[1][0][0] = "replacement";
         fakeWorld.setSurrounding(0, 0, 0, state);
-        fakeWorld.tick();
+        fakeWorld.doubleTick();
         String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 0);
 
         expected[1][0][0] = AIR;

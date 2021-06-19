@@ -1,11 +1,13 @@
 package br.com.isageek.automata;
 
+import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.BlockPos;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,9 +16,11 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     private final WorldController worldController;
     private AutomataStepper automataStepper;
 
-    public static final int EVAL_EVERY_TICKS = 15;
+    public static final int EVAL_EVERY_TICKS = 30;
     public static final boolean THROW_EXCEPTIONS = true;
+
     private int currentTickCounter = 0;
+    BlockStateHolder[] nextReplacement;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -57,13 +61,16 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
 
     public void setAutomataStepper(AutomataStepper automataStepper){
         this.automataStepper = automataStepper;
-        updateLoadState(automataStepper);
+        setStateToLoaded();
     }
 
-    private void updateLoadState(AutomataStepper automataStepper) {
+    /***
+     * This will update the texture from unloaded to loaded
+     *
+     */
+    private void setStateToLoaded() {
         if(this.level != null){
-            boolean loaded = automataStepper.isLoaded();
-            BlockState blockState = getBlockState().setValue(AutomataBlock.loaded, loaded);
+            BlockState blockState = getBlockState().setValue(AutomataBlock.loaded, true);
             this.level.setBlock(
                     getBlockPos(),
                     blockState,
@@ -90,12 +97,26 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         if(currentTickCounter < EVAL_EVERY_TICKS){
             return;
         }
-        worldController.set(level, getBlockPos());
-        boolean previousLoaded = automataStepper.isLoaded();
-        automataStepper.automataTick(worldController);
-        if(previousLoaded != automataStepper.isLoaded()){
-            updateLoadState(automataStepper);
+        BlockPos blockPos = getBlockPos();
+        System.out.println("Tick "+blockPos.getX());
+        worldController.set(level, blockPos);
+
+        if(automataStepper.isLoaded()){
+            if(nextReplacement != null){
+                System.out.println("Replaced "+blockPos.getX());
+                automataStepper.replace(worldController, nextReplacement);
+                nextReplacement = null;
+            }else{
+                System.out.println("Prepare to replace "+blockPos.getX());
+                nextReplacement = automataStepper.getReplacement(worldController);
+            }
+        }else{
+            if(automataStepper.load(worldController)){
+                System.out.println("loaded "+blockPos.getX());
+                setStateToLoaded();
+            }
         }
+
         currentTickCounter = 0;
     }
 

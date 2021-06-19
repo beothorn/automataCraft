@@ -52,11 +52,6 @@ public class WorldController {
         this.center = center;
     }
 
-    public void remove(int x, int y, int z) {
-        boolean p_217377_2_ = false;
-        world.removeBlock(center.offset(x, y, z), p_217377_2_);
-    }
-
     public BlockStateHolder[] surrounding(int x, int y, int z){
         BlockStateHolder[] result = new BlockStateHolder[27];
 
