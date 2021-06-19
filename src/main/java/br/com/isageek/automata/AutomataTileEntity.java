@@ -98,21 +98,17 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             return;
         }
         BlockPos blockPos = getBlockPos();
-        System.out.println("Tick "+blockPos.getX());
         worldController.set(level, blockPos);
 
         if(automataStepper.isLoaded()){
             if(nextReplacement != null){
-                System.out.println("Replaced "+blockPos.getX());
                 automataStepper.replace(worldController, nextReplacement);
                 nextReplacement = null;
             }else{
-                System.out.println("Prepare to replace "+blockPos.getX());
                 nextReplacement = automataStepper.getReplacement(worldController);
             }
         }else{
             if(automataStepper.load(worldController)){
-                System.out.println("loaded "+blockPos.getX());
                 setStateToLoaded();
             }
         }
