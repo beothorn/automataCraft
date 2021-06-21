@@ -30,22 +30,21 @@ public class AutomataMod
         Supplier<Block> regularBlock = () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE));
 
         RegistryObject<Block> automata_termination = block(
-                "automata_termination",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_start = block("automata_start",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_air_placeholder = block("automata_air_placeholder",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_water_placeholder = block("automata_water_placeholder",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_placeholder = block("automata_placeholder",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_y_rotation = block("automata_y_rotation",
-                AutomataMod.MOD_ID, modEventBus, regularBlock);
+                "automata_termination", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_start = block(
+                "automata_start", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_air_placeholder = block(
+                "automata_air_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_water_placeholder = block(
+                "automata_water_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_lava_placeholder = block(
+                "automata_lava_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_bedrock_placeholder = block(
+                "automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_placeholder = block(
+                "automata_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        RegistryObject<Block> automata_y_rotation = block(
+                "automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
 
         blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
             "automata",

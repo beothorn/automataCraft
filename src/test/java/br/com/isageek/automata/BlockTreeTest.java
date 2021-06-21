@@ -1,9 +1,7 @@
 package br.com.isageek.automata;
 
-import br.com.isageek.automata.forge.BlockOperations;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.patterns.PatternsTest;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;

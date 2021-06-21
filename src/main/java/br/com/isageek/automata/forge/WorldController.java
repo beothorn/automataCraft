@@ -112,6 +112,11 @@ public class WorldController {
         return blockState.getBlock() == start;
     }
 
+    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z) {
+        if(!isAutomataStart(x, y, z)) return false;
+        return world.hasNeighborSignal(center.offset(x, y, z));
+    }
+
     public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder){
         return blockStateHolder.is(automataPlaceholder);
     }
@@ -170,4 +175,6 @@ public class WorldController {
         }
         return blockState;
     }
+
+
 }

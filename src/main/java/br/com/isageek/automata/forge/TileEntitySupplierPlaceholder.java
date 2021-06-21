@@ -17,7 +17,6 @@ import java.util.function.Supplier;
  * circular dependency. Instead of using static fields
  * as globals, this SupplierPlaceholder makes explicit
  * what is going on.
- * @param <T>
  */
 public class TileEntitySupplierPlaceholder implements Supplier<TileEntity> {
 

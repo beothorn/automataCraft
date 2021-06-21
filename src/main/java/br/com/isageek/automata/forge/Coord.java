@@ -22,23 +22,6 @@ public class Coord {
         return new Coord(c.x, c.y, c.z);
     }
 
-    public static Coord firstPatternFromTo(Coord start, Coord end){
-        if(start.x > end.x){
-            return new Coord(start.x - 2, start.y, start.z);
-        }
-        if(start.x < end.x){
-            return new Coord(start.x + 2, start.y, start.z);
-        }
-        if(start.z > end.z){
-            return new Coord(start.x, start.y, start.z - 2);
-        }
-        if(start.z < end.z){
-            return new Coord(start.x, start.y, start.z + 2);
-        }
-
-        return null;
-    }
-
     public void moveTowards(Coord c, int amount) {
         if(x > c.x){
             this.x = this.x - amount;

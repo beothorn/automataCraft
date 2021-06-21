@@ -171,6 +171,9 @@ public class AutomataStepper {
     }
 
     private boolean tryToLoadPattern(WorldController worldController) {
+        if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart.x, nearestStart.y, nearestStart.z)){
+            return false;
+        }
         Coord terminator = findTerminatorFor(worldController, nearestStart);
         if(terminator != null){
             Coord cursor = Coord.coord(nearestStart);

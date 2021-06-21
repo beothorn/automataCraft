@@ -70,9 +70,9 @@ public class FakeWorld extends WorldController {
 
     public void tick(int ticks){
         for (int i = 0; i < ticks; i++) {
-            if(i == ticks - 1){
-                System.out.println("Last tick");
-            }
+//            if(i == ticks - 1){
+//                System.out.println("Last tick");
+//            }
             Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
             for (Map.Entry<Coord, AutomataTileEntity> entry : entries) {
                 cursor = entry.getKey();
@@ -149,6 +149,11 @@ public class FakeWorld extends WorldController {
             return false;
         }
         return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(AUTOMATA_START);
+    }
+
+    @Override
+    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z) {
+        return isAutomataStart(x, y, z);
     }
 
     @Override
