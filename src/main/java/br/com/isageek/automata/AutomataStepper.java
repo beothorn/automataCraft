@@ -9,13 +9,14 @@ public class AutomataStepper {
     private static final int PATTERN_LIMIT = 128;
     private static final int MAX_SEARCH_RADIUS = 20;
 
-    private BlockTree blockTree;
+    private final BlockTree blockTree;
     private boolean loaded = false;
-    private String descriptionIdForBlockRepresentingAny;
-    private BlockStateHolder air;
-    private BlockStateHolder water;
-    private BlockStateHolder lava;
-    private BlockStateHolder obsidian;
+    private final String descriptionIdForBlockRepresentingAny;
+    private final BlockStateHolder air;
+    private final BlockStateHolder water;
+    private final BlockStateHolder lava;
+    private final BlockStateHolder obsidian;
+    private Coord nearestStart;
 
     public AutomataStepper(
         String descriptionIdForBlockRepresentingAny,
@@ -106,6 +107,19 @@ public class AutomataStepper {
     }
 
     /***
+     * Search start block, caches start position and return if cache is filled
+     *
+     * @param worldController implementation of the world, fake on tests and controller on minecraft
+     * @return if the load status was false and turned true
+     */
+    public boolean findStart(WorldController worldController) {
+        if(nearestStart == null || !worldController.isAutomataStart(nearestStart.x, nearestStart.y, nearestStart.z)){
+            nearestStart = findNearestStart(worldController);
+        }
+        return nearestStart != null;
+    }
+
+    /***
      * Loads and returns if just loaded
      *
      * @param worldController implementation of the world, fake on tests and controller on minecraft
@@ -157,38 +171,35 @@ public class AutomataStepper {
     }
 
     private boolean tryToLoadPattern(WorldController worldController) {
-        Coord nearestStart = findNearestStart(worldController);
-        if(nearestStart != null){
-            Coord terminator = findTerminatorFor(worldController, nearestStart);
-            if(terminator != null){
-                Coord cursor = Coord.coord(nearestStart);
-                int count = 0;
+        Coord terminator = findTerminatorFor(worldController, nearestStart);
+        if(terminator != null){
+            Coord cursor = Coord.coord(nearestStart);
+            int count = 0;
+            cursor.moveTowards(terminator, 1);
+            while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
                 cursor.moveTowards(terminator, 1);
-                while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
-                    cursor.moveTowards(terminator, 1);
 
-                    BlockStateHolder[] result = worldController.surrounding(cursor);
-                    replaceBlockWithAnyMatcherBlock(result);
-                    replacePlaceHoldersIn(worldController, result);
-                    cursor.moveTowards(terminator, 3);
-                    final BlockStateHolder[] match = worldController.surrounding(cursor);
-                    final BlockStateHolder center = match[BlockTree.AUTOMATA_BLOCK_POSITION];
+                BlockStateHolder[] result = worldController.surrounding(cursor);
+                replaceBlockWithAnyMatcherBlock(result);
+                replacePlaceHoldersIn(worldController, result);
+                cursor.moveTowards(terminator, 3);
+                final BlockStateHolder[] match = worldController.surrounding(cursor);
+                final BlockStateHolder center = match[BlockTree.AUTOMATA_BLOCK_POSITION];
 
-                    replaceBlockWithAnyMatcherBlock(match);
-                    replacePlaceHoldersIn(worldController, match);
+                replaceBlockWithAnyMatcherBlock(match);
+                replacePlaceHoldersIn(worldController, match);
+                blockTree.addPattern(match, result);
+
+                if(worldController.isYRotation(center)){
+                    blockTree.addPatternRotateY(match, result);
+                }else{
                     blockTree.addPattern(match, result);
-
-                    if(worldController.isYRotation(center)){
-                        blockTree.addPatternRotateY(match, result);
-                    }else{
-                        blockTree.addPattern(match, result);
-                    }
-
-                    cursor.moveTowards(terminator, 2);
-                    count++;
                 }
-                return true;
+
+                cursor.moveTowards(terminator, 2);
+                count++;
             }
+            return true;
         }
         return false;
     }

@@ -141,9 +141,8 @@ public class WorldController {
         return blockState.getBlock() == Blocks.BEDROCK;
     }
 
-    public boolean isAutomata(int x, int y, int z) {
-        BlockState blockState = world.getBlockState(center.offset(x, y, z));
-        return blockState.getBlock() == automata;
+    public void destroyBlock(){
+        world.destroyBlock(center, true);
     }
 
     public void setBlockAutomata(int x, int y, int z) {

@@ -108,6 +108,10 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
                 nextReplacement = automataStepper.getReplacement(worldController);
             }
         }else{
+            if(!automataStepper.findStart(worldController)){
+                worldController.destroyBlock();
+                return;
+            }
             if(automataStepper.load(worldController)){
                 setStateToLoaded();
             }

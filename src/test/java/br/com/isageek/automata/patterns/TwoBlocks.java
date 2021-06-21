@@ -37,7 +37,7 @@ public class TwoBlocks {
                         {AIR, AIR, AIR}
                 },
                 {
-                        {AIR, "stone", AIR},
+                        {AIR, STONE, AIR},
                         {AIR, AUTOMATA_PLACEHOLDER, AIR},
                         {AIR, AIR, AIR}
                 },
@@ -66,9 +66,9 @@ public class TwoBlocks {
         fakeWorld.doubleTick();
 
         String actual1 = fakeWorld.getAt(0, -1, 0);
-        Assert.assertEquals("stone", actual1);
+        Assert.assertEquals(STONE, actual1);
         String actual2 = fakeWorld.getAt(1, -1, 0);
-        Assert.assertEquals("stone", actual2);
+        Assert.assertEquals(STONE, actual2);
     }
 
 }

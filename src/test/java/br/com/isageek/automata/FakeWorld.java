@@ -6,10 +6,12 @@ import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static br.com.isageek.automata.forge.BlockStateHolder.block;
 import static br.com.isageek.automata.forge.Coord.coord;
 
 public class FakeWorld extends WorldController {
@@ -17,6 +19,7 @@ public class FakeWorld extends WorldController {
     public static final String WATER = "Water";
     public static final String LAVA = "Lava";
     public static final String OBSIDIAN = "Obsidian";
+    public static final String STONE = "stone";
     public static final String AUTOMATA = "Automata";
     public static final String AUTOMATA_START = "AutomataStart";
     public static final String AUTOMATA_PLACEHOLDER = "AutomataPlaceholder";
@@ -35,20 +38,22 @@ public class FakeWorld extends WorldController {
 
     private Map<Coord, AutomataTileEntity> entitiesOnPositions = new LinkedHashMap<>();
 
-    private static final int CENTER = 100;
+    private ArrayList<Coord> destroyCalls = new ArrayList<>();
 
-    private Coord center = coord(0, 0, 0);
+    private static final int WORLD_CENTER = 100;
+
+    private Coord cursor = coord(0, 0, 0);
 
     public boolean calledSet = false;
 
     public FakeWorld(AutomataStepper automataStepper) {
         super(null, null, null, null, null, null, null, null, null, null);
         this.automataStepper = automataStepper;
-        fakeWorld = new BlockStateHolder[CENTER * 2][CENTER * 2][CENTER * 2];
-        for (int x = 0; x < CENTER * 2; x++) {
-            for (int y = 0; y < CENTER * 2; y++) {
-                for (int z = 0; z < CENTER * 2; z++) {
-                    fakeWorld[x][y][z] = BlockStateHolder.block(AIR);
+        fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
+        for (int x = 0; x < WORLD_CENTER * 2; x++) {
+            for (int y = 0; y < WORLD_CENTER * 2; y++) {
+                for (int z = 0; z < WORLD_CENTER * 2; z++) {
+                    fakeWorld[x][y][z] = block(AIR);
                 }
             }
         }
@@ -65,9 +70,12 @@ public class FakeWorld extends WorldController {
 
     public void tick(int ticks){
         for (int i = 0; i < ticks; i++) {
+            if(i == ticks - 1){
+                System.out.println("Last tick");
+            }
             Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
             for (Map.Entry<Coord, AutomataTileEntity> entry : entries) {
-                center = entry.getKey();
+                cursor = entry.getKey();
                 entry.getValue().tick();
             }
         }
@@ -75,10 +83,10 @@ public class FakeWorld extends WorldController {
 
     public void setAt(int x, int y, int z, String id){
         calledSet = true;
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
-        fakeWorld[CENTER+x][CENTER+y][CENTER+z] = BlockStateHolder.block(id);
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
+        fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
         if(id.equals(AUTOMATA)){
             AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
             automataTileEntity.setAutomataStepper(automataStepper);
@@ -95,13 +103,13 @@ public class FakeWorld extends WorldController {
     }
 
     public void setSurrounding(int x, int y, int z, String[][][] surroundingIds){
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    fakeWorld[x+ix+CENTER][y+iy+CENTER][z+iz+CENTER] = BlockStateHolder.block(surroundingIds[ix + 1][iy + 1][iz + 1]);
+                    fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER] = block(surroundingIds[ix + 1][iy + 1][iz + 1]);
                 }
             }
         }
@@ -109,74 +117,56 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isTerminator(int x, int y, int z) {
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
         if(
-                x + CENTER >= CENTER * 2
-                        || x + CENTER <  0
-                        || z + CENTER >=  CENTER * 2
-                        || z + CENTER <  0
-                        || y + CENTER >=  CENTER * 2
-                        || y + CENTER <  0
+                x + WORLD_CENTER >= WORLD_CENTER * 2
+                        || x + WORLD_CENTER <  0
+                        || z + WORLD_CENTER >=  WORLD_CENTER * 2
+                        || z + WORLD_CENTER <  0
+                        || y + WORLD_CENTER >=  WORLD_CENTER * 2
+                        || y + WORLD_CENTER <  0
         ){
             return false;
         }
-        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(TERMINATOR);
+        return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(TERMINATOR);
     }
 
     @Override
     public boolean isAutomataStart(int x, int y, int z) {
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
         if(
-               x + CENTER >= CENTER * 2
-            || x + CENTER <  0
-            || z + CENTER >=  CENTER * 2
-            || z + CENTER <  0
-            || y + CENTER >=  CENTER * 2
-            || y + CENTER <  0
+               x + WORLD_CENTER >= WORLD_CENTER * 2
+            || x + WORLD_CENTER <  0
+            || z + WORLD_CENTER >=  WORLD_CENTER * 2
+            || z + WORLD_CENTER <  0
+            || y + WORLD_CENTER >=  WORLD_CENTER * 2
+            || y + WORLD_CENTER <  0
         ){
             return false;
         }
-        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(AUTOMATA_START);
+        return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(AUTOMATA_START);
     }
 
     @Override
     public boolean isBedrock(int x, int y, int z) {
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
         if(
-                x + CENTER >= CENTER * 2
-                        || x + CENTER <  0
-                        || z + CENTER >=  CENTER * 2
-                        || z + CENTER <  0
-                        || y + CENTER >=  CENTER * 2
-                        || y + CENTER <  0
+                x + WORLD_CENTER >= WORLD_CENTER * 2
+                        || x + WORLD_CENTER <  0
+                        || z + WORLD_CENTER >=  WORLD_CENTER * 2
+                        || z + WORLD_CENTER <  0
+                        || y + WORLD_CENTER >=  WORLD_CENTER * 2
+                        || y + WORLD_CENTER <  0
         ){
             return false;
         }
-        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(BEDROCK);
-    }
-
-    @Override
-    public boolean isAutomata(int x, int y, int z) {
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
-        if(
-                x + CENTER >= CENTER * 2
-                        || x + CENTER <  0
-                        || z + CENTER >=  CENTER * 2
-                        || z + CENTER <  0
-                        || y + CENTER >=  CENTER * 2
-                        || y + CENTER <  0
-        ){
-            return false;
-        }
-        return fakeWorld[CENTER + x][CENTER + y][CENTER + z].descriptionId.equals(AUTOMATA);
+        return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(BEDROCK);
     }
 
     @Override
@@ -211,15 +201,15 @@ public class FakeWorld extends WorldController {
 
     @Override
     public BlockStateHolder[] surrounding(int x, int y, int z) {
-        x = x + center.x;
-        y = y + center.y;
-        z = z + center.z;
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
         BlockStateHolder[] result = new BlockStateHolder[27];
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] = fakeWorld[x+ix+CENTER][y+iy+CENTER][z+iz+CENTER];
+                    result[i++] = fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER];
                 }
             }
         }
@@ -229,18 +219,10 @@ public class FakeWorld extends WorldController {
 
     @Override
     public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
-        if(isAirPlaceholder(blockState)){
-            return BlockStateHolder.block(AIR);
-        }
-        if(isWaterPlaceholder(blockState)) {
-            return BlockStateHolder.block(WATER);
-        }
-        if(isLavaPlaceholder(blockState)) {
-            return BlockStateHolder.block(LAVA);
-        }
-        if(isBedrockPlaceholder(blockState)) {
-            return BlockStateHolder.block(BEDROCK);
-        }
+        if(isAirPlaceholder(blockState)) return block(AIR);
+        if(isWaterPlaceholder(blockState)) return block(WATER);
+        if(isLavaPlaceholder(blockState)) return block(LAVA);
+        if(isBedrockPlaceholder(blockState)) return block(BEDROCK);
         return blockState;
     }
 
@@ -254,12 +236,21 @@ public class FakeWorld extends WorldController {
         return entitiesOnPositions.get(Coord.coord(x, y, z));
     }
 
+    @Override
+    public void destroyBlock() {
+        destroyCalls.add(cursor);
+        int x = cursor.x;
+        int y = cursor.y;
+        int z = cursor.z;
+        fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER] = block(AIR);
+    }
+
     public String[][][] getSurroundingIds(int x, int y, int z) {
         String[][][] result = new String[3][3][3];
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[ix+1][iy+1][iz+1] = fakeWorld[x+ix+CENTER][y+iy+CENTER][z+iz+CENTER].descriptionId;
+                    result[ix+1][iy+1][iz+1] = fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER].descriptionId;
                 }
             }
         }
@@ -267,6 +258,10 @@ public class FakeWorld extends WorldController {
     }
 
     public String getAt(int x, int y, int z) {
-        return fakeWorld[x+CENTER][y+CENTER][z+CENTER].descriptionId;
+        return fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER].descriptionId;
+    }
+
+    public ArrayList<Coord> getDestroyCalls() {
+        return destroyCalls;
     }
 }
