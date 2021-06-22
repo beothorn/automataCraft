@@ -39,6 +39,7 @@ public class PatternsTest {
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, result);
         fakeWorld.setSurrounding(15, 0, 0, match);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
@@ -109,6 +110,7 @@ public class PatternsTest {
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, result1);
         fakeWorld.setSurrounding(15, 0, 0, match1);
         fakeWorld.setSurrounding(18, 0, 0, result2);

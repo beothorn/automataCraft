@@ -58,6 +58,7 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(-10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(-10, 0, 0, true);
         fakeWorld.setSurrounding(-12, 0, 0, replacement);
         fakeWorld.setSurrounding(-15, 0, 0, matcher);
         fakeWorld.setAt(-17, 0, 0, TERMINATOR);
@@ -88,6 +89,7 @@ public class AutomataStepperTest {
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(1, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(1, 0, 0, true);
         fakeWorld.setSurrounding(3, 0, 0, replacement);
         // Pattern is reversed
         fakeWorld.setSurrounding(6, 0, 0, matcher);
@@ -172,6 +174,7 @@ public class AutomataStepperTest {
         fakeWorld.setSurrounding(0, 0, 0, state);
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, replacement);
         fakeWorld.setSurrounding(15, 0, 0, matcher);
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
@@ -233,6 +236,7 @@ public class AutomataStepperTest {
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
         String[][][] result = PatternsTest.cubeWithSameBlockType(AIR);
         fakeWorld.setSurrounding(12, 0, 0, result);
         String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
@@ -264,6 +268,7 @@ public class AutomataStepperTest {
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, result);
         fakeWorld.setSurrounding(15, 0, 0, match);
 

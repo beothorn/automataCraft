@@ -39,4 +39,6 @@ public class AutomataTileEntityTest {
         Assert.assertEquals(FakeWorld.AUTOMATA, fakeWorld.getAt(0, 0, 0));
     }
 
+
+
 }

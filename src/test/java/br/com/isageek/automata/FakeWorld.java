@@ -34,6 +34,8 @@ public class FakeWorld extends WorldController {
 
     private BlockStateHolder[][][] fakeWorld;
 
+    private boolean[][][] redstoneSignal;
+
     private AutomataStepper automataStepper;
 
     private Map<Coord, AutomataTileEntity> entitiesOnPositions = new LinkedHashMap<>();
@@ -57,6 +59,7 @@ public class FakeWorld extends WorldController {
                 }
             }
         }
+        redstoneSignal = new boolean[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
     }
 
     public void tick(){
@@ -70,9 +73,9 @@ public class FakeWorld extends WorldController {
 
     public void tick(int ticks){
         for (int i = 0; i < ticks; i++) {
-//            if(i == ticks - 1){
-//                System.out.println("Last tick");
-//            }
+            if(i == ticks - 1){
+                String s = "last tick";
+            }
             Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
             for (Map.Entry<Coord, AutomataTileEntity> entry : entries) {
                 cursor = entry.getKey();
@@ -117,47 +120,21 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isTerminator(int x, int y, int z) {
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
-        if(
-                x + WORLD_CENTER >= WORLD_CENTER * 2
-                        || x + WORLD_CENTER <  0
-                        || z + WORLD_CENTER >=  WORLD_CENTER * 2
-                        || z + WORLD_CENTER <  0
-                        || y + WORLD_CENTER >=  WORLD_CENTER * 2
-                        || y + WORLD_CENTER <  0
-        ){
-            return false;
-        }
-        return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(TERMINATOR);
+        return getAtRelative(x, y, z).descriptionId.equals(TERMINATOR);
     }
 
     @Override
     public boolean isAutomataStart(int x, int y, int z) {
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
-        if(
-               x + WORLD_CENTER >= WORLD_CENTER * 2
-            || x + WORLD_CENTER <  0
-            || z + WORLD_CENTER >=  WORLD_CENTER * 2
-            || z + WORLD_CENTER <  0
-            || y + WORLD_CENTER >=  WORLD_CENTER * 2
-            || y + WORLD_CENTER <  0
-        ){
-            return false;
-        }
-        return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(AUTOMATA_START);
-    }
-
-    @Override
-    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z) {
-        return isAutomataStart(x, y, z);
+        return getAtRelative(x, y, z).descriptionId.equals(AUTOMATA_START);
     }
 
     @Override
     public boolean isBedrock(int x, int y, int z) {
+        return getAtRelative(x, y, z).descriptionId.equals(BEDROCK);
+    }
+
+    @Override
+    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z) {
         x = x + cursor.x;
         y = y + cursor.y;
         z = z + cursor.z;
@@ -171,7 +148,8 @@ public class FakeWorld extends WorldController {
         ){
             return false;
         }
-        return fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z].descriptionId.equals(BEDROCK);
+        BlockStateHolder blockStateHolder = fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
+        return blockStateHolder.descriptionId.equals(AUTOMATA_START) && redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
     }
 
     @Override
@@ -268,5 +246,30 @@ public class FakeWorld extends WorldController {
 
     public ArrayList<Coord> getDestroyCalls() {
         return destroyCalls;
+    }
+
+    private BlockStateHolder getAtRelative(int x, int y, int z) {
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
+        if(
+                x + WORLD_CENTER >= WORLD_CENTER * 2
+                        || x + WORLD_CENTER <  0
+                        || z + WORLD_CENTER >=  WORLD_CENTER * 2
+                        || z + WORLD_CENTER <  0
+                        || y + WORLD_CENTER >=  WORLD_CENTER * 2
+                        || y + WORLD_CENTER <  0
+        ){
+            return null;
+        }
+        BlockStateHolder blockStateHolder = fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
+        return blockStateHolder;
+    }
+
+    public void redSignalAt(int x, int y, int z, boolean signalState) {
+        x = x + cursor.x;
+        y = y + cursor.y;
+        z = z + cursor.z;
+        redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z] = signalState;
     }
 }
