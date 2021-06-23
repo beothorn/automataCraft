@@ -17,7 +17,7 @@ public class AutomataStepper {
     private final BlockStateHolder water;
     private final BlockStateHolder lava;
     private final BlockStateHolder obsidian;
-    private Coord nearestStart;
+    private BlockPos nearestStart;
 
     public AutomataStepper(
         String descriptionIdForBlockRepresentingAny,
@@ -38,7 +38,7 @@ public class AutomataStepper {
         return loaded;
     }
 
-    private Coord findNearestStart(WorldController worldController, BlockPos center){
+    private BlockPos findNearestStart(WorldController worldController, BlockPos center){
         //go Around center searching, maximun radius of RADIUS
 
         for (int r = 1; r <= MAX_SEARCH_RADIUS; r++){
@@ -47,11 +47,13 @@ public class AutomataStepper {
             int yDown = r;
             for (int x = -r; x <= r; x++) {
                 for (int z = -r; z <= r; z++) {
-                    if(worldController.isAutomataStart(x, yUp, z, center)){
-                        return new Coord(x, yUp, z);
+                    BlockPos yUpPos = center.offset(x, yUp, z);
+                    if(worldController.isAutomataStart(yUpPos)){
+                        return yUpPos;
                     }
-                    if(worldController.isAutomataStart(x, yDown, z, center)){
-                        return new Coord(x, yDown, z);
+                    BlockPos yDownPos = center.offset(x, yDown, z);
+                    if(worldController.isAutomataStart(yDownPos)){
+                        return yDownPos;
                     }
                 }
             }
@@ -61,11 +63,13 @@ public class AutomataStepper {
 
             for (int y = -r + 1; y < r; y++) {
                 for (int z = -r; z <= r; z++) {
-                    if(worldController.isAutomataStart(xLeft, y, z, center)){
-                        return new Coord(xLeft, y, z);
+                    BlockPos xLeftPos = center.offset(xLeft, y, z);
+                    if(worldController.isAutomataStart(xLeftPos)){
+                        return xLeftPos;
                     }
-                    if(worldController.isAutomataStart(xRight, y, z, center)){
-                        return new Coord(xRight, y, z);
+                    BlockPos xRightPos = center.offset(xRight, y, z);
+                    if(worldController.isAutomataStart(xRightPos)){
+                        return xRightPos;
                     }
                 }
             }
@@ -74,11 +78,13 @@ public class AutomataStepper {
             int zBack = r;
             for (int x = -r + 1; x < r; x++) {
                 for (int y = -r + 1; y < r; y++) {
-                    if(worldController.isAutomataStart(x, y, zFront, center)){
-                        return new Coord(x, y, zFront);
+                    BlockPos zFrontPos = center.offset(x, y, zFront);
+                    if(worldController.isAutomataStart(zFrontPos)){
+                        return zFrontPos;
                     }
-                    if(worldController.isAutomataStart(x, y, zBack, center)){
-                        return new Coord(x, y, zBack);
+                    BlockPos zBackPos = center.offset(x, y, zBack);
+                    if(worldController.isAutomataStart(zBackPos)){
+                        return zBackPos;
                     }
                 }
             }
@@ -87,20 +93,24 @@ public class AutomataStepper {
         return null;
     }
 
-    private Coord findTerminatorFor(WorldController worldController, Coord start, BlockPos center){
+    private BlockPos findTerminatorFor(WorldController worldController, BlockPos start){
         // search on each axis in intervals of 6 maximun of 128
         for(int i = 7; i <= PATTERN_LIMIT; i+=6){
-            if(worldController.isTerminator(start.x + i, start.y, start.z, center)){
-                return new Coord(start.x + i, start.y, start.z);
+            BlockPos xPlus = start.offset(i, 0, 0);
+            if(worldController.isTerminator(xPlus)){
+                return xPlus;
             }
-            if(worldController.isTerminator(start.x - i, start.y, start.z, center)){
-                return new Coord(start.x - i, start.y, start.z);
+            BlockPos xMinus = start.offset(-i, 0, 0);
+            if(worldController.isTerminator(xMinus)){
+                return xMinus;
             }
-            if(worldController.isTerminator(start.x, start.y, start.z + i, center)){
-                return new Coord(start.x, start.y, start.z + i);
+            BlockPos zPlus = start.offset(0, 0, i);
+            if(worldController.isTerminator(zPlus)){
+                return zPlus;
             }
-            if(worldController.isTerminator(start.x, start.y, start.z - i, center)){
-                return new Coord(start.x, start.y, start.z - i);
+            BlockPos zMinus = start.offset(0, 0, -i);
+            if(worldController.isTerminator(zMinus)){
+                return zMinus;
             }
         }
 
@@ -114,7 +124,7 @@ public class AutomataStepper {
      * @return if the load status was false and turned true
      */
     public boolean findStart(WorldController worldController, BlockPos center) {
-        if(nearestStart == null || !worldController.isAutomataStart(nearestStart.x, nearestStart.y, nearestStart.z, center)){
+        if(nearestStart == null || !worldController.isAutomataStart(nearestStart)){
             nearestStart = findNearestStart(worldController, center);
         }
         return nearestStart != null;
@@ -149,13 +159,14 @@ public class AutomataStepper {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
                         BlockStateHolder blockStateHolder = toReplace[i++];
-                        boolean isNotBedrock = !worldController.isBedrock(x, y, z, center);
+                        BlockPos currentPos = center.offset(x, y, z);
+                        boolean isNotBedrock = !worldController.isBedrock(currentPos);
                         boolean isNotMatchAll = !blockStateHolder.descriptionId.equals(BlockTree.ANY.descriptionId);
                         boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
                         if(shouldBeReplaced){
                             if(worldController.isAutomataPlaceholder(blockStateHolder)){
-                                worldController.setBlockAutomata(x, y, z, center);
-                                AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z, center);
+                                worldController.setBlockAutomata(currentPos);
+                                AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(currentPos);
                                 if(blockEntity != null) blockEntity.setAutomataStepper(this);
                             } else{
                                 BlockStateHolder blockState = blockStateHolder;
@@ -163,7 +174,7 @@ public class AutomataStepper {
                                 if(worldController.isWaterPlaceholder(blockStateHolder)  ) blockState = water;
                                 if(worldController.isLavaPlaceholder(blockStateHolder)   ) blockState = lava;
                                 if(worldController.isBedrockPlaceholder(blockStateHolder)) blockState = obsidian;
-                                worldController.setBlock(x, y, z, blockState, center);
+                                worldController.setBlock(blockState, currentPos);
                             }
                         }
                     }
@@ -173,22 +184,42 @@ public class AutomataStepper {
     }
 
     private boolean tryToLoadPattern(WorldController worldController, BlockPos center) {
-        if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart.x, nearestStart.y, nearestStart.z, center)){
+        if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart)){
             return false;
         }
-        Coord terminator = findTerminatorFor(worldController, nearestStart, center);
+        BlockPos terminator = findTerminatorFor(worldController, nearestStart);
         if(terminator != null){
-            Coord cursor = Coord.coord(nearestStart);
-            int count = 0;
-            cursor.moveTowards(terminator, 1);
-            while(!worldController.isTerminator(cursor, center) && count <= PATTERN_LIMIT){
-                cursor.moveTowards(terminator, 1);
 
-                BlockStateHolder[] result = worldController.surrounding(cursor, center);
+            int xDirection = 0;
+            int zDirection = 0;
+
+            if(nearestStart.getX() == terminator.getX()){
+                if(nearestStart.getZ() > terminator.getZ()){
+                    zDirection = -1;
+                }else{
+                    zDirection = 1;
+                }
+            }else{
+                if(nearestStart.getX() > terminator.getX()){
+                    xDirection = -1;
+                }else{
+                    xDirection = 1;
+                }
+            }
+
+            BlockPos cursor = nearestStart;
+            int count = 0;
+            cursor = cursor.offset(xDirection, 0, zDirection);
+
+            while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
+                cursor = cursor.offset(xDirection, 0, zDirection);
+
+                BlockStateHolder[] result = worldController.surrounding(cursor);
                 replaceBlockWithAnyMatcherBlock(result);
                 replacePlaceHoldersIn(worldController, result);
-                cursor.moveTowards(terminator, 3);
-                final BlockStateHolder[] match = worldController.surrounding(cursor, center);
+                // move 3 towards terminator
+                cursor = cursor.offset(xDirection * 3, 0, zDirection * 3);
+                final BlockStateHolder[] match = worldController.surrounding(cursor);
                 final BlockStateHolder centerBlock = match[BlockTree.AUTOMATA_BLOCK_POSITION];
 
                 replaceBlockWithAnyMatcherBlock(match);
@@ -200,8 +231,8 @@ public class AutomataStepper {
                 }else{
                     blockTree.addPattern(match, result);
                 }
-
-                cursor.moveTowards(terminator, 2);
+                // move 2 towards terminator
+                cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
                 count++;
             }
             return true;

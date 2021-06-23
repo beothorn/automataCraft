@@ -50,14 +50,13 @@ public class WorldController {
         this.world = world;
     }
 
-    public BlockStateHolder[] surrounding(int x, int y, int z, BlockPos center){
+    public BlockStateHolder[] surrounding(BlockPos surrounded){
         BlockStateHolder[] result = new BlockStateHolder[27];
-
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] =  createStateHolderFor(x+ix, y+iy, z+iz, center);
+                    result[i++] =  createStateHolderFor(surrounded.offset(ix, iy, iz));
                 }
             }
         }
@@ -65,55 +64,41 @@ public class WorldController {
         return result;
     }
 
-    public BlockStateHolder[] surrounding(Coord c, BlockPos center){
-        return surrounding(c.x, c.y, c.z, center);
-    }
-
     public void setBlock(
-            int x,
-            int y,
-            int z,
             BlockStateHolder blockState,
-            BlockPos center
+            BlockPos p
     ) {
         world.setBlock(
-                center.offset(x, y, z),
+                p,
                 blockState.blockState,
                 0,
                 0
         );
     }
 
-    public BlockStateHolder[] surrounding(BlockPos center) {
-        return surrounding(0, 0, 0, center);
-    }
-
-    private BlockStateHolder createStateHolderFor(int x, int y, int z, BlockPos center){
-        BlockState blockState = world.getBlockState(center.offset(x, y, z));
+    private BlockStateHolder createStateHolderFor(BlockPos pos){
+        BlockState blockState = world.getBlockState(pos);
         return BlockStateHolder.block(blockState);
     }
 
-    public TileEntity getBlockEntity(int x, int y, int z, BlockPos center) {
-        return world.getBlockEntity(center.offset(x, y, z));
+    public TileEntity getBlockEntity(BlockPos p) {
+        return world.getBlockEntity(p);
     }
 
-    public boolean isTerminator(int x, int y, int z, BlockPos center) {
-        BlockState blockState = world.getBlockState(center.offset(x, y, z));
+    public boolean isTerminator(BlockPos p) {
+        BlockState blockState = world.getBlockState(p);
         return blockState.getBlock() == terminator;
     }
 
-    public boolean isTerminator(Coord c, BlockPos center) {
-        return isTerminator(c.x, c.y, c.z, center);
-    }
 
-    public boolean isAutomataStart(int x, int y, int z, BlockPos center) {
-        BlockState blockState = world.getBlockState(center.offset(x, y, z));
+    public boolean isAutomataStart(BlockPos p) {
+        BlockState blockState = world.getBlockState(p);
         return blockState.getBlock() == start;
     }
 
-    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z, BlockPos center) {
-        if(!isAutomataStart(x, y, z, center)) return false;
-        return world.hasNeighborSignal(center.offset(x, y, z));
+    public boolean isAutomataStartWithRedstoneCharge(BlockPos p) {
+        if(!isAutomataStart(p)) return false;
+        return world.hasNeighborSignal(p);
     }
 
     public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder){
@@ -140,8 +125,8 @@ public class WorldController {
         return blockStateHolder.is(yRotation);
     }
 
-    public boolean isBedrock(int x, int y, int z, BlockPos center) {
-        BlockState blockState = world.getBlockState(center.offset(x, y, z));
+    public boolean isBedrock(BlockPos p) {
+        BlockState blockState = world.getBlockState(p);
         return blockState.getBlock() == Blocks.BEDROCK;
     }
 
@@ -149,10 +134,10 @@ public class WorldController {
         world.destroyBlock(center, true);
     }
 
-    public void setBlockAutomata(int x, int y, int z, BlockPos center) {
+    public void setBlockAutomata(BlockPos p) {
         BlockState blockState = automata.defaultBlockState().setValue(AutomataBlock.loaded, true);
         world.setBlock(
-            center.offset(x, y, z),
+            p,
             blockState,
             0,
             0

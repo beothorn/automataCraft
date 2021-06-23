@@ -22,21 +22,6 @@ public class Coord {
         return new Coord(c.x, c.y, c.z);
     }
 
-    public void moveTowards(Coord c, int amount) {
-        if(x > c.x){
-            this.x = this.x - amount;
-        }
-        if(x < c.x){
-            this.x = this.x + amount;
-        }
-        if(z > c.z){
-            this.z = this.z - amount;
-        }
-        if(z < c.z){
-            this.z = this.z + amount;
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

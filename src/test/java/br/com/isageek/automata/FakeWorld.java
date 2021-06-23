@@ -44,8 +44,6 @@ public class FakeWorld extends WorldController {
 
     private static final int WORLD_CENTER = 100;
 
-    private Coord cursor = coord(0, 0, 0);
-
     public boolean calledSet = false;
 
     public FakeWorld(AutomataStepper automataStepper) {
@@ -78,17 +76,16 @@ public class FakeWorld extends WorldController {
             }
             Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
             for (Map.Entry<Coord, AutomataTileEntity> entry : entries) {
-                cursor = entry.getKey();
-                entry.getValue().tick();
+                Coord coord = entry.getKey();
+                AutomataTileEntity automataTileEntity = entry.getValue();
+                automataTileEntity.setPosition(new BlockPos(coord.x, coord.y, coord.z));
+                automataTileEntity.tick();
             }
         }
     }
 
     public void setAt(int x, int y, int z, String id){
         calledSet = true;
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
         fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
         if(id.equals(AUTOMATA)){
             AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
@@ -101,14 +98,11 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, BlockStateHolder blockState, BlockPos center) {
-        setAt(x, y, z, blockState.descriptionId);
+    public void setBlock(BlockStateHolder blockState, BlockPos p) {
+        setAt(p.getX(), p.getY(), p.getZ(), blockState.descriptionId);
     }
 
     public void setSurrounding(int x, int y, int z, String[][][] surroundingIds){
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
@@ -119,35 +113,25 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public boolean isTerminator(int x, int y, int z, BlockPos center) {
-        return getAtRelative(x, y, z).descriptionId.equals(TERMINATOR);
+    public boolean isTerminator(BlockPos p) {
+        return getAt(p.getX(), p.getY(), p.getZ()).equals(TERMINATOR);
     }
 
     @Override
-    public boolean isAutomataStart(int x, int y, int z, BlockPos center) {
-        return getAtRelative(x, y, z).descriptionId.equals(AUTOMATA_START);
+    public boolean isAutomataStart(BlockPos p) {
+        return getAt(p.getX(), p.getY(), p.getZ()).equals(AUTOMATA_START);
     }
 
     @Override
-    public boolean isBedrock(int x, int y, int z, BlockPos center) {
-        return getAtRelative(x, y, z).descriptionId.equals(BEDROCK);
+    public boolean isBedrock(BlockPos p) {
+        return getAt(p.getX(), p.getY(), p.getZ()).equals(BEDROCK);
     }
 
     @Override
-    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z, BlockPos center) {
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
-        if(
-                x + WORLD_CENTER >= WORLD_CENTER * 2
-                        || x + WORLD_CENTER <  0
-                        || z + WORLD_CENTER >=  WORLD_CENTER * 2
-                        || z + WORLD_CENTER <  0
-                        || y + WORLD_CENTER >=  WORLD_CENTER * 2
-                        || y + WORLD_CENTER <  0
-        ){
-            return false;
-        }
+    public boolean isAutomataStartWithRedstoneCharge(BlockPos p) {
+        int x = p.getX();
+        int y = p.getY();
+        int z = p.getZ();
         BlockStateHolder blockStateHolder = fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
         return blockStateHolder.descriptionId.equals(AUTOMATA_START) && redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
     }
@@ -183,10 +167,10 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public BlockStateHolder[] surrounding(int x, int y, int z, BlockPos center) {
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
+    public BlockStateHolder[] surrounding(BlockPos center) {
+        int x = center.getX();
+        int y = center.getY();
+        int z = center.getZ();
         BlockStateHolder[] result = new BlockStateHolder[27];
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
@@ -210,22 +194,19 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public void setBlockAutomata(int x, int y, int z, BlockPos center) {
-        setAt(x, y, z, AUTOMATA);
+    public void setBlockAutomata(BlockPos p) {
+        setAt(p.getX(), p.getY(), p.getZ(), AUTOMATA);
     }
 
     @Override
-    public TileEntity getBlockEntity(int x, int y, int z, BlockPos center) {
-        return entitiesOnPositions.get(Coord.coord(x, y, z));
+    public TileEntity getBlockEntity(BlockPos p) {
+        return entitiesOnPositions.get(Coord.coord(p.getX(), p.getY(), p.getZ()));
     }
 
     @Override
     public void destroyBlock(BlockPos center) {
-        destroyCalls.add(cursor);
-        int x = cursor.x;
-        int y = cursor.y;
-        int z = cursor.z;
-        fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER] = block(AIR);
+        destroyCalls.add(Coord.coord(center.getX(), center.getY(), center.getZ()));
+        fakeWorld[center.getX()+ WORLD_CENTER][center.getY()+ WORLD_CENTER][center.getZ()+ WORLD_CENTER] = block(AIR);
     }
 
     public String[][][] getSurroundingIds(int x, int y, int z) {
@@ -248,28 +229,7 @@ public class FakeWorld extends WorldController {
         return destroyCalls;
     }
 
-    private BlockStateHolder getAtRelative(int x, int y, int z) {
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
-        if(
-                x + WORLD_CENTER >= WORLD_CENTER * 2
-                        || x + WORLD_CENTER <  0
-                        || z + WORLD_CENTER >=  WORLD_CENTER * 2
-                        || z + WORLD_CENTER <  0
-                        || y + WORLD_CENTER >=  WORLD_CENTER * 2
-                        || y + WORLD_CENTER <  0
-        ){
-            return null;
-        }
-        BlockStateHolder blockStateHolder = fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
-        return blockStateHolder;
-    }
-
     public void redSignalAt(int x, int y, int z, boolean signalState) {
-        x = x + cursor.x;
-        y = y + cursor.y;
-        z = z + cursor.z;
         redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z] = signalState;
     }
 }
