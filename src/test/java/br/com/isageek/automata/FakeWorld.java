@@ -101,7 +101,7 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, BlockStateHolder blockState) {
+    public void setBlock(int x, int y, int z, BlockStateHolder blockState, BlockPos center) {
         setAt(x, y, z, blockState.descriptionId);
     }
 
@@ -119,22 +119,22 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public boolean isTerminator(int x, int y, int z) {
+    public boolean isTerminator(int x, int y, int z, BlockPos center) {
         return getAtRelative(x, y, z).descriptionId.equals(TERMINATOR);
     }
 
     @Override
-    public boolean isAutomataStart(int x, int y, int z) {
+    public boolean isAutomataStart(int x, int y, int z, BlockPos center) {
         return getAtRelative(x, y, z).descriptionId.equals(AUTOMATA_START);
     }
 
     @Override
-    public boolean isBedrock(int x, int y, int z) {
+    public boolean isBedrock(int x, int y, int z, BlockPos center) {
         return getAtRelative(x, y, z).descriptionId.equals(BEDROCK);
     }
 
     @Override
-    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z) {
+    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z, BlockPos center) {
         x = x + cursor.x;
         y = y + cursor.y;
         z = z + cursor.z;
@@ -183,7 +183,7 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public BlockStateHolder[] surrounding(int x, int y, int z) {
+    public BlockStateHolder[] surrounding(int x, int y, int z, BlockPos center) {
         x = x + cursor.x;
         y = y + cursor.y;
         z = z + cursor.z;
@@ -210,17 +210,17 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public void setBlockAutomata(int x, int y, int z) {
+    public void setBlockAutomata(int x, int y, int z, BlockPos center) {
         setAt(x, y, z, AUTOMATA);
     }
 
     @Override
-    public TileEntity getBlockEntity(int x, int y, int z) {
+    public TileEntity getBlockEntity(int x, int y, int z, BlockPos center) {
         return entitiesOnPositions.get(Coord.coord(x, y, z));
     }
 
     @Override
-    public void destroyBlock() {
+    public void destroyBlock(BlockPos center) {
         destroyCalls.add(cursor);
         int x = cursor.x;
         int y = cursor.y;

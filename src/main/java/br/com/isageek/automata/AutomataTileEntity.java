@@ -97,22 +97,22 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         if(currentTickCounter < EVAL_EVERY_TICKS){
             return;
         }
-        BlockPos blockPos = getBlockPos();
-        worldController.set(level, blockPos);
+        BlockPos center = getBlockPos();
+        worldController.set(level);
 
         if(automataStepper.isLoaded()){
             if(nextReplacement != null){
-                automataStepper.replace(worldController, nextReplacement);
+                automataStepper.replace(worldController, nextReplacement, center);
                 nextReplacement = null;
             }else{
-                nextReplacement = automataStepper.getReplacement(worldController);
+                nextReplacement = automataStepper.getReplacement(worldController, center);
             }
         }else{
-            if(!automataStepper.findStart(worldController)){
-                worldController.destroyBlock();
+            if(!automataStepper.findStart(worldController, center)){
+                worldController.destroyBlock(center);
                 return;
             }
-            if(automataStepper.load(worldController)){
+            if(automataStepper.load(worldController, center)){
                 setStateToLoaded();
             }
         }

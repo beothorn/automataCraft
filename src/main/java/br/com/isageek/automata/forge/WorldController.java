@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 public class WorldController {
 
     private World world;
-    private BlockPos center;
     private final Block automata;
     private final Block terminator;
     private final Block start;
@@ -47,19 +46,18 @@ public class WorldController {
         this.yRotation = yRotation;
     }
 
-    public void set(World world, BlockPos center){
+    public void set(World world){
         this.world = world;
-        this.center = center;
     }
 
-    public BlockStateHolder[] surrounding(int x, int y, int z){
+    public BlockStateHolder[] surrounding(int x, int y, int z, BlockPos center){
         BlockStateHolder[] result = new BlockStateHolder[27];
 
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] =  createStateHolderFor(x+ix, y+iy, z+iz);
+                    result[i++] =  createStateHolderFor(x+ix, y+iy, z+iz, center);
                 }
             }
         }
@@ -67,15 +65,16 @@ public class WorldController {
         return result;
     }
 
-    public BlockStateHolder[] surrounding(Coord c){
-        return surrounding(c.x, c.y, c.z);
+    public BlockStateHolder[] surrounding(Coord c, BlockPos center){
+        return surrounding(c.x, c.y, c.z, center);
     }
 
     public void setBlock(
             int x,
             int y,
             int z,
-            BlockStateHolder blockState
+            BlockStateHolder blockState,
+            BlockPos center
     ) {
         world.setBlock(
                 center.offset(x, y, z),
@@ -85,35 +84,35 @@ public class WorldController {
         );
     }
 
-    public BlockStateHolder[] surrounding() {
-        return surrounding(0, 0, 0);
+    public BlockStateHolder[] surrounding(BlockPos center) {
+        return surrounding(0, 0, 0, center);
     }
 
-    private BlockStateHolder createStateHolderFor(int x, int y, int z){
+    private BlockStateHolder createStateHolderFor(int x, int y, int z, BlockPos center){
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
         return BlockStateHolder.block(blockState);
     }
 
-    public TileEntity getBlockEntity(int x, int y, int z) {
+    public TileEntity getBlockEntity(int x, int y, int z, BlockPos center) {
         return world.getBlockEntity(center.offset(x, y, z));
     }
 
-    public boolean isTerminator(int x, int y, int z) {
+    public boolean isTerminator(int x, int y, int z, BlockPos center) {
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
         return blockState.getBlock() == terminator;
     }
 
-    public boolean isTerminator(Coord c) {
-        return isTerminator(c.x, c.y, c.z);
+    public boolean isTerminator(Coord c, BlockPos center) {
+        return isTerminator(c.x, c.y, c.z, center);
     }
 
-    public boolean isAutomataStart(int x, int y, int z) {
+    public boolean isAutomataStart(int x, int y, int z, BlockPos center) {
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
         return blockState.getBlock() == start;
     }
 
-    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z) {
-        if(!isAutomataStart(x, y, z)) return false;
+    public boolean isAutomataStartWithRedstoneCharge(int x, int y, int z, BlockPos center) {
+        if(!isAutomataStart(x, y, z, center)) return false;
         return world.hasNeighborSignal(center.offset(x, y, z));
     }
 
@@ -141,16 +140,16 @@ public class WorldController {
         return blockStateHolder.is(yRotation);
     }
 
-    public boolean isBedrock(int x, int y, int z) {
+    public boolean isBedrock(int x, int y, int z, BlockPos center) {
         BlockState blockState = world.getBlockState(center.offset(x, y, z));
         return blockState.getBlock() == Blocks.BEDROCK;
     }
 
-    public void destroyBlock(){
+    public void destroyBlock(BlockPos center){
         world.destroyBlock(center, true);
     }
 
-    public void setBlockAutomata(int x, int y, int z) {
+    public void setBlockAutomata(int x, int y, int z, BlockPos center) {
         BlockState blockState = automata.defaultBlockState().setValue(AutomataBlock.loaded, true);
         world.setBlock(
             center.offset(x, y, z),

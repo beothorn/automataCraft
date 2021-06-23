@@ -3,6 +3,7 @@ package br.com.isageek.automata;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.util.math.BlockPos;
 
 public class AutomataStepper {
 
@@ -37,7 +38,7 @@ public class AutomataStepper {
         return loaded;
     }
 
-    private Coord findNearestStart(WorldController worldController){
+    private Coord findNearestStart(WorldController worldController, BlockPos center){
         //go Around center searching, maximun radius of RADIUS
 
         for (int r = 1; r <= MAX_SEARCH_RADIUS; r++){
@@ -46,10 +47,10 @@ public class AutomataStepper {
             int yDown = r;
             for (int x = -r; x <= r; x++) {
                 for (int z = -r; z <= r; z++) {
-                    if(worldController.isAutomataStart(x, yUp, z)){
+                    if(worldController.isAutomataStart(x, yUp, z, center)){
                         return new Coord(x, yUp, z);
                     }
-                    if(worldController.isAutomataStart(x, yDown, z)){
+                    if(worldController.isAutomataStart(x, yDown, z, center)){
                         return new Coord(x, yDown, z);
                     }
                 }
@@ -60,10 +61,10 @@ public class AutomataStepper {
 
             for (int y = -r + 1; y < r; y++) {
                 for (int z = -r; z <= r; z++) {
-                    if(worldController.isAutomataStart(xLeft, y, z)){
+                    if(worldController.isAutomataStart(xLeft, y, z, center)){
                         return new Coord(xLeft, y, z);
                     }
-                    if(worldController.isAutomataStart(xRight, y, z)){
+                    if(worldController.isAutomataStart(xRight, y, z, center)){
                         return new Coord(xRight, y, z);
                     }
                 }
@@ -73,10 +74,10 @@ public class AutomataStepper {
             int zBack = r;
             for (int x = -r + 1; x < r; x++) {
                 for (int y = -r + 1; y < r; y++) {
-                    if(worldController.isAutomataStart(x, y, zFront)){
+                    if(worldController.isAutomataStart(x, y, zFront, center)){
                         return new Coord(x, y, zFront);
                     }
-                    if(worldController.isAutomataStart(x, y, zBack)){
+                    if(worldController.isAutomataStart(x, y, zBack, center)){
                         return new Coord(x, y, zBack);
                     }
                 }
@@ -86,19 +87,19 @@ public class AutomataStepper {
         return null;
     }
 
-    private Coord findTerminatorFor(WorldController worldController, Coord start){
+    private Coord findTerminatorFor(WorldController worldController, Coord start, BlockPos center){
         // search on each axis in intervals of 6 maximun of 128
         for(int i = 7; i <= PATTERN_LIMIT; i+=6){
-            if(worldController.isTerminator(start.x + i, start.y, start.z)){
+            if(worldController.isTerminator(start.x + i, start.y, start.z, center)){
                 return new Coord(start.x + i, start.y, start.z);
             }
-            if(worldController.isTerminator(start.x - i, start.y, start.z)){
+            if(worldController.isTerminator(start.x - i, start.y, start.z, center)){
                 return new Coord(start.x - i, start.y, start.z);
             }
-            if(worldController.isTerminator(start.x, start.y, start.z + i)){
+            if(worldController.isTerminator(start.x, start.y, start.z + i, center)){
                 return new Coord(start.x, start.y, start.z + i);
             }
-            if(worldController.isTerminator(start.x, start.y, start.z - i)){
+            if(worldController.isTerminator(start.x, start.y, start.z - i, center)){
                 return new Coord(start.x, start.y, start.z - i);
             }
         }
@@ -112,9 +113,9 @@ public class AutomataStepper {
      * @param worldController implementation of the world, fake on tests and controller on minecraft
      * @return if the load status was false and turned true
      */
-    public boolean findStart(WorldController worldController) {
-        if(nearestStart == null || !worldController.isAutomataStart(nearestStart.x, nearestStart.y, nearestStart.z)){
-            nearestStart = findNearestStart(worldController);
+    public boolean findStart(WorldController worldController, BlockPos center) {
+        if(nearestStart == null || !worldController.isAutomataStart(nearestStart.x, nearestStart.y, nearestStart.z, center)){
+            nearestStart = findNearestStart(worldController, center);
         }
         return nearestStart != null;
     }
@@ -125,21 +126,22 @@ public class AutomataStepper {
      * @param worldController implementation of the world, fake on tests and controller on minecraft
      * @return if the load status was false and turned true
      */
-    public boolean load(WorldController worldController) {
+    public boolean load(WorldController worldController, BlockPos center) {
         if(loaded) return false; // was already loaded, no transition
-        loaded = tryToLoadPattern(worldController);
+        loaded = tryToLoadPattern(worldController, center);
         return loaded;
     }
 
-    public BlockStateHolder[] getReplacement(WorldController worldController) {
+    public BlockStateHolder[] getReplacement(WorldController worldController, BlockPos center) {
         if(!loaded) return null;
-        BlockStateHolder[] toBeReplaced = worldController.surrounding();
+        BlockStateHolder[] toBeReplaced = worldController.surrounding(center);
         return blockTree.getReplacementFor(toBeReplaced);
     }
 
     public void replace(
             WorldController worldController,
-            BlockStateHolder[] toReplace
+            BlockStateHolder[] toReplace,
+            BlockPos center
     ){
         if(toReplace != null){
             int i = 0;
@@ -147,13 +149,13 @@ public class AutomataStepper {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
                         BlockStateHolder blockStateHolder = toReplace[i++];
-                        boolean isNotBedrock = !worldController.isBedrock(x, y, z);
+                        boolean isNotBedrock = !worldController.isBedrock(x, y, z, center);
                         boolean isNotMatchAll = !blockStateHolder.descriptionId.equals(BlockTree.ANY.descriptionId);
                         boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
                         if(shouldBeReplaced){
                             if(worldController.isAutomataPlaceholder(blockStateHolder)){
-                                worldController.setBlockAutomata(x, y, z);
-                                AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z);
+                                worldController.setBlockAutomata(x, y, z, center);
+                                AutomataTileEntity blockEntity = (AutomataTileEntity) worldController.getBlockEntity(x, y, z, center);
                                 if(blockEntity != null) blockEntity.setAutomataStepper(this);
                             } else{
                                 BlockStateHolder blockState = blockStateHolder;
@@ -161,7 +163,7 @@ public class AutomataStepper {
                                 if(worldController.isWaterPlaceholder(blockStateHolder)  ) blockState = water;
                                 if(worldController.isLavaPlaceholder(blockStateHolder)   ) blockState = lava;
                                 if(worldController.isBedrockPlaceholder(blockStateHolder)) blockState = obsidian;
-                                worldController.setBlock(x, y, z, blockState);
+                                worldController.setBlock(x, y, z, blockState, center);
                             }
                         }
                     }
@@ -170,30 +172,30 @@ public class AutomataStepper {
         }
     }
 
-    private boolean tryToLoadPattern(WorldController worldController) {
-        if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart.x, nearestStart.y, nearestStart.z)){
+    private boolean tryToLoadPattern(WorldController worldController, BlockPos center) {
+        if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart.x, nearestStart.y, nearestStart.z, center)){
             return false;
         }
-        Coord terminator = findTerminatorFor(worldController, nearestStart);
+        Coord terminator = findTerminatorFor(worldController, nearestStart, center);
         if(terminator != null){
             Coord cursor = Coord.coord(nearestStart);
             int count = 0;
             cursor.moveTowards(terminator, 1);
-            while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
+            while(!worldController.isTerminator(cursor, center) && count <= PATTERN_LIMIT){
                 cursor.moveTowards(terminator, 1);
 
-                BlockStateHolder[] result = worldController.surrounding(cursor);
+                BlockStateHolder[] result = worldController.surrounding(cursor, center);
                 replaceBlockWithAnyMatcherBlock(result);
                 replacePlaceHoldersIn(worldController, result);
                 cursor.moveTowards(terminator, 3);
-                final BlockStateHolder[] match = worldController.surrounding(cursor);
-                final BlockStateHolder center = match[BlockTree.AUTOMATA_BLOCK_POSITION];
+                final BlockStateHolder[] match = worldController.surrounding(cursor, center);
+                final BlockStateHolder centerBlock = match[BlockTree.AUTOMATA_BLOCK_POSITION];
 
                 replaceBlockWithAnyMatcherBlock(match);
                 replacePlaceHoldersIn(worldController, match);
                 blockTree.addPattern(match, result);
 
-                if(worldController.isYRotation(center)){
+                if(worldController.isYRotation(centerBlock)){
                     blockTree.addPatternRotateY(match, result);
                 }else{
                     blockTree.addPattern(match, result);
