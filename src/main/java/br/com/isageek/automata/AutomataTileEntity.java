@@ -96,7 +96,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     private void internalTick() {
-        if(getBlockState().getBlock() != automata) return;
+        if( this.level != null && getBlockState().getBlock() != automata) return;
         currentTickCounter++;
         if(currentTickCounter < EVAL_EVERY_TICKS){
             return;
