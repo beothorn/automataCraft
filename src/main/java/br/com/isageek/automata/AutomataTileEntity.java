@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class AutomataTileEntity extends TileEntity implements ITickableTileEntity {
 
     private final WorldController worldController;
+
     private AutomataStepper automataStepper;
 
     public static final int EVAL_EVERY_TICKS = 30;
@@ -61,16 +62,16 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
 
     public void setAutomataStepper(AutomataStepper automataStepper){
         this.automataStepper = automataStepper;
-        setStateToLoaded();
+        setLoadedStateTo(true);
     }
 
     /***
-     * This will update the texture from unloaded to loaded
+     * This will update the texture
      *
      */
-    private void setStateToLoaded() {
+    private void setLoadedStateTo(boolean isLoaded) {
         if(this.level != null){
-            BlockState blockState = getBlockState().setValue(AutomataBlock.loaded, true);
+            BlockState blockState = getBlockState().setValue(AutomataBlock.loaded, isLoaded);
             this.level.setBlock(
                     getBlockPos(),
                     blockState,
@@ -100,22 +101,14 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
         BlockPos center = getBlockPos();
         worldController.set(level);
 
-        if(automataStepper.isLoaded()){
-            if(nextReplacement != null){
-                automataStepper.replace(worldController, nextReplacement, center);
-                nextReplacement = null;
-            }else{
-                nextReplacement = automataStepper.getReplacement(worldController, center);
-            }
-        }else{
-            if(!automataStepper.findStart(worldController, center)){
-                worldController.destroyBlock(center);
-                return;
-            }
-            if(automataStepper.load(worldController, center)){
-                setStateToLoaded();
-            }
-        }
+        nextReplacement = automataStepper.tick(
+                worldController,
+                center,
+                nextReplacement,
+                () -> worldController.destroyBlock(center)
+        );
+
+        setLoadedStateTo(automataStepper.isLoaded());
 
         currentTickCounter = 0;
     }

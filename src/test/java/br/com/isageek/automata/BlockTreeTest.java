@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import static br.com.isageek.automata.BlockTree.ANY;
 import static br.com.isageek.automata.forge.BlockStateHolder.block;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class BlockTreeTest {
@@ -627,6 +628,15 @@ public class BlockTreeTest {
         BlockStateHolder[] replaced4 = blockTree.getReplacementFor(state4flatten);
         BlockStateHolder[] expected4 = PatternsTest.flatten(stateReplaced4);
         assertEquals(Arrays.toString(expected4), Arrays.toString(replaced4));
+    }
+
+    @Test
+    public void shouldClear(){
+        BlockTree blockTree = new BlockTree();
+        blockTree.addPattern( new BlockStateHolder[]{BlockStateHolder.block("a")}, new BlockStateHolder[]{BlockStateHolder.block("b")});
+        assertArrayEquals(new BlockStateHolder[]{BlockStateHolder.block("b")}, blockTree.getReplacementFor(new BlockStateHolder[]{BlockStateHolder.block("a")}));
+        blockTree.clear();
+        assertArrayEquals(null, blockTree.getReplacementFor(new BlockStateHolder[]{BlockStateHolder.block("a")}));
     }
 
 }

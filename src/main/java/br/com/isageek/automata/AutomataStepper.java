@@ -5,6 +5,8 @@ import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.function.Consumer;
+
 public class AutomataStepper {
 
     private static final int PATTERN_LIMIT = 128;
@@ -32,6 +34,51 @@ public class AutomataStepper {
         this.water = water;
         this.lava = lava;
         this.obsidian = obsidian;
+    }
+
+    public BlockStateHolder[] tick(
+            WorldController worldController,
+            BlockPos center,
+            BlockStateHolder[] replacement,
+            Runnable destroy
+    ){
+        // first step, search for nearest star
+        if(nearestStart == null || !worldController.isAutomataStart(nearestStart)){
+            nearestStart = findNearestStart(worldController, center);
+            if(nearestStart == null){
+                destroy.run();
+            }else{
+                loaded = tryToLoadPattern(worldController);
+                return null;
+            }
+            return null;
+        }
+
+        // second step, try to load pattern
+
+        if(!loaded){
+            loaded = tryToLoadPattern(worldController);
+            return null;
+        }
+
+        // third, if loaded checks the start block, if it is ok get replacement or replace
+
+        if(!worldController.isAutomataStart(nearestStart)){
+            destroy.run();
+            return null;
+        }
+        if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart)){
+            loaded = false;
+            blockTree.clear();
+            return null;
+        }
+
+        if(replacement == null){
+            return getReplacement(worldController, center);
+        }else{
+            replace(worldController, replacement, center);
+        }
+        return null;
     }
 
     public boolean isLoaded(){
@@ -136,9 +183,9 @@ public class AutomataStepper {
      * @param worldController implementation of the world, fake on tests and controller on minecraft
      * @return if the load status was false and turned true
      */
-    public boolean load(WorldController worldController, BlockPos center) {
+    public boolean load(WorldController worldController) {
         if(loaded) return false; // was already loaded, no transition
-        loaded = tryToLoadPattern(worldController, center);
+        loaded = tryToLoadPattern(worldController);
         return loaded;
     }
 
@@ -183,7 +230,7 @@ public class AutomataStepper {
         }
     }
 
-    private boolean tryToLoadPattern(WorldController worldController, BlockPos center) {
+    private boolean tryToLoadPattern(WorldController worldController) {
         if(!worldController.isAutomataStartWithRedstoneCharge(nearestStart)){
             return false;
         }

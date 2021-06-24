@@ -9,6 +9,10 @@ import java.util.Set;
 
 public class BlockTree {
 
+    public void clear() {
+        root = null;
+    }
+
     private static class Node {
         public final LinkedHashMap<String, Node> nextBlockStateHolder = new LinkedHashMap<>();
         public BlockStateHolder[] result;
@@ -102,6 +106,9 @@ public class BlockTree {
     }
 
     public BlockStateHolder[] getReplacementFor(BlockStateHolder[] state) {
+        if(root == null){
+            return null;
+        }
         return internalGetReplacementFor(state, root, 0);
     }
 }

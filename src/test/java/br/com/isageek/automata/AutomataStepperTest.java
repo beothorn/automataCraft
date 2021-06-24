@@ -2,8 +2,11 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.patterns.PatternsTest;
+import net.minecraft.util.math.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static br.com.isageek.automata.FakeWorld.*;
 
@@ -287,6 +290,117 @@ public class AutomataStepperTest {
         fakeWorld.setAt(1, 0, 0, "SomeBlock");
         fakeWorld.doubleTick();
         Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
+    }
+
+    @Test
+    public void willCallDestroyCallbacks(){
+        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
+        FakeWorld fakeWorld = new FakeWorld(null);
+        AtomicBoolean destroyCalled = new AtomicBoolean(false);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                new BlockStateHolder[0],
+                () -> destroyCalled.set(true)
+        );
+        fakeWorld.setAt(0, 0, 0, AUTOMATA);
+        Assert.assertTrue(destroyCalled.get());
+    }
+
+    @Test
+    public void willCallLoadedCallbacks(){
+        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
+        FakeWorld fakeWorld = new FakeWorld(null);
+        fakeWorld.setAt(0, 0, 0, AUTOMATA);
+
+        fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
+        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(15, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+
+        fakeWorld.setAt(17, 0, 0, TERMINATOR);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                new BlockStateHolder[0],
+                () -> {}
+        );
+        Assert.assertTrue(automataStepper.isLoaded());
+    }
+
+    @Test
+    public void willCallUnLoadCallback(){
+        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
+        FakeWorld fakeWorld = new FakeWorld(null);
+        fakeWorld.setAt(0, 0, 0, AUTOMATA);
+
+        fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
+        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(15, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+
+        fakeWorld.setAt(17, 0, 0, TERMINATOR);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                new BlockStateHolder[0],
+                () -> {}
+        );
+        Assert.assertTrue(automataStepper.isLoaded());
+        fakeWorld.redSignalAt(10, 0, 0, false);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                new BlockStateHolder[0],
+                () -> {}
+        );
+        Assert.assertFalse(automataStepper.isLoaded());
+    }
+
+    @Test
+    public void willReload(){
+        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
+        FakeWorld fakeWorld = new FakeWorld(null);
+        fakeWorld.setAt(0, 0, 0, AUTOMATA);
+
+        fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
+        fakeWorld.redSignalAt(10, 0, 0, true);
+        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(15, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+
+        fakeWorld.setAt(17, 0, 0, TERMINATOR);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                null,
+                () -> {}
+        );
+        Assert.assertTrue(automataStepper.isLoaded());
+        fakeWorld.redSignalAt(10, 0, 0, false);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                null,
+                () -> {}
+        );
+        Assert.assertFalse(automataStepper.isLoaded());
+        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType("stone"));
+        fakeWorld.redSignalAt(10, 0, 0, true);
+        automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                null,
+                () -> {}
+        );
+        Assert.assertTrue(automataStepper.isLoaded());
+        BlockStateHolder[] result = automataStepper.tick(
+                fakeWorld,
+                new BlockPos(0, 0, 0),
+                null,
+                () -> {}
+        );
+        Assert.assertNotNull(result);
+        Assert.assertArrayEquals(PatternsTest.flatten(PatternsTest.cubeWithSameBlockType("stone")), result);
     }
 
 }
