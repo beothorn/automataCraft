@@ -24,6 +24,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     BlockStateHolder[] nextReplacement;
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private Block automata;
 
     public AutomataTileEntity(
             TileEntityType<AutomataTileEntity> tileEntityType,
@@ -58,6 +59,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             caveAir,
             yRotation
         ));
+        this.automata = automata;
     }
 
     public void setAutomataStepper(AutomataStepper automataStepper){
@@ -94,6 +96,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     private void internalTick() {
+        if(getBlockState().getBlock() != automata) return;
         currentTickCounter++;
         if(currentTickCounter < EVAL_EVERY_TICKS){
             return;
