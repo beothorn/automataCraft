@@ -46,6 +46,10 @@ public class FakeWorld extends WorldController {
 
     public boolean calledSet = false;
 
+    public FakeWorld() {
+        this(null);
+    }
+
     public FakeWorld(AutomataStepper automataStepper) {
         super(null, null, null, null, null, null, null, null, null, null);
         this.automataStepper = automataStepper;
@@ -120,6 +124,11 @@ public class FakeWorld extends WorldController {
     @Override
     public boolean isAutomataStart(BlockPos p) {
         return getAt(p.getX(), p.getY(), p.getZ()).equals(AUTOMATA_START);
+    }
+
+    @Override
+    public boolean isAutomata(BlockPos p) {
+        return getAt(p.getX(), p.getY(), p.getZ()).equals(AUTOMATA);
     }
 
     @Override
@@ -231,5 +240,9 @@ public class FakeWorld extends WorldController {
 
     public void redSignalAt(int x, int y, int z, boolean signalState) {
         redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z] = signalState;
+    }
+
+    public boolean hasNeighborSignal(BlockPos p) {
+        return redstoneSignal[WORLD_CENTER + p.getX()][WORLD_CENTER + p.getY()][WORLD_CENTER + p.getZ()];
     }
 }

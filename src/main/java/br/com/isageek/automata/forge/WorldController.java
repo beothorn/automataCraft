@@ -85,15 +85,13 @@ public class WorldController {
         return world.getBlockEntity(p);
     }
 
-    public boolean isTerminator(BlockPos p) {
-        BlockState blockState = world.getBlockState(p);
-        return blockState.getBlock() == terminator;
-    }
+    public boolean isTerminator(BlockPos p) { return is(p, terminator);}
+    public boolean isAutomata(BlockPos p) { return is(p, automata);}
+    public boolean isAutomataStart(BlockPos p) { return is(p, start);}
+    public boolean isBedrock(BlockPos p) { return is(p, Blocks.BEDROCK);}
 
-
-    public boolean isAutomataStart(BlockPos p) {
-        BlockState blockState = world.getBlockState(p);
-        return blockState.getBlock() == start;
+    private boolean is(BlockPos p, Block blockType) {
+        return world.getBlockState(p).getBlock() == blockType;
     }
 
     public boolean isAutomataStartWithRedstoneCharge(BlockPos p) {
@@ -105,30 +103,12 @@ public class WorldController {
         return blockStateHolder.is(automataPlaceholder);
     }
 
-    public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.is(airPlaceholder);
-    }
+    public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(airPlaceholder); }
+    public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(waterPlaceholder);}
+    public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(lavaPlaceholder); }
+    public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(bedrockPlaceholder); }
+    public boolean isYRotation(BlockStateHolder blockStateHolder) { return blockStateHolder.is(yRotation); }
 
-    public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.is(waterPlaceholder);
-    }
-
-    public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.is(lavaPlaceholder);
-    }
-
-    public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.is(bedrockPlaceholder);
-    }
-
-    public boolean isYRotation(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.is(yRotation);
-    }
-
-    public boolean isBedrock(BlockPos p) {
-        BlockState blockState = world.getBlockState(p);
-        return blockState.getBlock() == Blocks.BEDROCK;
-    }
 
     public void destroyBlock(BlockPos center){
         world.destroyBlock(center, true);
@@ -160,5 +140,7 @@ public class WorldController {
         return blockState;
     }
 
-
+    public boolean hasNeighborSignal(BlockPos p) {
+        return world.hasNeighborSignal(p);
+    }
 }
