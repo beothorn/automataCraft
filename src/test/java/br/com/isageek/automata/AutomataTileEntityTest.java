@@ -1,7 +1,7 @@
 package br.com.isageek.automata;
 
-import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.patterns.PatternsTest;
+import net.minecraft.util.math.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,9 +17,9 @@ public class AutomataTileEntityTest {
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
 
         fakeWorld.tick();
-        ArrayList<Coord> destroyCalls = fakeWorld.getDestroyCalls();
+        ArrayList<BlockPos> destroyCalls = fakeWorld.getDestroyCalls();
         Assert.assertEquals(1, destroyCalls.size());
-        Assert.assertEquals(destroyCalls.get(0), Coord.coord(0, 0, 0));
+        Assert.assertEquals(destroyCalls.get(0), new BlockPos(0, 0, 0));
 
         Assert.assertEquals(FakeWorld.AIR, fakeWorld.getAt(0, 0, 0));
     }
@@ -33,7 +33,7 @@ public class AutomataTileEntityTest {
         fakeWorld.setAt(1, 0, 0, FakeWorld.AUTOMATA_START);
 
         fakeWorld.tick();
-        ArrayList<Coord> destroyCalls = fakeWorld.getDestroyCalls();
+        ArrayList<BlockPos> destroyCalls = fakeWorld.getDestroyCalls();
         Assert.assertEquals(0, destroyCalls.size());
 
         Assert.assertEquals(FakeWorld.AUTOMATA, fakeWorld.getAt(0, 0, 0));

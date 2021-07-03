@@ -1,7 +1,6 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
-import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static br.com.isageek.automata.forge.BlockStateHolder.block;
-import static br.com.isageek.automata.forge.Coord.coord;
 
 public class FakeWorld extends WorldController {
 
@@ -38,9 +36,9 @@ public class FakeWorld extends WorldController {
 
     private AutomataStepper automataStepper;
 
-    private Map<Coord, AutomataTileEntity> entitiesOnPositions = new LinkedHashMap<>();
+    private Map<BlockPos, AutomataTileEntity> entitiesOnPositions = new LinkedHashMap<>();
 
-    private ArrayList<Coord> destroyCalls = new ArrayList<>();
+    private ArrayList<BlockPos> destroyCalls = new ArrayList<>();
 
     private static final int WORLD_CENTER = 100;
 
@@ -78,11 +76,11 @@ public class FakeWorld extends WorldController {
             if(i == ticks - 1){
                 String s = "last tick";
             }
-            Set<Map.Entry<Coord, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
-            for (Map.Entry<Coord, AutomataTileEntity> entry : entries) {
-                Coord coord = entry.getKey();
+            Set<Map.Entry<BlockPos, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
+            for (Map.Entry<BlockPos, AutomataTileEntity> entry : entries) {
+                BlockPos coord = entry.getKey();
                 AutomataTileEntity automataTileEntity = entry.getValue();
-                automataTileEntity.setPosition(new BlockPos(coord.x, coord.y, coord.z));
+                automataTileEntity.setPosition(coord);
                 automataTileEntity.tick();
             }
         }
@@ -94,10 +92,10 @@ public class FakeWorld extends WorldController {
         if(id.equals(AUTOMATA)){
             AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
             automataTileEntity.setAutomataStepper(automataStepper);
-            entitiesOnPositions.put(Coord.coord(x, y, z), automataTileEntity);
+            entitiesOnPositions.put(new BlockPos(x, y, z), automataTileEntity);
             automataTileEntity.setPosition(new BlockPos(x, y, z));
         }else{
-            entitiesOnPositions.remove(Coord.coord(x, y, z));
+            entitiesOnPositions.remove(new BlockPos(x, y, z));
         }
     }
 
@@ -209,12 +207,12 @@ public class FakeWorld extends WorldController {
 
     @Override
     public TileEntity getBlockEntity(BlockPos p) {
-        return entitiesOnPositions.get(Coord.coord(p.getX(), p.getY(), p.getZ()));
+        return entitiesOnPositions.get(p);
     }
 
     @Override
     public void destroyBlock(BlockPos center) {
-        destroyCalls.add(Coord.coord(center.getX(), center.getY(), center.getZ()));
+        destroyCalls.add(center);
         fakeWorld[center.getX()+ WORLD_CENTER][center.getY()+ WORLD_CENTER][center.getZ()+ WORLD_CENTER] = block(AIR);
     }
 
@@ -231,10 +229,18 @@ public class FakeWorld extends WorldController {
     }
 
     public String getAt(int x, int y, int z) {
+        if(
+                x < -WORLD_CENTER
+                || x > WORLD_CENTER
+                || y < -WORLD_CENTER
+                || y > WORLD_CENTER
+                || z < -WORLD_CENTER
+                || z > WORLD_CENTER
+        ) return AIR;
         return fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER].descriptionId;
     }
 
-    public ArrayList<Coord> getDestroyCalls() {
+    public ArrayList<BlockPos> getDestroyCalls() {
         return destroyCalls;
     }
 

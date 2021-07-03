@@ -55,6 +55,7 @@ public class AutomataSearchTest {
         fakeWorld.redSignalAt(0, 0, 0, true);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         PatternLoad next = (PatternLoad) automataSearch.tick(automataStartPos, fakeWorld);
+        Assert.assertNotNull(next);
     }
 
 }

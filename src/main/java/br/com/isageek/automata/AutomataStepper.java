@@ -1,11 +1,8 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
-import br.com.isageek.automata.forge.Coord;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.function.Consumer;
 
 public class AutomataStepper {
 

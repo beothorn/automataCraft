@@ -38,7 +38,7 @@ public class AutomataSearch implements EntityTick {
         }
 
         if(worldController.hasNeighborSignal(center)){
-            return new PatternLoad();
+            return new PatternLoad(automata);
         }
 
         return this;
