@@ -2,13 +2,14 @@ package br.com.isageek.automata.automata;
 
 import br.com.isageek.automata.BlockTree;
 import br.com.isageek.automata.forge.BlockStateHolder;
+import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-public class PatternLoad implements EntityTick{
+public class PatternLoad implements EntityTick {
 
     private static final int PATTERN_LIMIT = 128;
 

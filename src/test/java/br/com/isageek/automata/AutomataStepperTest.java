@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static br.com.isageek.automata.FakeWorld.*;
 
+//TODO: Delete stepper
 public class AutomataStepperTest {
 
     @Test

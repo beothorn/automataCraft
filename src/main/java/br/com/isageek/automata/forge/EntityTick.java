@@ -1,6 +1,5 @@
-package br.com.isageek.automata.automata;
+package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
 public interface EntityTick {

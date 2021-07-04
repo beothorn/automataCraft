@@ -1,14 +1,14 @@
 package br.com.isageek.automata.automata;
 
-import br.com.isageek.automata.AutomataTileEntity;
 import br.com.isageek.automata.BlockTree;
 import br.com.isageek.automata.forge.BlockStateHolder;
+import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
-public class ExecutePattern implements EntityTick{
+public class ExecutePattern implements EntityTick {
 
     private HashSet<BlockPos> automataPositions;
     private BlockTree replacementPattern;

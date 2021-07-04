@@ -3,6 +3,7 @@ package br.com.isageek.automata.automata;
 import br.com.isageek.automata.BlockTree;
 import br.com.isageek.automata.FakeWorld;
 import br.com.isageek.automata.forge.BlockStateHolder;
+import br.com.isageek.automata.forge.EntityTick;
 import net.minecraft.util.math.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;

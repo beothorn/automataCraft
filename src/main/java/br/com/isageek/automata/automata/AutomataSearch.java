@@ -1,5 +1,6 @@
 package br.com.isageek.automata.automata;
 
+import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
