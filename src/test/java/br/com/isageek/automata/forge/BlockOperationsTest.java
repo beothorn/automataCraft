@@ -1,6 +1,6 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.patterns.PatternsTest;
+import br.com.isageek.automata.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,8 +44,8 @@ public class BlockOperationsTest {
             }
         };
 
-        BlockStateHolder[] actual = BlockOperations.rotateY(PatternsTest.flatten(pattern));
-        BlockStateHolder[] expected = PatternsTest.flatten(rotatedY);
+        BlockStateHolder[] actual = BlockOperations.rotateY(TestHelper.flatten(pattern));
+        BlockStateHolder[] expected = TestHelper.flatten(rotatedY);
 
         Assert.assertArrayEquals(expected, actual);
 

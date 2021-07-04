@@ -10,7 +10,15 @@ public class AutomataSearch implements EntityTick {
 
     private static final int MAX_SEARCH_RADIUS = 20;
 
-    private HashSet<BlockPos> automata = new HashSet<>();
+    private HashSet<BlockPos> automata;
+
+    public AutomataSearch(HashSet<BlockPos> automata){
+        this.automata = automata;
+    }
+
+    public AutomataSearch(){
+        this(new HashSet<>());
+    }
 
     @Override
     public EntityTick tick(BlockPos center, WorldController worldController) {
@@ -38,7 +46,8 @@ public class AutomataSearch implements EntityTick {
         }
 
         if(worldController.hasNeighborSignal(center)){
-            return new PatternLoad(automata);
+            PatternLoad patternLoad = new PatternLoad(automata);
+            return patternLoad.tick(center, worldController);
         }
 
         return this;

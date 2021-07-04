@@ -1,7 +1,7 @@
 package br.com.isageek.automata.automata;
 
 import br.com.isageek.automata.FakeWorld;
-import br.com.isageek.automata.patterns.PatternsTest;
+import br.com.isageek.automata.TestHelper;
 import net.minecraft.util.math.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class PatternLoadTest {
         PatternLoad patternLoad = new PatternLoad(null);
 
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
-        fakeWorld.redSignalAt(0, 0, 0, true);
+        fakeWorld.redSignalAt(automataStartPos, true);
 
         PatternLoad next = (PatternLoad) patternLoad.tick(automataStartPos, fakeWorld);
         Assert.assertNotNull(next);
@@ -30,7 +30,7 @@ public class PatternLoadTest {
         PatternLoad patternLoad = new PatternLoad(null);
 
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
-        fakeWorld.redSignalAt(0, 0, 0, false);
+        fakeWorld.redSignalAt(automataStartPos, false);
 
         AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld);
         Assert.assertNotNull(next);
@@ -39,12 +39,12 @@ public class PatternLoadTest {
     @Test
     public void loadsASimplePattern(){
         FakeWorld fakeWorld = new FakeWorld();
-        PatternLoad patternLoad = new PatternLoad(null);
+        PatternLoad patternLoad = new PatternLoad();
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
-        fakeWorld.redSignalAt(0, 0, 0, true);
+        fakeWorld.redSignalAt(automataStartPos, true);
 
-        String[][][] matcher = PatternsTest.cubeWithSameBlockType("a");
-        String[][][] replacement = PatternsTest.cubeWithSameBlockType("b");
+        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setSurrounding(2, 0, 0, replacement);
         fakeWorld.setSurrounding(5, 0, 0, matcher);
@@ -52,6 +52,4 @@ public class PatternLoadTest {
         ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld);
         Assert.assertNotNull(next);
     }
-
-
 }

@@ -36,6 +36,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
 
     public AutomataTileEntity(
             TileEntityType<AutomataTileEntity> tileEntityType,
+            Block air,
             Block automata,
             Block automataPlaceholder,
             Block start,
@@ -48,6 +49,7 @@ public class AutomataTileEntity extends TileEntity implements ITickableTileEntit
             Block yRotation
     ) {
         this(tileEntityType, new WorldController(
+            air,
             automata,
             termination,
             start,

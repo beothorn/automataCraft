@@ -56,8 +56,8 @@ public class AutomataStepperTest {
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
-        String[][][] matcher = PatternsTest.cubeWithSameBlockType("a");
-        String[][][] replacement = PatternsTest.cubeWithSameBlockType("b");
+        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
         fakeWorld.setAt(-10, 0, 0, AUTOMATA_START);
@@ -72,7 +72,7 @@ public class AutomataStepperTest {
         fakeWorld.doubleTick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
-        String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
+        String[][][] expected = TestHelper.cubeWithSameBlockType("b");
         Assert.assertArrayEquals(expected, result);
     }
 
@@ -86,8 +86,8 @@ public class AutomataStepperTest {
                 BlockStateHolder.block(OBSIDIAN)
         );
 
-        String[][][] matcher = PatternsTest.cubeWithSameBlockType("a");
-        String[][][] replacement = PatternsTest.cubeWithSameBlockType("b");
+        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
@@ -104,7 +104,7 @@ public class AutomataStepperTest {
         fakeWorld.doubleTick();
         String[][][] result = fakeWorld.getSurroundingIds(0, 0, 0);
 
-        String[][][] expected = PatternsTest.cubeWithSameBlockType("b");
+        String[][][] expected = TestHelper.cubeWithSameBlockType("b");
         Assert.assertArrayEquals(expected, result);
     }
 
@@ -210,20 +210,20 @@ public class AutomataStepperTest {
 
     @Test
     public void replaceAllWithAir(){
-        String[][][] state = PatternsTest.cubeWithSameBlockType("SomeBlock");
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
-        String[][][] result = PatternsTest.cubeWithSameBlockType(AIR_PLACEHOLDER);
-        String[][][] expected = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] state = TestHelper.cubeWithSameBlockType("SomeBlock");
+        String[][][] match = TestHelper.cubeWithSameBlockType(AIR);
+        String[][][] result = TestHelper.cubeWithSameBlockType(AIR_PLACEHOLDER);
+        String[][][] expected = TestHelper.cubeWithSameBlockType(AIR);
 
         PatternsTest.testPattern(state, match, result, expected);
     }
 
     @Test
     public void replaceAirWithX(){
-        String[][][] state = PatternsTest.cubeWithSameBlockType(AIR);
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR_PLACEHOLDER);
-        String[][][] result = PatternsTest.cubeWithSameBlockType("X");
-        String[][][] expected = PatternsTest.cubeWithSameBlockType("X");
+        String[][][] state = TestHelper.cubeWithSameBlockType(AIR);
+        String[][][] match = TestHelper.cubeWithSameBlockType(AIR_PLACEHOLDER);
+        String[][][] result = TestHelper.cubeWithSameBlockType("X");
+        String[][][] expected = TestHelper.cubeWithSameBlockType("X");
 
         PatternsTest.testPattern(state, match, result, expected);
     }
@@ -234,15 +234,15 @@ public class AutomataStepperTest {
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
 
-        fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType("X"));
+        fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("X"));
 
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        String[][][] result = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] result = TestHelper.cubeWithSameBlockType(AIR);
         fakeWorld.setSurrounding(12, 0, 0, result);
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] match = TestHelper.cubeWithSameBlockType(AIR);
         fakeWorld.setSurrounding(15, 0, 0, match);
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
@@ -254,18 +254,18 @@ public class AutomataStepperTest {
         fakeWorld.setAt(0, 0, 0, "X");
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
 
-        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("X"), actual);
+        Assert.assertArrayEquals(TestHelper.cubeWithSameBlockType("X"), actual);
     }
 
     @Test
     public void usesYRotationBlock(){
         AutomataStepper automataStepper = PatternsTest.vanillaStepper();
 
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] match = TestHelper.cubeWithSameBlockType(AIR);
         match[0][1][1] = "SomeBlock";
         match[1][1][1] = AUTOMATA_Y_ROTATION;
 
-        String[][][] result = PatternsTest.cubeWithSameBlockType("Matched");
+        String[][][] result = TestHelper.cubeWithSameBlockType("Matched");
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
@@ -282,14 +282,14 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(-1, 0, 0, "SomeBlock");
         fakeWorld.doubleTick();
-        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
+        Assert.assertArrayEquals(TestHelper.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
 
-        fakeWorld.setSurrounding(0, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
         fakeWorld.setAt(0, 0, 0, AUTOMATA);
 
         fakeWorld.setAt(1, 0, 0, "SomeBlock");
         fakeWorld.doubleTick();
-        Assert.assertArrayEquals(PatternsTest.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
+        Assert.assertArrayEquals(TestHelper.cubeWithSameBlockType("Matched"), fakeWorld.getSurroundingIds(0, 0, 0));
     }
 
     @Test
@@ -315,8 +315,8 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
-        fakeWorld.setSurrounding(15, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(12, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(15, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
         automataStepper.tick(
@@ -336,8 +336,8 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
-        fakeWorld.setSurrounding(15, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(12, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(15, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
         automataStepper.tick(
@@ -365,8 +365,8 @@ public class AutomataStepperTest {
 
         fakeWorld.setAt(10, 0, 0, AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
-        fakeWorld.setSurrounding(15, 0, 0, PatternsTest.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(12, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
+        fakeWorld.setSurrounding(15, 0, 0, TestHelper.cubeWithSameBlockType(AIR));
 
         fakeWorld.setAt(17, 0, 0, TERMINATOR);
         automataStepper.tick(
@@ -384,7 +384,7 @@ public class AutomataStepperTest {
                 () -> {}
         );
         Assert.assertFalse(automataStepper.isLoaded());
-        fakeWorld.setSurrounding(12, 0, 0, PatternsTest.cubeWithSameBlockType("stone"));
+        fakeWorld.setSurrounding(12, 0, 0, TestHelper.cubeWithSameBlockType("stone"));
         fakeWorld.redSignalAt(10, 0, 0, true);
         automataStepper.tick(
                 fakeWorld,
@@ -400,7 +400,7 @@ public class AutomataStepperTest {
                 () -> {}
         );
         Assert.assertNotNull(result);
-        Assert.assertArrayEquals(PatternsTest.flatten(PatternsTest.cubeWithSameBlockType("stone")), result);
+        Assert.assertArrayEquals(TestHelper.flatten(TestHelper.cubeWithSameBlockType("stone")), result);
     }
 
 }

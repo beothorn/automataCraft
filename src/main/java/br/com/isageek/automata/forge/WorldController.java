@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 public class WorldController {
 
     private World world;
+    private final Block any;
     private final Block automata;
     private final Block terminator;
     private final Block start;
@@ -23,6 +24,7 @@ public class WorldController {
     private final Block yRotation;
 
     public WorldController(
+        Block any,
         Block automata,
         Block terminator,
         Block start,
@@ -34,6 +36,7 @@ public class WorldController {
         Block caveAir,
         Block yRotation
     ) {
+        this.any = any;
         this.automata = automata;
         this.terminator = terminator;
         this.start = start;
@@ -103,6 +106,7 @@ public class WorldController {
         return blockStateHolder.is(automataPlaceholder);
     }
 
+    public boolean isAny(BlockStateHolder blockStateHolder) { return blockStateHolder.is(any); }
     public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(airPlaceholder); }
     public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(waterPlaceholder);}
     public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(lavaPlaceholder); }
@@ -143,4 +147,10 @@ public class WorldController {
     public boolean hasNeighborSignal(BlockPos p) {
         return world.hasNeighborSignal(p);
     }
+
+    public BlockStateHolder getAutomata() { return BlockStateHolder.block(automata.defaultBlockState()); }
+    public BlockStateHolder getAir() { return BlockStateHolder.block(Blocks.AIR.defaultBlockState()); }
+    public BlockStateHolder getWater() { return BlockStateHolder.block(Blocks.WATER.defaultBlockState()); }
+    public BlockStateHolder getLava() { return BlockStateHolder.block(Blocks.LAVA.defaultBlockState()); }
+    public BlockStateHolder getObsidian() { return BlockStateHolder.block(Blocks.OBSIDIAN.defaultBlockState()); }
 }

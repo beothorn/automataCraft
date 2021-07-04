@@ -48,10 +48,11 @@ public class AutomataMod
 
         blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
             "automata",
-            (tileEntitySupplierPlaceholder) -> new AutomataBlock(tileEntitySupplierPlaceholder),
+                AutomataBlock::new,
             (tileEntityRegistry, automataBlock) -> {
                 AutomataTileEntity automataTileEntity = new AutomataTileEntity(
                         (TileEntityType<AutomataTileEntity>) tileEntityRegistry.get(),
+                        Blocks.AIR,
                         automataBlock.get(),
                         automata_placeholder.get(),
                         automata_start.get(),

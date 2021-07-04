@@ -6,13 +6,17 @@ import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class PatternLoad implements EntityTick{
 
     private static final int PATTERN_LIMIT = 128;
 
-    private String descriptionIdForBlockRepresentingAny = "TODO";
     private HashSet<BlockPos> automataPositions;
+
+    public PatternLoad() {
+        this(new LinkedHashSet<>());
+    }
 
     public PatternLoad(HashSet<BlockPos> automataPositions) {
         this.automataPositions = automataPositions;
@@ -20,11 +24,12 @@ public class PatternLoad implements EntityTick{
 
     @Override
     public EntityTick tick(BlockPos center, WorldController worldController) {
-        if(!worldController.hasNeighborSignal(center)) return new AutomataSearch();
+        if(!worldController.hasNeighborSignal(center)) return new AutomataSearch(automataPositions);
         BlockPos terminatorPos = findTerminatorFor(worldController, center);
         if(terminatorPos == null) return this;
         BlockTree replacementPattern = loadPattern(worldController, terminatorPos, center);
-        return new ExecutePattern(automataPositions, replacementPattern);
+        ExecutePattern executePattern = new ExecutePattern(automataPositions, replacementPattern);
+        return executePattern.tick(center, worldController);
     }
 
     private BlockPos findTerminatorFor(WorldController worldController, BlockPos start){
@@ -83,14 +88,14 @@ public class PatternLoad implements EntityTick{
             cursor = cursor.offset(xDirection, 0, zDirection);
 
             BlockStateHolder[] result = worldController.surrounding(cursor);
-            replaceBlockWithAnyMatcherBlock(result);
+            replaceBlockWithAnyMatcherBlock(worldController, result);
             replacePlaceHoldersIn(worldController, result);
             // move 3 towards terminator
             cursor = cursor.offset(xDirection * 3, 0, zDirection * 3);
             final BlockStateHolder[] match = worldController.surrounding(cursor);
             final BlockStateHolder centerBlock = match[BlockTree.AUTOMATA_BLOCK_POSITION];
 
-            replaceBlockWithAnyMatcherBlock(match);
+            replaceBlockWithAnyMatcherBlock(worldController, match);
             replacePlaceHoldersIn(worldController, match);
             blockTree.addPattern(match, result);
 
@@ -106,10 +111,10 @@ public class PatternLoad implements EntityTick{
         return blockTree;
     }
 
-    private void replaceBlockWithAnyMatcherBlock(BlockStateHolder[] blockStates) {
+    private void replaceBlockWithAnyMatcherBlock(WorldController worldController, BlockStateHolder[] blockStates) {
         for (int i = 0; i < blockStates.length; i++) {
             BlockStateHolder blockState = blockStates[i];
-            if(blockState.descriptionId.equals(descriptionIdForBlockRepresentingAny)){
+            if(worldController.isAny(blockState)){
                 blockStates[i] = BlockTree.ANY;
             }
         }

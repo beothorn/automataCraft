@@ -2,6 +2,7 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -49,7 +50,19 @@ public class FakeWorld extends WorldController {
     }
 
     public FakeWorld(AutomataStepper automataStepper) {
-        super(null, null, null, null, null, null, null, null, null, null);
+        super(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
         this.automataStepper = automataStepper;
         fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
         for (int x = 0; x < WORLD_CENTER * 2; x++) {
@@ -86,6 +99,10 @@ public class FakeWorld extends WorldController {
         }
     }
 
+    public void setAt(BlockPos p, String id){
+        setAt(p.getX(), p.getY(), p.getZ(), id);
+    }
+
     public void setAt(int x, int y, int z, String id){
         calledSet = true;
         fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
@@ -102,6 +119,10 @@ public class FakeWorld extends WorldController {
     @Override
     public void setBlock(BlockStateHolder blockState, BlockPos p) {
         setAt(p.getX(), p.getY(), p.getZ(), blockState.descriptionId);
+    }
+
+    public void setSurrounding(BlockPos p, String[][][] surroundingIds){
+        setSurrounding(p.getX(), p.getY(), p.getZ(), surroundingIds);
     }
 
     public void setSurrounding(int x, int y, int z, String[][][] surroundingIds){
@@ -174,6 +195,11 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
+    public boolean isAny(BlockStateHolder blockStateHolder) {
+        return blockStateHolder.descriptionId.equals(AIR);
+    }
+
+    @Override
     public BlockStateHolder[] surrounding(BlockPos center) {
         int x = center.getX();
         int y = center.getY();
@@ -216,6 +242,10 @@ public class FakeWorld extends WorldController {
         fakeWorld[center.getX()+ WORLD_CENTER][center.getY()+ WORLD_CENTER][center.getZ()+ WORLD_CENTER] = block(AIR);
     }
 
+    public String[][][] getSurroundingIds(BlockPos p) {
+        return getSurroundingIds(p.getX(), p.getY(), p.getZ());
+    }
+
     public String[][][] getSurroundingIds(int x, int y, int z) {
         String[][][] result = new String[3][3][3];
         for (int ix = -1; ix <= 1; ix++) {
@@ -244,6 +274,10 @@ public class FakeWorld extends WorldController {
         return destroyCalls;
     }
 
+    public void redSignalAt(BlockPos p, boolean signalState) {
+        redSignalAt(p.getX(), p.getY(), p.getZ(), signalState);
+    }
+
     public void redSignalAt(int x, int y, int z, boolean signalState) {
         redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z] = signalState;
     }
@@ -251,4 +285,10 @@ public class FakeWorld extends WorldController {
     public boolean hasNeighborSignal(BlockPos p) {
         return redstoneSignal[WORLD_CENTER + p.getX()][WORLD_CENTER + p.getY()][WORLD_CENTER + p.getZ()];
     }
+
+    public BlockStateHolder getAutomata() { return block(AUTOMATA); }
+    public BlockStateHolder getAir() { return block(AIR); }
+    public BlockStateHolder getWater() { return block(WATER); }
+    public BlockStateHolder getLava() { return block(LAVA); }
+    public BlockStateHolder getObsidian() { return block(OBSIDIAN); }
 }

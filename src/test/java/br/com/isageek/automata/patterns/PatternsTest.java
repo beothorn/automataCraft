@@ -2,7 +2,7 @@ package br.com.isageek.automata.patterns;
 
 import br.com.isageek.automata.AutomataStepper;
 import br.com.isageek.automata.FakeWorld;
-import br.com.isageek.automata.forge.BlockStateHolder;
+import br.com.isageek.automata.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,21 +10,6 @@ import static br.com.isageek.automata.FakeWorld.*;
 import static br.com.isageek.automata.forge.BlockStateHolder.block;
 
 public class PatternsTest {
-
-    public static BlockStateHolder[] flatten(String[][][] matrix){
-        BlockStateHolder[] result = new BlockStateHolder[27];
-
-        int i = 0;
-        for (int ix = 0; ix < 3; ix++) {
-            for (int iy = 0; iy < 3; iy++) {
-                for (int iz = 0; iz < 3; iz++) {
-                    result[i++] =  block(matrix[ix][iy][iz]);
-                }
-            }
-        }
-
-        return result;
-    }
 
     public static void testPattern(
         String[][][] state,
@@ -63,26 +48,6 @@ public class PatternsTest {
         );
     }
 
-    public static String[][][] cubeWithSameBlockType(String blockId){
-        return new String[][][]{
-                {
-                        {blockId, blockId, blockId},
-                        {blockId, blockId, blockId},
-                        {blockId, blockId, blockId}
-                },
-                {
-                        {blockId, blockId, blockId},
-                        {blockId, blockId, blockId},
-                        {blockId, blockId, blockId}
-                },
-                {
-                        {blockId, blockId, blockId},
-                        {blockId, blockId, blockId},
-                        {blockId, blockId, blockId}
-                }
-        };
-    }
-
     @Test
     public void createBlockWhenAnotherBlockIsAdded(){
         AutomataStepper automataStepper = new AutomataStepper(
@@ -93,17 +58,17 @@ public class PatternsTest {
                 block(OBSIDIAN)
         );
 
-        String[][][] state = PatternsTest.cubeWithSameBlockType(AIR);
-        String[][][] match1 = PatternsTest.cubeWithSameBlockType("anyMatcher");
+        String[][][] state = TestHelper.cubeWithSameBlockType(AIR);
+        String[][][] match1 = TestHelper.cubeWithSameBlockType("anyMatcher");
         match1[0][0][1] = "keyBlock";
-        String[][][] result1 = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] result1 = TestHelper.cubeWithSameBlockType(AIR);
         result1[1][0][0] = "replacement";
         result1[1][1][1] = AUTOMATA_PLACEHOLDER;
-        String[][][] match2 = PatternsTest.cubeWithSameBlockType("anyMatcher");
-        String[][][] result2 = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] match2 = TestHelper.cubeWithSameBlockType("anyMatcher");
+        String[][][] result2 = TestHelper.cubeWithSameBlockType(AIR);
         result2[1][0][0] = AIR;
         result2[1][1][1] = AUTOMATA_PLACEHOLDER;
-        String[][][] expected = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] expected = TestHelper.cubeWithSameBlockType(AIR);
         expected[1][1][1] = AUTOMATA;
 
         FakeWorld fakeWorld = new FakeWorld(automataStepper);

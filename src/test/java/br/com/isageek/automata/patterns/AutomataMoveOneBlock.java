@@ -2,6 +2,7 @@ package br.com.isageek.automata.patterns;
 
 import br.com.isageek.automata.AutomataStepper;
 import br.com.isageek.automata.FakeWorld;
+import br.com.isageek.automata.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class AutomataMoveOneBlock {
                 {AIR, AIR, AIR}
             }
         };
-        String[][][] match = PatternsTest.cubeWithSameBlockType(AIR);
+        String[][][] match = TestHelper.cubeWithSameBlockType(AIR);
 
         String[][][] expected = {
             {
