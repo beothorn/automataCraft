@@ -1,7 +1,7 @@
 package br.com.isageek.automata.automata;
 
 import br.com.isageek.automata.BlockTree;
-import br.com.isageek.automata.FakeWorld;
+import br.com.isageek.automata.testSupport.FakeWorld;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import net.minecraft.util.math.BlockPos;
@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import java.util.HashSet;
 
-import static br.com.isageek.automata.TestHelper.blocksOf;
-import static br.com.isageek.automata.TestHelper.cubeWithSameBlockType;
+import static br.com.isageek.automata.testSupport.TestHelper.blocksOf;
+import static br.com.isageek.automata.testSupport.TestHelper.cubeWithSameBlockType;
 
 public class ExecutePatternTest {
 

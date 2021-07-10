@@ -1,11 +1,10 @@
 package br.com.isageek.automata.patterns;
 
-import br.com.isageek.automata.AutomataStepper;
-import br.com.isageek.automata.FakeWorld;
+import br.com.isageek.automata.testSupport.FakeWorld;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static br.com.isageek.automata.FakeWorld.*;
+import static br.com.isageek.automata.testSupport.FakeWorld.*;
 
 public class TickClock {
 
@@ -38,9 +37,7 @@ public class TickClock {
                 {AIR, someBlock, AIR}
         }, ignore};
 
-        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
-
-        FakeWorld fakeWorld = new FakeWorld(automataStepper);
+        FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
@@ -55,12 +52,9 @@ public class TickClock {
         fakeWorld.setAt(0, -1, 0, someBlock); // starts up
 
         fakeWorld.tick();
-        Assert.assertTrue(automataStepper.isLoaded());
-
-        fakeWorld.doubleTick();
         String[][][] actual1 = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expectedDown, actual1);
-        fakeWorld.doubleTick();
+        fakeWorld.tick();
         String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expectedUp, actual2);
     }

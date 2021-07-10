@@ -1,17 +1,19 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
+import br.com.isageek.automata.testSupport.TestHelper;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static br.com.isageek.automata.BlockTree.ANY;
-import static br.com.isageek.automata.TestHelper.blocksOf;
 import static br.com.isageek.automata.forge.BlockStateHolder.block;
+import static br.com.isageek.automata.testSupport.TestHelper.blocksOf;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class BlockTreeTest {
+
+    private static final BlockStateHolder ANY = BlockTree.ANY;
 
     @Test
     public void findResultForMatch(){

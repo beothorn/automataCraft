@@ -1,12 +1,11 @@
 package br.com.isageek.automata.patterns;
 
-import br.com.isageek.automata.AutomataStepper;
-import br.com.isageek.automata.FakeWorld;
-import br.com.isageek.automata.TestHelper;
+import br.com.isageek.automata.testSupport.FakeWorld;
+import br.com.isageek.automata.testSupport.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static br.com.isageek.automata.FakeWorld.*;
+import static br.com.isageek.automata.testSupport.FakeWorld.*;
 import static br.com.isageek.automata.forge.BlockStateHolder.block;
 
 public class PatternsTest {
@@ -17,9 +16,7 @@ public class PatternsTest {
         String[][][] result,
         String[][][] expected
     ) {
-        AutomataStepper automataStepper = vanillaStepper();
-
-        FakeWorld fakeWorld = new FakeWorld(automataStepper);
+        FakeWorld fakeWorld = new FakeWorld();
         fakeWorld.setSurrounding(0, 0, 0, state);
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
@@ -29,7 +26,6 @@ public class PatternsTest {
         fakeWorld.setSurrounding(15, 0, 0, match);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
         fakeWorld.tick(); // One tick to load
-        Assert.assertTrue(automataStepper.isLoaded());
 
         fakeWorld.tick(); // One tick to read world state
         fakeWorld.tick(); // One tick to replace blocks
@@ -38,40 +34,29 @@ public class PatternsTest {
         Assert.assertArrayEquals(expected, actual);
     }
 
-    public static AutomataStepper vanillaStepper() {
-        return new AutomataStepper(
-                AIR,
-                block(AIR),
-                block(WATER),
-                block(LAVA),
-                block(OBSIDIAN)
-        );
-    }
-
     @Test
     public void createBlockWhenAnotherBlockIsAdded(){
-        AutomataStepper automataStepper = new AutomataStepper(
-                "anyMatcher",
-                block(AIR),
-                block(WATER),
-                block(LAVA),
-                block(OBSIDIAN)
-        );
-
+        /*
+         * Important when you have a sticky piston move a block
+         * near the automata and have a pattern that can be turned
+         * on and off
+         */
         String[][][] state = TestHelper.cubeWithSameBlockType(AIR);
-        String[][][] match1 = TestHelper.cubeWithSameBlockType("anyMatcher");
+
+        String[][][] match1 = TestHelper.cubeWithSameBlockType(ANY);
         match1[0][0][1] = "keyBlock";
+
         String[][][] result1 = TestHelper.cubeWithSameBlockType(AIR);
         result1[1][0][0] = "replacement";
         result1[1][1][1] = AUTOMATA_PLACEHOLDER;
-        String[][][] match2 = TestHelper.cubeWithSameBlockType("anyMatcher");
-        String[][][] result2 = TestHelper.cubeWithSameBlockType(AIR);
-        result2[1][0][0] = AIR;
-        result2[1][1][1] = AUTOMATA_PLACEHOLDER;
-        String[][][] expected = TestHelper.cubeWithSameBlockType(AIR);
-        expected[1][1][1] = AUTOMATA;
 
-        FakeWorld fakeWorld = new FakeWorld(automataStepper);
+        String[][][] match2 = TestHelper.cubeWithSameBlockType(ANY);
+
+        String[][][] result2 = TestHelper.cubeWithSameBlockType(AIR);
+        result2[1][0][0] = AIR_PLACEHOLDER;
+        result2[1][1][1] = AUTOMATA_PLACEHOLDER;
+
+        FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
@@ -81,28 +66,20 @@ public class PatternsTest {
         fakeWorld.setSurrounding(18, 0, 0, result2);
         fakeWorld.setSurrounding(21, 0, 0, match2);
         fakeWorld.setAt(23, 0, 0, FakeWorld.TERMINATOR);
-        fakeWorld.tick();
-        Assert.assertTrue(automataStepper.isLoaded());
-
 
         // If key block is present, replace the other block
-        state[0][0][1] = "keyBlock";
         fakeWorld.setSurrounding(0, 0, 0, state);
-        fakeWorld.doubleTick();
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
-
-        expected[1][0][0] = "replacement";
-        Assert.assertArrayEquals(expected, actual);
+        fakeWorld.setAt(0, 0, 1, "keyBlock");
+        fakeWorld.tick();
+        String actual = fakeWorld.getAt(1, 0, 0);
+        Assert.assertEquals("replacement", actual);
 
         // If key block is NOT present, removes the other block
-        state[0][0][1] = AIR;
-        state[1][0][0] = "replacement";
         fakeWorld.setSurrounding(0, 0, 0, state);
-        fakeWorld.doubleTick();
-        String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 0);
-
-        expected[1][0][0] = AIR;
-        Assert.assertArrayEquals(expected, actual2);
+        fakeWorld.setAt(0, 0, 1, AIR);
+        fakeWorld.tick();
+        String actual2 = fakeWorld.getAt(1, 0, 0);
+        Assert.assertEquals(AIR, actual2);
 
     }
 

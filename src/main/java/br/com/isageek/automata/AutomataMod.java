@@ -25,6 +25,7 @@ import static br.com.isageek.automata.forge.Register.blockWithTileEntity;
 public class AutomataMod
 {
     public static final String MOD_ID = "automata";
+    public static final boolean DEBUG = true;
 
     public AutomataMod() {
         MinecraftForge.EVENT_BUS.register(this);
@@ -45,24 +46,29 @@ public class AutomataMod
         blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
                 "automata_start",
                 AutomataStartBlock::new,
-                (tileEntityRegistry, automata_start) -> new ClockedTileEntity(
-                        (TileEntityType<ClockedTileEntity>) tileEntityRegistry.get(),
-                        new WorldController(
-                                Blocks.AIR,
-                                automata.get(),
-                                automata_termination.get(),
-                                automata_start.get(),
-                                automata_placeholder.get(),
-                                automata_air_placeholder.get(),
-                                automata_water_placeholder.get(),
-                                automata_lava_placeholder.get(),
-                                automata_bedrock_placeholder.get(),
-                                Blocks.CAVE_AIR,
-                                automata_y_rotation.get()
-                        ),
-                        new AutomataSearch(),
-                        new SystemEntityClock()
-                )
+                (tileEntityRegistry, automata_start) -> {
+                    WorldController worldController = new WorldController(
+                            Blocks.AIR,
+                            automata.get(),
+                            automata_termination.get(),
+                            automata_start.get(),
+                            automata_placeholder.get(),
+                            automata_air_placeholder.get(),
+                            automata_water_placeholder.get(),
+                            automata_lava_placeholder.get(),
+                            automata_bedrock_placeholder.get(),
+                            Blocks.CAVE_AIR,
+                            automata_y_rotation.get()
+                    );
+                    AutomataSearch initial = new AutomataSearch();
+                    SystemEntityClock entityClock = new SystemEntityClock();
+                    return new ClockedTileEntity(
+                            (TileEntityType<ClockedTileEntity>) tileEntityRegistry.get(),
+                            worldController,
+                            initial,
+                            entityClock
+                    );
+                }
         );
 
 //        blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,

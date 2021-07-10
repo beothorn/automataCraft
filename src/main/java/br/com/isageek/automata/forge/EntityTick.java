@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 
 public interface EntityTick {
 
-    public EntityTick tick(
+    EntityTick tick(
             BlockPos center,
             WorldController worldController
     );

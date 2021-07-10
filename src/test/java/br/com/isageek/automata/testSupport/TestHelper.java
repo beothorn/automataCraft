@@ -1,4 +1,4 @@
-package br.com.isageek.automata;
+package br.com.isageek.automata.testSupport;
 
 import br.com.isageek.automata.forge.BlockStateHolder;
 
@@ -35,7 +35,7 @@ public class TestHelper {
         return result;
     }
 
-    public static String[][][] cubeWithSameBlockType(String blockId){
+    public static String[][][] cubeWithSameBlockType(String blockId, String center){
         return new String[][][]{
                 {
                         {blockId, blockId, blockId},
@@ -44,7 +44,7 @@ public class TestHelper {
                 },
                 {
                         {blockId, blockId, blockId},
-                        {blockId, blockId, blockId},
+                        {blockId, center, blockId},
                         {blockId, blockId, blockId}
                 },
                 {
@@ -53,5 +53,9 @@ public class TestHelper {
                         {blockId, blockId, blockId}
                 }
         };
+    }
+
+    public static String[][][] cubeWithSameBlockType(String blockId){
+        return cubeWithSameBlockType(blockId, blockId);
     }
 }

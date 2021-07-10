@@ -1,6 +1,7 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.forge.BlockWithTileEntity;
+import br.com.isageek.automata.forge.ClockedTileEntity;
 import br.com.isageek.automata.forge.TileEntitySupplierPlaceholder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

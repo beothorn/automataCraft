@@ -1,44 +1,46 @@
 package br.com.isageek.automata.patterns;
 
 import br.com.isageek.automata.testSupport.FakeWorld;
+import br.com.isageek.automata.testSupport.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static br.com.isageek.automata.testSupport.FakeWorld.*;
+import static br.com.isageek.automata.testSupport.FakeWorld.AIR;
 
-public class TwoBlocks {
+public class DigDown{
 
     @Test
-    public void twoBlocks(){
-
-        String[][][] match = {
-                {
-                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
-                        {AIR, AIR, AIR},
-                        {AIR, AIR, AIR}
-                },
-                {
-                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
-                        {AIR, AIR, AIR},
-                        {AIR, AIR, AIR}
-                },
-                {
-                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
-                        {AIR, AIR, AIR},
-                        {AIR, AIR, AIR}
-                }
-        };
-
+    public void digDown(){
         String[][][] result = {
                 {
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER}
+                },
+                {
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
+                        {AIR_PLACEHOLDER, AUTOMATA_PLACEHOLDER, AIR_PLACEHOLDER}
+                },
+                {
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
+                        {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER}
+                }
+        };
+        String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
+
+        String[][][] expected = {
+                {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR}
                 },
                 {
-                        {AIR, STONE, AIR},
-                        {AIR, AUTOMATA_PLACEHOLDER, AIR},
-                        {AIR, AIR, AIR}
+                        {AIR, AIR, AIR},
+                        {AIR, AIR, AIR},
+                        {AIR, AUTOMATA, AIR}
                 },
                 {
                         {AIR, AIR, AIR},
@@ -49,8 +51,8 @@ public class TwoBlocks {
 
         FakeWorld fakeWorld = new FakeWorld();
 
+        fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("Dirt"));
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
-        fakeWorld.setAt(1, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, result);
@@ -59,10 +61,7 @@ public class TwoBlocks {
 
         fakeWorld.tick();
 
-        String actual1 = fakeWorld.getAt(0, -1, 0);
-        Assert.assertEquals(STONE, actual1);
-        String actual2 = fakeWorld.getAt(1, -1, 0);
-        Assert.assertEquals(STONE, actual2);
+        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        Assert.assertArrayEquals(expected, actual);
     }
-
 }

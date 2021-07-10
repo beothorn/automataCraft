@@ -1,8 +1,8 @@
-package br.com.isageek.automata;
+package br.com.isageek.automata.testSupport;
 
+import br.com.isageek.automata.automata.AutomataSearch;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -30,14 +30,13 @@ public class FakeWorld extends WorldController {
     public static final String TERMINATOR = "Terminator";
     public static final String BEDROCK = "Bedrock";
     public static final String AIR = "air";
+    public static final String ANY = "air";
 
     private BlockStateHolder[][][] fakeWorld;
 
     private boolean[][][] redstoneSignal;
 
-    private AutomataStepper automataStepper;
-
-    private Map<BlockPos, AutomataTileEntity> entitiesOnPositions = new LinkedHashMap<>();
+    private Map<BlockPos, FakeTileEntity> entitiesOnPositions = new LinkedHashMap<>();
 
     private ArrayList<BlockPos> destroyCalls = new ArrayList<>();
 
@@ -46,10 +45,6 @@ public class FakeWorld extends WorldController {
     public boolean calledSet = false;
 
     public FakeWorld() {
-        this(null);
-    }
-
-    public FakeWorld(AutomataStepper automataStepper) {
         super(
             null,
             null,
@@ -63,7 +58,6 @@ public class FakeWorld extends WorldController {
             null,
             null
         );
-        this.automataStepper = automataStepper;
         fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
         for (int x = 0; x < WORLD_CENTER * 2; x++) {
             for (int y = 0; y < WORLD_CENTER * 2; y++) {
@@ -75,13 +69,13 @@ public class FakeWorld extends WorldController {
         redstoneSignal = new boolean[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
     }
 
-    public void tick(){
-        tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+    @Override
+    public BlockStateHolder getAny() {
+        return BlockStateHolder.block(ANY);
     }
 
-    public void doubleTick(){
-        tick(AutomataTileEntity.EVAL_EVERY_TICKS);
-        tick(AutomataTileEntity.EVAL_EVERY_TICKS);
+    public void tick(){
+        tick(1);
     }
 
     public void tick(int ticks){
@@ -89,12 +83,11 @@ public class FakeWorld extends WorldController {
             if(i == ticks - 1){
                 String s = "last tick";
             }
-            Set<Map.Entry<BlockPos, AutomataTileEntity>> entries = entitiesOnPositions.entrySet();
-            for (Map.Entry<BlockPos, AutomataTileEntity> entry : entries) {
+            Set<Map.Entry<BlockPos, FakeTileEntity>> entries = entitiesOnPositions.entrySet();
+            for (Map.Entry<BlockPos, FakeTileEntity> entry : entries) {
                 BlockPos coord = entry.getKey();
-                AutomataTileEntity automataTileEntity = entry.getValue();
-                automataTileEntity.setPosition(coord);
-                automataTileEntity.tick();
+                FakeTileEntity automataTileEntity = entry.getValue();
+                automataTileEntity.tick(coord, this);
             }
         }
     }
@@ -106,11 +99,9 @@ public class FakeWorld extends WorldController {
     public void setAt(int x, int y, int z, String id){
         calledSet = true;
         fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
-        if(id.equals(AUTOMATA)){
-            AutomataTileEntity automataTileEntity = new AutomataTileEntity(null, this);
-            automataTileEntity.setAutomataStepper(automataStepper);
+        if(id.equals(AUTOMATA_START)){
+            FakeTileEntity automataTileEntity = new FakeTileEntity(new AutomataSearch());
             entitiesOnPositions.put(new BlockPos(x, y, z), automataTileEntity);
-            automataTileEntity.setPosition(new BlockPos(x, y, z));
         }else{
             entitiesOnPositions.remove(new BlockPos(x, y, z));
         }
@@ -196,7 +187,7 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isAny(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId.equals(AIR);
+        return blockStateHolder.descriptionId.equals(ANY);
     }
 
     @Override

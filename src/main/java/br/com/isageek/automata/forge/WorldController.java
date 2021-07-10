@@ -153,4 +153,5 @@ public class WorldController {
     public BlockStateHolder getWater() { return BlockStateHolder.block(Blocks.WATER.defaultBlockState()); }
     public BlockStateHolder getLava() { return BlockStateHolder.block(Blocks.LAVA.defaultBlockState()); }
     public BlockStateHolder getObsidian() { return BlockStateHolder.block(Blocks.OBSIDIAN.defaultBlockState()); }
+    public BlockStateHolder getAny() { return BlockStateHolder.block(any.defaultBlockState()); }
 }

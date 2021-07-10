@@ -1,12 +1,11 @@
 package br.com.isageek.automata.patterns;
 
-import br.com.isageek.automata.AutomataStepper;
-import br.com.isageek.automata.FakeWorld;
-import br.com.isageek.automata.TestHelper;
+import br.com.isageek.automata.testSupport.FakeWorld;
+import br.com.isageek.automata.testSupport.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static br.com.isageek.automata.FakeWorld.*;
+import static br.com.isageek.automata.testSupport.FakeWorld.*;
 
 public class AutomataMoveOneBlock {
 
@@ -30,7 +29,7 @@ public class AutomataMoveOneBlock {
                 {AIR, AIR, AIR}
             }
         };
-        String[][][] match = TestHelper.cubeWithSameBlockType(AIR);
+        String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
 
         String[][][] expected = {
             {
@@ -50,9 +49,7 @@ public class AutomataMoveOneBlock {
             }
         };
 
-        AutomataStepper automataStepper = PatternsTest.vanillaStepper();
-
-        FakeWorld fakeWorld = new FakeWorld(automataStepper);
+        FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
@@ -62,14 +59,9 @@ public class AutomataMoveOneBlock {
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
-        Assert.assertTrue(automataStepper.isLoaded());
 
-        fakeWorld.doubleTick();
-        String[][][] actual1 = fakeWorld.getSurroundingIds(0, 0, 0);
-        Assert.assertArrayEquals(expected, actual1);
-        fakeWorld.doubleTick();
-        String[][][] actual2 = fakeWorld.getSurroundingIds(0, 0, 1);
-        Assert.assertArrayEquals(expected, actual2);
+        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        Assert.assertArrayEquals(expected, actual);
     }
 
 }

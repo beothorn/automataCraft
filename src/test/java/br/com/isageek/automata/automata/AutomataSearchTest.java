@@ -1,7 +1,7 @@
 package br.com.isageek.automata.automata;
 
-import br.com.isageek.automata.FakeWorld;
-import br.com.isageek.automata.TestHelper;
+import br.com.isageek.automata.testSupport.FakeWorld;
+import br.com.isageek.automata.testSupport.TestHelper;
 import net.minecraft.util.math.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,9 +9,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static br.com.isageek.automata.FakeWorld.TERMINATOR;
+import static br.com.isageek.automata.testSupport.FakeWorld.TERMINATOR;
 import static org.junit.Assert.assertEquals;
 
 public class AutomataSearchTest {

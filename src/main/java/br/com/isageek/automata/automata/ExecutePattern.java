@@ -13,7 +13,10 @@ public class ExecutePattern implements EntityTick {
     private HashSet<BlockPos> automataPositions;
     private BlockTree replacementPattern;
 
-    public ExecutePattern(HashSet<BlockPos> automataPositions, BlockTree replacementPattern) {
+    public ExecutePattern(
+            HashSet<BlockPos> automataPositions,
+            BlockTree replacementPattern
+    ) {
         this.automataPositions = automataPositions;
         this.replacementPattern = replacementPattern;
     }
@@ -31,6 +34,8 @@ public class ExecutePattern implements EntityTick {
         for (BlockPos a: automataPositions) {
             BlockStateHolder[] toBeReplaced = worldController.surrounding(a);
             BlockStateHolder[] replacement = replacementPattern.getReplacementFor(toBeReplaced);
+
+            if(replacement == null) continue;
 
             int i = 0;
             for (int x = -1; x <= 1; x++) {

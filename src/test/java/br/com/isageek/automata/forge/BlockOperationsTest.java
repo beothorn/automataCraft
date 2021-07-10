@@ -1,6 +1,6 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.TestHelper;
+import br.com.isageek.automata.testSupport.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
