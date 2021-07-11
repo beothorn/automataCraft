@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class AutomataSearch implements EntityTick {
 
-    private static final int MAX_SEARCH_RADIUS = 20;
+    private static final int MAX_SEARCH_RADIUS = 100;
 
     private HashSet<BlockPos> automata;
 
@@ -22,7 +22,7 @@ public class AutomataSearch implements EntityTick {
     }
 
     @Override
-    public EntityTick tick(BlockPos center, WorldController worldController) {
+    public EntityTick tick(BlockPos center, WorldController worldController, long delta) {
 
         if(!worldController.hasNeighborSignal(center)) return this;
 
@@ -53,12 +53,7 @@ public class AutomataSearch implements EntityTick {
         }
 
         PatternLoad patternLoad = new PatternLoad(automata);
-        return patternLoad.tick(center, worldController);
-    }
-
-    @Override
-    public int minimunDuration() {
-        return 0;
+        return patternLoad.tick(center, worldController, delta);
     }
 
     public HashSet<BlockPos> getAutomata() {

@@ -6,9 +6,7 @@ public interface EntityTick {
 
     EntityTick tick(
             BlockPos center,
-            WorldController worldController
-    );
-
-    int minimunDuration();
+            WorldController worldController,
+            long delta);
 
 }

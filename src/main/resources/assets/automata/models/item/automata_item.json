@@ -1,5 +1,5 @@
 {
-  "parent": "automata:block/automata_unloaded",
+  "parent": "automata:block/automata",
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],

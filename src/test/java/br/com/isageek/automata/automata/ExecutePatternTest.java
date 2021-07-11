@@ -36,7 +36,7 @@ public class ExecutePatternTest {
         fakeWorld.setAt(automatonPos, FakeWorld.AUTOMATA);
 
         ExecutePattern executePattern = new ExecutePattern(automataPos, patterns);
-        executePattern.tick(startBlockPosition, fakeWorld);
+        executePattern.tick(startBlockPosition, fakeWorld, 0);
 
         String[][][] actual = fakeWorld.getSurroundingIds(automatonPos);
         Assert.assertArrayEquals(cubeWithSameBlockType("b"), actual);
@@ -63,14 +63,14 @@ public class ExecutePatternTest {
         fakeWorld.setAt(automatonPos, FakeWorld.AUTOMATA);
 
         ExecutePattern executePattern = new ExecutePattern(automataPos, patterns);
-        EntityTick next = executePattern.tick(startBlockPosition, fakeWorld);
+        EntityTick next = executePattern.tick(startBlockPosition, fakeWorld, 0);
 
         String[][][] actual = fakeWorld.getSurroundingIds(automatonPos);
         Assert.assertArrayEquals(cubeWithSameBlockType(FakeWorld.AUTOMATA), actual);
 
         fakeWorld.redSignalAt(startBlockPosition, false);
 
-        AutomataSearch nextAutomataSearch = (AutomataSearch) next.tick(startBlockPosition, fakeWorld);
+        AutomataSearch nextAutomataSearch = (AutomataSearch) next.tick(startBlockPosition, fakeWorld, 0);
         Assert.assertNotNull(nextAutomataSearch);
 
         HashSet<BlockPos> automata = nextAutomataSearch.getAutomata();

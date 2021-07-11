@@ -24,7 +24,7 @@ public class AutomataSearchTest {
         fakeWorld.setAt(expected, FakeWorld.AUTOMATA);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        AutomataSearch tick = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld);
+        AutomataSearch tick = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, 0);
         HashSet<BlockPos> automata = tick.getAutomata();
         assertEquals(1, automata.size());
 
@@ -43,7 +43,7 @@ public class AutomataSearchTest {
         AutomataSearch automataSearch = new AutomataSearch(initial);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld);
+        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, 0);
         HashSet<BlockPos> automata = next.getAutomata();
         assertEquals(2, automata.size());
         List<BlockPos> automataPos = new ArrayList<>(automata);
@@ -62,14 +62,14 @@ public class AutomataSearchTest {
         fakeWorld.setAt(automata2, FakeWorld.AUTOMATA);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld);
+        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, 0);
         HashSet<BlockPos> automata = next.getAutomata();
         assertEquals(2, automata.size());
         List<BlockPos> automataPos = new ArrayList<>(automata);
         assertEquals(automata1, automataPos.get(1));
         assertEquals(automata2, automataPos.get(0));
         fakeWorld.setAt(0, 11, 0, FakeWorld.AIR);
-        next = (AutomataSearch) next.tick(automataStartPos, fakeWorld);
+        next = (AutomataSearch) next.tick(automataStartPos, fakeWorld, 0);
         HashSet<BlockPos> nextAutomata = next.getAutomata();
         assertEquals(1, nextAutomata.size());
         assertEquals(automata1, nextAutomata.iterator().next());
@@ -91,7 +91,7 @@ public class AutomataSearchTest {
         fakeWorld.setAt(7, 0, 0, TERMINATOR);
 
 
-        ExecutePattern next = (ExecutePattern)automataSearch.tick(automataStartPos, fakeWorld);
+        ExecutePattern next = (ExecutePattern)automataSearch.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 

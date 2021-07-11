@@ -15,6 +15,6 @@ public class FakeTileEntity extends TileEntity {
     }
 
     public void tick(BlockPos pos, WorldController world){
-        current = current.tick(pos, world);
+        current = current.tick(pos, world, 0);
     }
 }

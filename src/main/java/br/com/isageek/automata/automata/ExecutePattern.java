@@ -5,6 +5,8 @@ import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -12,6 +14,8 @@ public class ExecutePattern implements EntityTick {
 
     private HashSet<BlockPos> automataPositions;
     private BlockTree replacementPattern;
+    private long timeSinceLastTick = 0;
+    private static final Logger LOGGER = LogManager.getLogger(ExecutePattern.class);
 
     public ExecutePattern(
             HashSet<BlockPos> automataPositions,
@@ -22,10 +26,24 @@ public class ExecutePattern implements EntityTick {
     }
 
     @Override
-    public EntityTick tick(BlockPos center, WorldController worldController) {
+    public EntityTick tick(
+            BlockPos center,
+            WorldController worldController,
+            long delta
+    ) {
+        timeSinceLastTick += delta;
+        int minimalTickInterval = 500;
+        int throttleAfterAutomataCount = 8000;
+        if(
+                (timeSinceLastTick < minimalTickInterval)
+                || (automataPositions.size() > throttleAfterAutomataCount && timeSinceLastTick < (automataPositions.size()/2.5))) {
+            LOGGER.debug("Skipped size "+automataPositions.size()+" delta: "+ timeSinceLastTick);
+            return this;
+        }
+        LOGGER.debug("automataPositions.size() "+automataPositions.size());
         if(!worldController.hasNeighborSignal(center)){
             AutomataSearch automataSearch = new AutomataSearch(automataPositions);
-            return automataSearch.tick(center, worldController);
+            return automataSearch.tick(center, worldController, delta);
         }
 
         HashMap<BlockPos, BlockStateHolder> replacements = new LinkedHashMap<>();
@@ -72,11 +90,7 @@ public class ExecutePattern implements EntityTick {
             worldController.setBlock(value, key);
         }
 
+        timeSinceLastTick = 0;
         return this;
-    }
-
-    @Override
-    public int minimunDuration() {
-        return automataPositions.size() ;
     }
 }

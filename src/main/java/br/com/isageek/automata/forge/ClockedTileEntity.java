@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ClockedTileEntity extends TileEntity implements ITickableTileEntity {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(ClockedTileEntity.class);
 
     private EntityTick current;
     private EntityClock entityClock;
@@ -31,16 +31,12 @@ public class ClockedTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public void tick() {
         long timeSinceLastTick = entityClock.currentTimeMillis() - lastTick;
-        if(AutomataMod.DEBUG) LOGGER.info("timeSinceLastTick "+timeSinceLastTick+" minimunDuration "+current.minimunDuration());
-        if(timeSinceLastTick > current.minimunDuration()){
-            doTick();
-        }
+        LOGGER.debug("Delta "+timeSinceLastTick);
+        LOGGER.debug("Tick at "+entityClock.currentTimeMillis());
+        worldController.set(level);
+        long now = entityClock.currentTimeMillis();
+        current = current.tick(getBlockPos(), worldController, now - lastTick);
+        this.lastTick = now;
     }
 
-    private void doTick() {
-        if(AutomataMod.DEBUG) LOGGER.info("Tick at "+entityClock.currentTimeMillis());
-        worldController.set(level);
-        current = current.tick(getBlockPos(), worldController);
-        lastTick = entityClock.currentTimeMillis();
-    }
 }

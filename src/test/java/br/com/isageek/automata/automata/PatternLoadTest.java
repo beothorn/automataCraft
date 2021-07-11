@@ -1,7 +1,5 @@
 package br.com.isageek.automata.automata;
 
-import br.com.isageek.automata.forge.BlockStateHolder;
-import br.com.isageek.automata.patterns.PatternsTest;
 import br.com.isageek.automata.testSupport.FakeWorld;
 import br.com.isageek.automata.testSupport.TestHelper;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +19,7 @@ public class PatternLoadTest {
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld);
+        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 
@@ -34,7 +32,7 @@ public class PatternLoadTest {
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, false);
 
-        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld);
+        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 
@@ -51,7 +49,7 @@ public class PatternLoadTest {
         fakeWorld.setSurrounding(2, 0, 0, replacement);
         fakeWorld.setSurrounding(5, 0, 0, matcher);
         fakeWorld.setAt(7, 0, 0, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld);
+        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 
@@ -68,7 +66,7 @@ public class PatternLoadTest {
         fakeWorld.setSurrounding(-2, 0, 0, replacement);
         fakeWorld.setSurrounding(-5, 0, 0, matcher);
         fakeWorld.setAt(-7, 0, 0, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld);
+        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 
@@ -85,7 +83,7 @@ public class PatternLoadTest {
         fakeWorld.setSurrounding(0, 0, 2, replacement);
         fakeWorld.setSurrounding(0, 0, 5, matcher);
         fakeWorld.setAt(0, 0, 7, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld);
+        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 
@@ -102,7 +100,7 @@ public class PatternLoadTest {
         fakeWorld.setSurrounding(0, 0, -2, replacement);
         fakeWorld.setSurrounding(0, 0, -5, matcher);
         fakeWorld.setAt(0, 0, -7, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld);
+        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, 0);
         Assert.assertNotNull(next);
     }
 

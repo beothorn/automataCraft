@@ -25,7 +25,6 @@ import static br.com.isageek.automata.forge.Register.blockWithTileEntity;
 public class AutomataMod
 {
     public static final String MOD_ID = "automata";
-    public static final boolean DEBUG = true;
 
     public AutomataMod() {
         MinecraftForge.EVENT_BUS.register(this);
