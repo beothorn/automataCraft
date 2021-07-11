@@ -44,63 +44,32 @@ public class AutomataMod
         RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
 
         blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
-                "automata_start",
-                AutomataStartBlock::new,
-                (tileEntityRegistry, automata_start) -> {
-                    WorldController worldController = new WorldController(
-                            Blocks.AIR,
-                            automata.get(),
-                            automata_termination.get(),
-                            automata_start.get(),
-                            automata_placeholder.get(),
-                            automata_air_placeholder.get(),
-                            automata_water_placeholder.get(),
-                            automata_lava_placeholder.get(),
-                            automata_bedrock_placeholder.get(),
-                            Blocks.CAVE_AIR,
-                            automata_y_rotation.get()
-                    );
-                    AutomataSearch initial = new AutomataSearch();
-                    SystemEntityClock entityClock = new SystemEntityClock();
-                    return new ClockedTileEntity(
-                            (TileEntityType<ClockedTileEntity>) tileEntityRegistry.get(),
-                            worldController,
-                            initial,
-                            entityClock
-                    );
-                }
+            "automata_start",
+            AutomataStartBlock::new,
+            (tileEntityRegistry, automata_start) -> {
+                WorldController worldController = new WorldController(
+                    Blocks.AIR,
+                    automata.get(),
+                    automata_termination.get(),
+                    automata_start.get(),
+                    automata_placeholder.get(),
+                    automata_air_placeholder.get(),
+                    automata_water_placeholder.get(),
+                    automata_lava_placeholder.get(),
+                    automata_bedrock_placeholder.get(),
+                    Blocks.CAVE_AIR,
+                    automata_y_rotation.get()
+                );
+                AutomataSearch initial = new AutomataSearch();
+                SystemEntityClock entityClock = new SystemEntityClock();
+                return new ClockedTileEntity(
+                    (TileEntityType<ClockedTileEntity>) tileEntityRegistry.get(),
+                    worldController,
+                    initial,
+                    entityClock
+                );
+            }
         );
-
-//        blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
-//            "automata",
-//                AutomataBlock::new,
-//            (tileEntityRegistry, automataBlock) -> {
-//                AutomataTileEntity automataTileEntity = new AutomataTileEntity(
-//                        (TileEntityType<AutomataTileEntity>) tileEntityRegistry.get(),
-//                        Blocks.AIR,
-//                        automataBlock.get(),
-//                        automata_placeholder.get(),
-//                        automata_start.get(),
-//                        automata_termination.get(),
-//                        automata_air_placeholder.get(),
-//                        automata_water_placeholder.get(),
-//                        automata_lava_placeholder.get(),
-//                        automata_bedrock_placeholder.get(),
-//                        Blocks.CAVE_AIR,
-//                        automata_y_rotation.get()
-//                );
-//                automataTileEntity.setAutomataStepper(
-//                    new AutomataStepper(
-//                        Blocks.AIR.getDescriptionId(),
-//                        BlockStateHolder.block(Blocks.AIR.defaultBlockState()),
-//                        BlockStateHolder.block(Blocks.WATER.defaultBlockState()),
-//                        BlockStateHolder.block(Blocks.LAVA.defaultBlockState()),
-//                        BlockStateHolder.block(Blocks.OBSIDIAN.defaultBlockState())
-//                    )
-//                );
-//                return automataTileEntity;
-//            }
-//        );
     }
 
 }

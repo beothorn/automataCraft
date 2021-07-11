@@ -24,6 +24,8 @@ public class AutomataSearch implements EntityTick {
     @Override
     public EntityTick tick(BlockPos center, WorldController worldController) {
 
+        if(!worldController.hasNeighborSignal(center)) return this;
+
         ArrayList<BlockPos> toBeRemoved = new ArrayList<>();
         for (BlockPos p: automata) {
             if(!worldController.isAutomata(p)){
@@ -38,7 +40,11 @@ public class AutomataSearch implements EntityTick {
         for (int x = -MAX_SEARCH_RADIUS; x <= MAX_SEARCH_RADIUS; x++) {
             for (int y = -MAX_SEARCH_RADIUS; y <= MAX_SEARCH_RADIUS; y++) {
                 for (int z = -MAX_SEARCH_RADIUS; z <= MAX_SEARCH_RADIUS; z++) {
+
                     BlockPos currentPos = center.offset(x, y, z);
+                    if(currentPos.getX() == 0 && currentPos.getY() == 0 && currentPos.getZ() == 0){
+                        System.out.println();
+                    }
                     if(worldController.isAutomata(currentPos)){
                         automata.add(currentPos);
                     }
@@ -46,12 +52,13 @@ public class AutomataSearch implements EntityTick {
             }
         }
 
-        if(worldController.hasNeighborSignal(center)){
-            PatternLoad patternLoad = new PatternLoad(automata);
-            return patternLoad.tick(center, worldController);
-        }
+        PatternLoad patternLoad = new PatternLoad(automata);
+        return patternLoad.tick(center, worldController);
+    }
 
-        return this;
+    @Override
+    public int minimunDuration() {
+        return 0;
     }
 
     public HashSet<BlockPos> getAutomata() {

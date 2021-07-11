@@ -14,7 +14,6 @@ public class ClockedTileEntity extends TileEntity implements ITickableTileEntity
     private EntityTick current;
     private EntityClock entityClock;
     private final WorldController worldController;
-    private long lastDuration = 0;
     private long lastTick = 0;
 
     public ClockedTileEntity(
@@ -31,24 +30,17 @@ public class ClockedTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void tick() {
-        if(lastDuration < 1000){
+        long timeSinceLastTick = entityClock.currentTimeMillis() - lastTick;
+        if(AutomataMod.DEBUG) LOGGER.info("timeSinceLastTick "+timeSinceLastTick+" minimunDuration "+current.minimunDuration());
+        if(timeSinceLastTick > current.minimunDuration()){
             doTick();
-        }else{
-            if(AutomataMod.DEBUG) LOGGER.info("Postponed tick at "+entityClock.currentTimeMillis());
-            long timeSinceLastTick = entityClock.currentTimeMillis() - lastTick;
-            if(timeSinceLastTick > lastDuration){
-                doTick();
-            }
         }
     }
 
     private void doTick() {
         if(AutomataMod.DEBUG) LOGGER.info("Tick at "+entityClock.currentTimeMillis());
         worldController.set(level);
-        long before = entityClock.currentTimeMillis();
         current = current.tick(getBlockPos(), worldController);
-        long after = entityClock.currentTimeMillis();
         lastTick = entityClock.currentTimeMillis();
-        lastDuration = after - before;
     }
 }

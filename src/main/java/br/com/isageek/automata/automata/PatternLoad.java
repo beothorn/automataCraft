@@ -27,10 +27,15 @@ public class PatternLoad implements EntityTick {
     public EntityTick tick(BlockPos center, WorldController worldController) {
         if(!worldController.hasNeighborSignal(center)) return new AutomataSearch(automataPositions);
         BlockPos terminatorPos = findTerminatorFor(worldController, center);
-        if(terminatorPos == null) return this;
+        if(terminatorPos == null) return new AutomataSearch(automataPositions);
         BlockTree replacementPattern = loadPattern(worldController, terminatorPos, center);
         ExecutePattern executePattern = new ExecutePattern(automataPositions, replacementPattern);
         return executePattern.tick(center, worldController);
+    }
+
+    @Override
+    public int minimunDuration() {
+        return 0;
     }
 
     private BlockPos findTerminatorFor(WorldController worldController, BlockPos start){

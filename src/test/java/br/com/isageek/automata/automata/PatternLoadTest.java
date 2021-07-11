@@ -13,7 +13,7 @@ import static br.com.isageek.automata.testSupport.FakeWorld.*;
 public class PatternLoadTest {
 
     @Test
-    public void nothingToLoadJustWaits(){
+    public void nothingToLoadGoesBackToSearch(){
         FakeWorld fakeWorld = new FakeWorld();
 
         PatternLoad patternLoad = new PatternLoad(null);
@@ -21,7 +21,7 @@ public class PatternLoadTest {
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        PatternLoad next = (PatternLoad) patternLoad.tick(automataStartPos, fakeWorld);
+        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld);
         Assert.assertNotNull(next);
     }
 

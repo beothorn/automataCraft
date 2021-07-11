@@ -9,4 +9,6 @@ public interface EntityTick {
             WorldController worldController
     );
 
+    int minimunDuration();
+
 }

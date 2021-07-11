@@ -19,6 +19,11 @@ public class ClockedTileEntityTest {
                 tickCount.incrementAndGet();
                 return this;
             }
+
+            @Override
+            public int minimunDuration() {
+                return 0;
+            }
         };
         EntityClock entityClock = () -> 0;
         ClockedTileEntity clockedTileEntity = new ClockedTileEntity(
@@ -58,8 +63,18 @@ public class ClockedTileEntityTest {
                 tickCount.incrementAndGet();
                 return this;
             }
+
+            @Override
+            public int minimunDuration() {
+                return 1000;
+            }
         };
-        EntityClock entityClock = () -> lastTick.getAndAdd(1000);
+        EntityClock entityClock = new EntityClock() {
+            @Override
+            public long currentTimeMillis() {
+                return lastTick.getAndAdd(1000);
+            }
+        };
         ClockedTileEntity clockedTileEntity = new ClockedTileEntity(
                 null,
                 new WorldController(

@@ -63,5 +63,6 @@ public class DigDown{
 
         String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual);
+        Assert.fail("Do it one more time it is failing");
     }
 }

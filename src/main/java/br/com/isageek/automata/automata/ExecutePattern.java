@@ -74,4 +74,9 @@ public class ExecutePattern implements EntityTick {
 
         return this;
     }
+
+    @Override
+    public int minimunDuration() {
+        return automataPositions.size() ;
+    }
 }

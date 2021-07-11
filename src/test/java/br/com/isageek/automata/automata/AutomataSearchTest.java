@@ -23,6 +23,7 @@ public class AutomataSearchTest {
 
         fakeWorld.setAt(expected, FakeWorld.AUTOMATA);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        fakeWorld.redSignalAt(automataStartPos, true);
         AutomataSearch tick = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld);
         HashSet<BlockPos> automata = tick.getAutomata();
         assertEquals(1, automata.size());
@@ -41,6 +42,7 @@ public class AutomataSearchTest {
         initial.add(automata1);
         AutomataSearch automataSearch = new AutomataSearch(initial);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        fakeWorld.redSignalAt(automataStartPos, true);
         AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld);
         HashSet<BlockPos> automata = next.getAutomata();
         assertEquals(2, automata.size());
@@ -59,6 +61,7 @@ public class AutomataSearchTest {
         fakeWorld.setAt(automata1, FakeWorld.AUTOMATA);
         fakeWorld.setAt(automata2, FakeWorld.AUTOMATA);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        fakeWorld.redSignalAt(automataStartPos, true);
         AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld);
         HashSet<BlockPos> automata = next.getAutomata();
         assertEquals(2, automata.size());
@@ -72,15 +75,6 @@ public class AutomataSearchTest {
         assertEquals(automata1, nextAutomata.iterator().next());
     }
 
-    @Test
-    public void ifHasRedstoneSignalButNoPatternReturnPatternSearchState(){
-        FakeWorld fakeWorld = new FakeWorld();
-        AutomataSearch automataSearch = new AutomataSearch();
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
-        fakeWorld.redSignalAt(automataStartPos, true);
-        PatternLoad next = (PatternLoad) automataSearch.tick(automataStartPos, fakeWorld);
-        Assert.assertNotNull(next);
-    }
 
     @Test
     public void ifHasRedstoneSignalAndPatternReturnExecutedState(){
