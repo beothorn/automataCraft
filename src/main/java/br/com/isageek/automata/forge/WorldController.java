@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class WorldController {
 
     private World world;
-    private final Block any;
+    private final Block[] any;
     private final Block automata;
     private final Block terminator;
     private final Block start;
@@ -20,11 +20,10 @@ public class WorldController {
     private final Block waterPlaceholder;
     private final Block lavaPlaceholder;
     private final Block bedrockPlaceholder;
-    private final Block caveAir;
     private final Block yRotation;
 
     public WorldController(
-        Block any,
+        Block[] any,
         Block automata,
         Block terminator,
         Block start,
@@ -33,7 +32,6 @@ public class WorldController {
         Block waterPlaceholder,
         Block lavaPlaceholder,
         Block bedrockPlaceholder,
-        Block caveAir,
         Block yRotation
     ) {
         this.any = any;
@@ -45,7 +43,6 @@ public class WorldController {
         this.waterPlaceholder = waterPlaceholder;
         this.lavaPlaceholder = lavaPlaceholder;
         this.bedrockPlaceholder = bedrockPlaceholder;
-        this.caveAir = caveAir;
         this.yRotation = yRotation;
     }
 
@@ -106,7 +103,13 @@ public class WorldController {
         return blockStateHolder.is(automataPlaceholder);
     }
 
-    public boolean isAny(BlockStateHolder blockStateHolder) { return blockStateHolder.is(any); }
+    public boolean isAny(BlockStateHolder blockStateHolder) {
+        for (int i = 0; i < any.length; i++) {
+            if(blockStateHolder.is(any[i])) return true;
+        }
+        return false;
+
+    }
     public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(airPlaceholder); }
     public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(waterPlaceholder);}
     public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(lavaPlaceholder); }
@@ -156,5 +159,4 @@ public class WorldController {
     public BlockStateHolder getWater() { return BlockStateHolder.block(Blocks.WATER.defaultBlockState()); }
     public BlockStateHolder getLava() { return BlockStateHolder.block(Blocks.LAVA.defaultBlockState()); }
     public BlockStateHolder getObsidian() { return BlockStateHolder.block(Blocks.OBSIDIAN.defaultBlockState()); }
-    public BlockStateHolder getAny() { return BlockStateHolder.block(any.defaultBlockState()); }
 }

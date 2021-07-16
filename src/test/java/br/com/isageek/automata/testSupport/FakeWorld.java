@@ -30,6 +30,7 @@ public class FakeWorld extends WorldController {
     public static final String TERMINATOR = "Terminator";
     public static final String BEDROCK = "Bedrock";
     public static final String AIR = "air";
+    public static final String CAVE_AIR = "caveAir";
     public static final String ANY = "air";
 
     private BlockStateHolder[][][] fakeWorld;
@@ -55,7 +56,6 @@ public class FakeWorld extends WorldController {
             null,
             null,
             null,
-            null,
             null
         );
         fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
@@ -67,11 +67,6 @@ public class FakeWorld extends WorldController {
             }
         }
         redstoneSignal = new boolean[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
-    }
-
-    @Override
-    public BlockStateHolder getAny() {
-        return BlockStateHolder.block(ANY);
     }
 
     public void tick(){
@@ -187,7 +182,7 @@ public class FakeWorld extends WorldController {
 
     @Override
     public boolean isAny(BlockStateHolder blockStateHolder) {
-        return blockStateHolder.descriptionId.equals(ANY);
+        return blockStateHolder.descriptionId.equals(AIR) || blockStateHolder.descriptionId.equals(CAVE_AIR);
     }
 
     @Override

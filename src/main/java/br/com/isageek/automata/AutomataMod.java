@@ -47,7 +47,7 @@ public class AutomataMod
             AutomataStartBlock::new,
             (tileEntityRegistry, automata_start) -> {
                 WorldController worldController = new WorldController(
-                    Blocks.AIR,
+                    new Block[]{Blocks.AIR, Blocks.CAVE_AIR},
                     automata.get(),
                     automata_termination.get(),
                     automata_start.get(),
@@ -56,7 +56,6 @@ public class AutomataMod
                     automata_water_placeholder.get(),
                     automata_lava_placeholder.get(),
                     automata_bedrock_placeholder.get(),
-                    Blocks.CAVE_AIR,
                     automata_y_rotation.get()
                 );
                 AutomataSearch initial = new AutomataSearch();

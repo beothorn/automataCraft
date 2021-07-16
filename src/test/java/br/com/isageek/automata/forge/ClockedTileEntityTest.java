@@ -34,7 +34,6 @@ public class ClockedTileEntityTest {
                         null,
                         null,
                         null,
-                        null,
                         null
                 ),
                 initial,
