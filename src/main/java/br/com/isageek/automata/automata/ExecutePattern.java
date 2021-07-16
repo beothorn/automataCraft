@@ -49,6 +49,7 @@ public class ExecutePattern implements EntityTick {
         HashMap<BlockPos, BlockStateHolder> replacements = new LinkedHashMap<>();
         BlockStateHolder automata = worldController.getAutomata();
 
+        HashSet<BlockPos> toBeRemoved = new HashSet<>();
         for (BlockPos a: automataPositions) {
             BlockStateHolder[] toBeReplaced = worldController.surrounding(a);
             BlockStateHolder[] replacement = replacementPattern.getReplacementFor(toBeReplaced);
@@ -65,19 +66,20 @@ public class ExecutePattern implements EntityTick {
                         boolean isNotMatchAll = !blockStateHolder.descriptionId.equals(BlockTree.ANY.descriptionId);
                         boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
                         if(shouldBeReplaced){
-                            BlockStateHolder blockState = blockStateHolder;
-                            if(worldController.isAutomataPlaceholder(blockStateHolder)) blockState = automata;
-                            if(worldController.isAirPlaceholder(blockStateHolder)    )  blockState = worldController.getAir();
-                            if(worldController.isWaterPlaceholder(blockStateHolder)  )  blockState = worldController.getWater();
-                            if(worldController.isLavaPlaceholder(blockStateHolder)   )  blockState = worldController.getLava();
-                            if(worldController.isBedrockPlaceholder(blockStateHolder))  blockState = worldController.getObsidian();
                             if(!replacements.containsKey(currentPos)){
-                                replacements.put(currentPos, blockState);
+                                if(worldController.isAutomata(currentPos)){
+                                    toBeRemoved.add(currentPos);
+                                }
+                                replacements.put(currentPos, blockStateHolder);
                             }
                         }
                     }
                 }
             }
+        }
+
+        for (BlockPos p: toBeRemoved) {
+            automataPositions.remove(p);
         }
 
         Set<Map.Entry<BlockPos, BlockStateHolder>> replacementEntries = replacements.entrySet();

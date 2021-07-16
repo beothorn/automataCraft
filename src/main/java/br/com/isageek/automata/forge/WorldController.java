@@ -141,6 +141,9 @@ public class WorldController {
         if(isBedrockPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.BEDROCK.defaultBlockState());
         }
+        if(isAutomataPlaceholder(blockState)){
+            return BlockStateHolder.block(automata.defaultBlockState());
+        }
         return blockState;
     }
 

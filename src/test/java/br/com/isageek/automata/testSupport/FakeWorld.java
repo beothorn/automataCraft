@@ -214,6 +214,7 @@ public class FakeWorld extends WorldController {
         if(isWaterPlaceholder(blockState)) return block(WATER);
         if(isLavaPlaceholder(blockState)) return block(LAVA);
         if(isBedrockPlaceholder(blockState)) return block(BEDROCK);
+        if(isAutomataPlaceholder(blockState)) return block(AUTOMATA);
         return blockState;
     }
 
@@ -251,12 +252,12 @@ public class FakeWorld extends WorldController {
 
     public String getAt(int x, int y, int z) {
         if(
-                x < -WORLD_CENTER
-                || x > WORLD_CENTER
-                || y < -WORLD_CENTER
-                || y > WORLD_CENTER
-                || z < -WORLD_CENTER
-                || z > WORLD_CENTER
+                x <= -WORLD_CENTER
+                || x >= WORLD_CENTER
+                || y <= -WORLD_CENTER
+                || y >= WORLD_CENTER
+                || z <= -WORLD_CENTER
+                || z >= WORLD_CENTER
         ) return AIR;
         return fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER].descriptionId;
     }

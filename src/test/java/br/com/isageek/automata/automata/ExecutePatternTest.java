@@ -1,9 +1,9 @@
 package br.com.isageek.automata.automata;
 
 import br.com.isageek.automata.BlockTree;
-import br.com.isageek.automata.testSupport.FakeWorld;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
+import br.com.isageek.automata.testSupport.FakeWorld;
 import net.minecraft.util.math.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class ExecutePatternTest {
         fakeWorld.setAt(automatonPos, FakeWorld.AUTOMATA);
 
         ExecutePattern executePattern = new ExecutePattern(automataPos, patterns);
-        executePattern.tick(startBlockPosition, fakeWorld, 0);
+        executePattern.tick(startBlockPosition, fakeWorld, Integer.MAX_VALUE);
 
         String[][][] actual = fakeWorld.getSurroundingIds(automatonPos);
         Assert.assertArrayEquals(cubeWithSameBlockType("b"), actual);
@@ -51,7 +51,7 @@ public class ExecutePatternTest {
         fakeWorld.redSignalAt(startBlockPosition, true);
 
         BlockStateHolder[] match1 = blocksOf("a");
-        BlockStateHolder[] result1 = blocksOf(FakeWorld.AUTOMATA_PLACEHOLDER);
+        BlockStateHolder[] result1 = blocksOf(FakeWorld.AUTOMATA);
 
         BlockTree patterns = new BlockTree();
         patterns.addPattern(match1, result1);
@@ -63,14 +63,14 @@ public class ExecutePatternTest {
         fakeWorld.setAt(automatonPos, FakeWorld.AUTOMATA);
 
         ExecutePattern executePattern = new ExecutePattern(automataPos, patterns);
-        EntityTick next = executePattern.tick(startBlockPosition, fakeWorld, 0);
+        EntityTick next = executePattern.tick(startBlockPosition, fakeWorld, Integer.MAX_VALUE);
 
         String[][][] actual = fakeWorld.getSurroundingIds(automatonPos);
         Assert.assertArrayEquals(cubeWithSameBlockType(FakeWorld.AUTOMATA), actual);
 
         fakeWorld.redSignalAt(startBlockPosition, false);
 
-        AutomataSearch nextAutomataSearch = (AutomataSearch) next.tick(startBlockPosition, fakeWorld, 0);
+        AutomataSearch nextAutomataSearch = (AutomataSearch) next.tick(startBlockPosition, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(nextAutomataSearch);
 
         HashSet<BlockPos> automata = nextAutomataSearch.getAutomata();
