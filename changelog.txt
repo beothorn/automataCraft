@@ -1,5 +1,8 @@
 6.0
 
+- Start block has 3 textures for each state (searching automata, loading pattern and executing)
+- Each 9x3x3 now needs a terminator, this removes the sequence´s limit and fix the freeze on no terminator bug
+- Added TNT block placeholder
 
 ========================
 5.0
