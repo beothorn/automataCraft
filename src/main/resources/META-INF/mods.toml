@@ -46,17 +46,17 @@ This mod adds:
 - A termination block
 - An air placeholder block
 - A water placeholder block
-- A magma placeholder block
+- A lava placeholder block
+- A tnt placeholder block
 - A bedrock placeholder block
 - A automata placeholder block
 
-To use it add a start block, a 3x3 block construction for the result blocks, another 3x3
+To use it add a start block, a 3x3x3 block construction for the result blocks, another 3x3
 block construction for the pattern match blocks and another terminator and
-the automata block.
+the automata block. Keep adding 9x3x3 patterns and terminators for multiple patterns.
 
-After creating the pattern, place the automata block. The patterns will
-be loaded and the automata block will change from black to red.
-You need a red signal for the start block.
+After creating the pattern, place the automata block and fire a red signal on the start block.
+The patterns will be loaded and the automata block will change from black to red.
 
 Empty blocks (air) matches any block type.
 '''
