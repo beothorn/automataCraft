@@ -92,9 +92,10 @@ public class KeyBlock {
         fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, result1);
         fakeWorld.setSurrounding(15, 0, 0, match1);
-        fakeWorld.setSurrounding(18, 0, 0, result2);
-        fakeWorld.setSurrounding(21, 0, 0, match2);
-        fakeWorld.setAt(23, 0, 0, FakeWorld.TERMINATOR);
+        fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
+        fakeWorld.setSurrounding(19, 0, 0, result2);
+        fakeWorld.setSurrounding(22, 0, 0, match2);
+        fakeWorld.setAt(24, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
 

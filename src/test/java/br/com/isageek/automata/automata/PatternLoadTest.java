@@ -107,6 +107,24 @@ public class PatternLoadTest {
         Assert.assertNotNull(next);
     }
 
+    @Test
+    public void loadsAPatternWithTwoEntries(){
+        FakeWorld fakeWorld = new FakeWorld();
+        PatternLoad patternLoad = new PatternLoad();
+        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        fakeWorld.redSignalAt(automataStartPos, true);
+
+        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
+
+        fakeWorld.setSurrounding(2, 0, 0, replacement);
+        fakeWorld.setSurrounding(5, 0, 0, matcher);
+        fakeWorld.setAt(7, 0, 0, TERMINATOR);
+        fakeWorld.setAt(14, 0, 0, TERMINATOR);
+        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, 0);
+        Assert.assertNotNull(next);
+    }
+
 //
 //    @Test
 //    public void usesYRotationBlock(){

@@ -44,9 +44,10 @@ public class TickClock {
         fakeWorld.redSignalAt(10, 0, 0, true);
         fakeWorld.setSurrounding(12, 0, 0, blockUp);
         fakeWorld.setSurrounding(15, 0, 0, blockDown);
-        fakeWorld.setSurrounding(18, 0, 0, blockDown);
-        fakeWorld.setSurrounding(21, 0, 0, blockUp);
-        fakeWorld.setAt(23, 0, 0, FakeWorld.TERMINATOR);
+        fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
+        fakeWorld.setSurrounding(19, 0, 0, blockDown);
+        fakeWorld.setSurrounding(22, 0, 0, blockUp);
+        fakeWorld.setAt(24, 0, 0, FakeWorld.TERMINATOR);
 
 
         fakeWorld.setAt(0, -1, 0, someBlock); // starts up

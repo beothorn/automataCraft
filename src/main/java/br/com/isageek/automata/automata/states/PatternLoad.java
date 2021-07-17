@@ -12,8 +12,6 @@ import java.util.LinkedHashSet;
 
 public class PatternLoad implements EntityTick {
 
-    private static final int PATTERN_LIMIT = 128;
-
     private HashSet<BlockPos> automataPositions;
 
     public PatternLoad() {}
@@ -35,23 +33,21 @@ public class PatternLoad implements EntityTick {
 
     private BlockPos findTerminatorFor(WorldController worldController, BlockPos start){
         // search on each axis in intervals of 6 maximun of 128
-        for(int i = 7; i <= PATTERN_LIMIT; i+=6){
-            BlockPos xPlus = start.offset(i, 0, 0);
-            if(worldController.isTerminator(xPlus)){
-                return xPlus;
-            }
-            BlockPos xMinus = start.offset(-i, 0, 0);
-            if(worldController.isTerminator(xMinus)){
-                return xMinus;
-            }
-            BlockPos zPlus = start.offset(0, 0, i);
-            if(worldController.isTerminator(zPlus)){
-                return zPlus;
-            }
-            BlockPos zMinus = start.offset(0, 0, -i);
-            if(worldController.isTerminator(zMinus)){
-                return zMinus;
-            }
+        BlockPos xPlus = start.offset(7, 0, 0);
+        if(worldController.isTerminator(xPlus)){
+            return xPlus;
+        }
+        BlockPos xMinus = start.offset(-7, 0, 0);
+        if(worldController.isTerminator(xMinus)){
+            return xMinus;
+        }
+        BlockPos zPlus = start.offset(0, 0, 7);
+        if(worldController.isTerminator(zPlus)){
+            return zPlus;
+        }
+        BlockPos zMinus = start.offset(0, 0, -7);
+        if(worldController.isTerminator(zMinus)){
+            return zMinus;
         }
 
         return null;
@@ -82,11 +78,10 @@ public class PatternLoad implements EntityTick {
         }
 
         BlockPos cursor = center;
-        int count = 0;
-        cursor = cursor.offset(xDirection, 0, zDirection);
 
-        while(!worldController.isTerminator(cursor) && count <= PATTERN_LIMIT){
-            cursor = cursor.offset(xDirection, 0, zDirection);
+        while(worldController.isTerminator(cursor.offset(xDirection * 7, 0, zDirection * 7))){
+            // move 2 to next center
+            cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
 
             BlockStateHolder[] result = worldController.surrounding(cursor);
             replaceBlockWithAnyMatcherBlock(worldController, result);
@@ -107,7 +102,6 @@ public class PatternLoad implements EntityTick {
             }
             // move 2 towards terminator
             cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
-            count++;
         }
         return blockTree;
     }
