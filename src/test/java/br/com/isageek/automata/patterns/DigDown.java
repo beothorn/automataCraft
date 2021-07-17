@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static br.com.isageek.automata.testSupport.FakeWorld.*;
-import static br.com.isageek.automata.testSupport.FakeWorld.AIR;
 
 public class DigDown{
 

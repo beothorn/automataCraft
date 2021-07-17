@@ -26,7 +26,7 @@ public class AutomataSearchTest {
         fakeWorld.setAt(expected, FakeWorld.AUTOMATA);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        AutomataSearch tick = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, 0);
+        AutomataSearch tick = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         HashSet<BlockPos> automata = tick.getAutomata();
         assertEquals(1, automata.size());
 
@@ -45,7 +45,7 @@ public class AutomataSearchTest {
         AutomataSearch automataSearch = new AutomataSearch(initial);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, 0);
+        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         HashSet<BlockPos> automata = next.getAutomata();
         assertEquals(2, automata.size());
         List<BlockPos> automataPos = new ArrayList<>(automata);
@@ -64,14 +64,14 @@ public class AutomataSearchTest {
         fakeWorld.setAt(automata2, FakeWorld.AUTOMATA);
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, 0);
+        AutomataSearch next = (AutomataSearch) automataSearch.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         HashSet<BlockPos> automata = next.getAutomata();
         assertEquals(2, automata.size());
         List<BlockPos> automataPos = new ArrayList<>(automata);
         assertEquals(automata1, automataPos.get(1));
         assertEquals(automata2, automataPos.get(0));
         fakeWorld.setAt(0, 11, 0, FakeWorld.AIR);
-        next = (AutomataSearch) next.tick(automataStartPos, fakeWorld, 0);
+        next = (AutomataSearch) next.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         HashSet<BlockPos> nextAutomata = next.getAutomata();
         assertEquals(1, nextAutomata.size());
         assertEquals(automata1, nextAutomata.iterator().next());

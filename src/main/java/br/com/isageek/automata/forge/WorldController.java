@@ -5,7 +5,6 @@ import br.com.isageek.automata.automata.AutomataStartState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.state.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -20,6 +19,7 @@ public class WorldController {
     private final Block airPlaceholder;
     private final Block waterPlaceholder;
     private final Block lavaPlaceholder;
+    private final Block tntPlaceholder;
     private final Block bedrockPlaceholder;
     private final Block yRotation;
 
@@ -32,6 +32,7 @@ public class WorldController {
         Block airPlaceholder,
         Block waterPlaceholder,
         Block lavaPlaceholder,
+        Block tntPlaceholder,
         Block bedrockPlaceholder,
         Block yRotation
     ) {
@@ -43,6 +44,7 @@ public class WorldController {
         this.airPlaceholder = airPlaceholder;
         this.waterPlaceholder = waterPlaceholder;
         this.lavaPlaceholder = lavaPlaceholder;
+        this.tntPlaceholder = tntPlaceholder;
         this.bedrockPlaceholder = bedrockPlaceholder;
         this.yRotation = yRotation;
     }
@@ -84,7 +86,6 @@ public class WorldController {
 
     public boolean isTerminator(BlockPos p) { return is(p, terminator);}
     public boolean isAutomata(BlockPos p) { return is(p, automata);}
-    public boolean isAutomataStart(BlockPos p) { return is(p, start);}
     public boolean isBedrock(BlockPos p) { return is(p, Blocks.BEDROCK);}
 
     private boolean is(BlockPos p, Block blockType) {
@@ -96,8 +97,8 @@ public class WorldController {
     }
 
     public boolean isAny(BlockStateHolder blockStateHolder) {
-        for (int i = 0; i < any.length; i++) {
-            if(blockStateHolder.is(any[i])) return true;
+        for (Block block : any) {
+            if (blockStateHolder.is(block)) return true;
         }
         return false;
 
@@ -105,6 +106,7 @@ public class WorldController {
     public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(airPlaceholder); }
     public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(waterPlaceholder);}
     public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(lavaPlaceholder); }
+    public boolean isTntPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(tntPlaceholder); }
     public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(bedrockPlaceholder); }
     public boolean isYRotation(BlockStateHolder blockStateHolder) { return blockStateHolder.is(yRotation); }
 
@@ -117,6 +119,9 @@ public class WorldController {
         }
         if(isLavaPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.LAVA.defaultBlockState());
+        }
+        if(isTntPlaceholder(blockState)) {
+            return BlockStateHolder.block(Blocks.TNT.defaultBlockState());
         }
         if(isBedrockPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.BEDROCK.defaultBlockState());
@@ -132,7 +137,6 @@ public class WorldController {
     }
 
     public BlockStateHolder getAutomata() { return BlockStateHolder.block(automata.defaultBlockState()); }
-    public BlockStateHolder getAir() { return BlockStateHolder.block(Blocks.AIR.defaultBlockState()); }
 
     public void setStateAt(BlockPos pos, AutomataStartState state){
         BlockState newBlockState = start.defaultBlockState().setValue(AutomataStartBlock.state, state);

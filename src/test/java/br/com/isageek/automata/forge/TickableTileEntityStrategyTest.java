@@ -6,13 +6,12 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ClockedTileEntityTest {
+public class TickableTileEntityStrategyTest {
 
     @Test
     public void tick(){
 
         AtomicInteger tickCount = new AtomicInteger(0);
-        AtomicInteger delta = new AtomicInteger(0);
 
         EntityTick initial = new EntityTick() {
             @Override
@@ -22,9 +21,10 @@ public class ClockedTileEntityTest {
             }
         };
         EntityClock entityClock = () -> 1000;
-        ClockedTileEntity clockedTileEntity = new ClockedTileEntity(
+        TickableTileEntityStrategy tickableTileEntityStrategy = new TickableTileEntityStrategy(
                 null,
                 new WorldController(
+                        null,
                         null,
                         null,
                         null,
@@ -40,8 +40,8 @@ public class ClockedTileEntityTest {
                 entityClock
         );
 
-        clockedTileEntity.tick();
-        clockedTileEntity.tick();
+        tickableTileEntityStrategy.tick();
+        tickableTileEntityStrategy.tick();
 
         Assert.assertEquals(2, tickCount.get());
     }

@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " x ",
+        "  x",
+        "xxx"
+    ],
+    "key":{
+      "x": {"item": "minecraft:tnt"}
+    },
+    "result": {"item": "automata:automata_tnt_placeholder_item"}
+}

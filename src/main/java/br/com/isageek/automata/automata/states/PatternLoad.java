@@ -1,5 +1,6 @@
 package br.com.isageek.automata.automata.states;
 
+import br.com.isageek.automata.AutomataMod;
 import br.com.isageek.automata.BlockTree;
 import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
@@ -8,13 +9,15 @@ import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 public class PatternLoad implements EntityTick {
 
     private HashSet<BlockPos> automataPositions;
+    private long timeWithoutTerminator = 0;
 
-    public PatternLoad() {}
+    public PatternLoad() {
+        this.automataPositions = new HashSet<>();
+    }
 
     public PatternLoad(WorldController worldController, BlockPos pos, HashSet<BlockPos> automataPositions) {
         worldController.setStateAt(pos, AutomataStartState.LOAD);
@@ -25,7 +28,13 @@ public class PatternLoad implements EntityTick {
     public EntityTick tick(BlockPos center, WorldController worldController, long delta) {
         if(!worldController.hasNeighborSignal(center)) return new AutomataSearch(worldController, center, automataPositions);
         BlockPos terminatorPos = findTerminatorFor(worldController, center);
-        if(terminatorPos == null) return new AutomataSearch(worldController, center, automataPositions);
+        if(terminatorPos == null){
+            timeWithoutTerminator += delta;
+            if(timeWithoutTerminator > AutomataMod.SEARCH_AGAIN_TIMEOUT)
+                return new AutomataSearch(worldController, center, automataPositions);
+            else
+                return this;
+        }
         BlockTree replacementPattern = loadPattern(worldController, terminatorPos, center);
         ExecutePattern executePattern = new ExecutePattern(worldController, center, automataPositions, replacementPattern);
         return executePattern.tick(center, worldController, delta);

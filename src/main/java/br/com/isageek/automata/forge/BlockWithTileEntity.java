@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 public class BlockWithTileEntity extends Block {
 
-    private TileEntitySupplierPlaceholder tileEntityType;
+    private final TileEntitySupplierPlaceholder tileEntityType;
 
     public BlockWithTileEntity(
         TileEntitySupplierPlaceholder tileEntityType,

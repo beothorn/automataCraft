@@ -1,15 +1,11 @@
 package br.com.isageek.automata.testSupport;
 
-import br.com.isageek.automata.automata.AutomataStartBlock;
 import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.automata.states.AutomataSearch;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +16,7 @@ public class FakeWorld extends WorldController {
 
     public static final String WATER = "Water";
     public static final String LAVA = "Lava";
-    public static final String OBSIDIAN = "Obsidian";
+    public static final String TNT = "tnt";
     public static final String STONE = "stone";
     public static final String AUTOMATA = "Automata";
     public static final String AUTOMATA_START = "AutomataStart";
@@ -28,6 +24,7 @@ public class FakeWorld extends WorldController {
     public static final String AIR_PLACEHOLDER = "AirPlaceholder";
     public static final String WATER_PLACEHOLDER = "WaterPlaceholder";
     public static final String LAVA_PLACEHOLDER = "LavaPlaceholder";
+    public static final String TNT_PLACEHOLDER = "TntPlaceholder";
     public static final String BEDROCK_PLACEHOLDER = "BedrockPlaceholder";
     public static final String AUTOMATA_Y_ROTATION = "AutomataYRotation";
     public static final String TERMINATOR = "Terminator";
@@ -36,20 +33,17 @@ public class FakeWorld extends WorldController {
     public static final String CAVE_AIR = "caveAir";
     public static final String ANY = "air";
 
-    private BlockStateHolder[][][] fakeWorld;
+    private final BlockStateHolder[][][] fakeWorld;
 
-    private boolean[][][] redstoneSignal;
+    private final boolean[][][] redstoneSignal;
 
-    private Map<BlockPos, FakeTileEntity> entitiesOnPositions = new LinkedHashMap<>();
-
-    private ArrayList<BlockPos> destroyCalls = new ArrayList<>();
+    private final Map<BlockPos, FakeTileEntity> entitiesOnPositions = new LinkedHashMap<>();
 
     private static final int WORLD_CENTER = 100;
 
-    public boolean calledSet = false;
-
     public FakeWorld() {
         super(
+            null,
             null,
             null,
             null,
@@ -73,20 +67,11 @@ public class FakeWorld extends WorldController {
     }
 
     public void tick(){
-        tick(1);
-    }
-
-    public void tick(int ticks){
-        for (int i = 0; i < ticks; i++) {
-            if(i == ticks - 1){
-                String s = "last tick";
-            }
-            Set<Map.Entry<BlockPos, FakeTileEntity>> entries = entitiesOnPositions.entrySet();
-            for (Map.Entry<BlockPos, FakeTileEntity> entry : entries) {
-                BlockPos coord = entry.getKey();
-                FakeTileEntity automataTileEntity = entry.getValue();
-                automataTileEntity.tick(coord, this);
-            }
+        Set<Map.Entry<BlockPos, FakeTileEntity>> entries = entitiesOnPositions.entrySet();
+        for (Map.Entry<BlockPos, FakeTileEntity> entry : entries) {
+            BlockPos coord = entry.getKey();
+            FakeTileEntity automataTileEntity = entry.getValue();
+            automataTileEntity.tick(coord, this);
         }
     }
 
@@ -95,7 +80,6 @@ public class FakeWorld extends WorldController {
     }
 
     public void setAt(int x, int y, int z, String id){
-        calledSet = true;
         fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
         if(id.equals(AUTOMATA_START)){
             FakeTileEntity automataTileEntity = new FakeTileEntity(new AutomataSearch());
@@ -130,11 +114,6 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public boolean isAutomataStart(BlockPos p) {
-        return getAt(p.getX(), p.getY(), p.getZ()).equals(AUTOMATA_START);
-    }
-
-    @Override
     public boolean isAutomata(BlockPos p) {
         return getAt(p.getX(), p.getY(), p.getZ()).equals(AUTOMATA);
     }
@@ -162,6 +141,11 @@ public class FakeWorld extends WorldController {
     @Override
     public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(LAVA_PLACEHOLDER);
+    }
+
+    @Override
+    public boolean isTntPlaceholder(BlockStateHolder blockStateHolder) {
+        return blockStateHolder.descriptionId.equals(TNT_PLACEHOLDER);
     }
 
     @Override
@@ -202,6 +186,7 @@ public class FakeWorld extends WorldController {
         if(isAirPlaceholder(blockState)) return block(AIR);
         if(isWaterPlaceholder(blockState)) return block(WATER);
         if(isLavaPlaceholder(blockState)) return block(LAVA);
+        if(isTntPlaceholder(blockState)) return block(TNT);
         if(isBedrockPlaceholder(blockState)) return block(BEDROCK);
         if(isAutomataPlaceholder(blockState)) return block(AUTOMATA);
         return blockState;

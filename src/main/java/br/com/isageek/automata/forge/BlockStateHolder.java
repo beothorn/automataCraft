@@ -31,7 +31,7 @@ public class BlockStateHolder {
     }
 
     public boolean is(Block block) {
-        if(blockState == null) return block.getDescriptionId() == descriptionId;
+        if(blockState == null) return block.getDescriptionId().equals(descriptionId);
         return blockState.getBlock() == block;
     }
 

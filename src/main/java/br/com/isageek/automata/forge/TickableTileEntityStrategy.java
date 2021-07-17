@@ -3,20 +3,16 @@ package br.com.isageek.automata.forge;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class ClockedTileEntity extends TileEntity implements ITickableTileEntity {
-
-    private static final Logger LOGGER = LogManager.getLogger(ClockedTileEntity.class);
+public class TickableTileEntityStrategy extends TileEntity implements ITickableTileEntity {
 
     private EntityTick current;
-    private EntityClock entityClock;
+    private final EntityClock entityClock;
     private final WorldController worldController;
     private long lastTick = 0;
 
-    public ClockedTileEntity(
-            TileEntityType<ClockedTileEntity> tileEntityType,
+    public TickableTileEntityStrategy(
+            TileEntityType<TickableTileEntityStrategy> tileEntityType,
             WorldController worldController,
             EntityTick initial,
             EntityClock entityClock
@@ -29,9 +25,6 @@ public class ClockedTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void tick() {
-        long timeSinceLastTick = entityClock.currentTimeMillis() - lastTick;
-        LOGGER.debug("Delta "+timeSinceLastTick);
-        LOGGER.debug("Tick at "+entityClock.currentTimeMillis());
         worldController.set(level);
         long now = entityClock.currentTimeMillis();
         current = current.tick(getBlockPos(), worldController, now - lastTick);

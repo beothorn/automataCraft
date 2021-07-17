@@ -1,5 +1,6 @@
 package br.com.isageek.automata.automata.states;
 
+import br.com.isageek.automata.AutomataMod;
 import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
@@ -10,9 +11,7 @@ import java.util.HashSet;
 
 public class AutomataSearch implements EntityTick {
 
-    private static final int MAX_SEARCH_RADIUS = 100;
-
-    private HashSet<BlockPos> automata;
+    private final HashSet<BlockPos> automata;
 
     public AutomataSearch(HashSet<BlockPos> automata){
         this.automata = automata;
@@ -42,14 +41,11 @@ public class AutomataSearch implements EntityTick {
             automata.remove(p);
         }
 
-        for (int x = -MAX_SEARCH_RADIUS; x <= MAX_SEARCH_RADIUS; x++) {
-            for (int y = -MAX_SEARCH_RADIUS; y <= MAX_SEARCH_RADIUS; y++) {
-                for (int z = -MAX_SEARCH_RADIUS; z <= MAX_SEARCH_RADIUS; z++) {
+        for (int x = -AutomataMod.MAX_SEARCH_RADIUS; x <= AutomataMod.MAX_SEARCH_RADIUS; x++) {
+            for (int y = -AutomataMod.MAX_SEARCH_RADIUS; y <= AutomataMod.MAX_SEARCH_RADIUS; y++) {
+                for (int z = -AutomataMod.MAX_SEARCH_RADIUS; z <= AutomataMod.MAX_SEARCH_RADIUS; z++) {
 
                     BlockPos currentPos = center.offset(x, y, z);
-                    if(currentPos.getX() == 0 && currentPos.getY() == 0 && currentPos.getZ() == 0){
-                        System.out.println();
-                    }
                     if(worldController.isAutomata(currentPos)){
                         automata.add(currentPos);
                     }

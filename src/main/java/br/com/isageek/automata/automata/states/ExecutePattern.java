@@ -1,22 +1,20 @@
 package br.com.isageek.automata.automata.states;
 
+import br.com.isageek.automata.AutomataMod;
 import br.com.isageek.automata.BlockTree;
 import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class ExecutePattern implements EntityTick {
 
-    private HashSet<BlockPos> automataPositions;
-    private BlockTree replacementPattern;
+    private final HashSet<BlockPos> automataPositions;
+    private final BlockTree replacementPattern;
     private long timeSinceLastTick = 0;
-    private static final Logger LOGGER = LogManager.getLogger(ExecutePattern.class);
 
     public ExecutePattern(
             HashSet<BlockPos> automataPositions,
@@ -44,9 +42,9 @@ public class ExecutePattern implements EntityTick {
             long delta
     ) {
         timeSinceLastTick += delta;
-        int minimalTickInterval = 500;
-        int throttleAfterAutomataCount = 8000;
-        if(
+        int minimalTickInterval = AutomataMod.EXECUTE_MINIMAL_TICK_INTERVAL;
+        int throttleAfterAutomataCount = AutomataMod.EXECUTE_THROTTLE_AFTER_AUTOMATA_COUNT;
+         if(
                 (timeSinceLastTick < minimalTickInterval)
                 || (automataPositions.size() > throttleAfterAutomataCount && timeSinceLastTick < (automataPositions.size()/2.5))) {
             return this;

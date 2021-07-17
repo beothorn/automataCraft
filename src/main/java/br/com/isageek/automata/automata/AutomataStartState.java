@@ -9,7 +9,7 @@ public enum AutomataStartState implements IStringSerializable {
 
    private final String name;
 
-   private AutomataStartState(String p_i231882_3_) {
+   AutomataStartState(String p_i231882_3_) {
       this.name = p_i231882_3_;
    }
 

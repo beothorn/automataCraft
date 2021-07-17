@@ -86,7 +86,7 @@ public class BlockTree {
                     Set<Map.Entry<String, Node>> entries = current.nextBlockStateHolder.entrySet();
                     for (Map.Entry<String, Node> entry: entries) {
                         String descriptionId = entry.getKey();
-                        if(descriptionId == currentState.descriptionId || descriptionId == ANY.descriptionId){
+                        if(descriptionId.equals(currentState.descriptionId) || descriptionId.equals(ANY.descriptionId)){
                             BlockStateHolder[] blockStateHolders = internalGetReplacementFor(state, entry.getValue(), i+1);
                             if(blockStateHolders != null) return blockStateHolders;
                         }

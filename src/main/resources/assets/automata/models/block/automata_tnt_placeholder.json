@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "automata:block/automata_tnt_placeholder",
+    "north": "automata:block/automata_tnt_placeholder",
+    "south": "automata:block/automata_tnt_placeholder",
+    "east": "automata:block/automata_tnt_placeholder",
+    "west": "automata:block/automata_tnt_placeholder",
+    "up": "automata:block/automata_lava_placeholder_top_bottom",
+    "down": "automata:block/automata_lava_placeholder_top_bottom"
+  }
+}
