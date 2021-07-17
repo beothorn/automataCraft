@@ -1,8 +1,11 @@
 package br.com.isageek.automata.testSupport;
 
-import br.com.isageek.automata.automata.AutomataSearch;
+import br.com.isageek.automata.automata.AutomataStartBlock;
+import br.com.isageek.automata.automata.AutomataStartState;
+import br.com.isageek.automata.automata.states.AutomataSearch;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -142,15 +145,6 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public boolean isAutomataStartWithRedstoneCharge(BlockPos p) {
-        int x = p.getX();
-        int y = p.getY();
-        int z = p.getZ();
-        BlockStateHolder blockStateHolder = fakeWorld[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
-        return blockStateHolder.descriptionId.equals(AUTOMATA_START) && redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z];
-    }
-
-    @Override
     public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(AUTOMATA_PLACEHOLDER);
     }
@@ -213,22 +207,6 @@ public class FakeWorld extends WorldController {
         return blockState;
     }
 
-    @Override
-    public void setBlockAutomata(BlockPos p) {
-        setAt(p.getX(), p.getY(), p.getZ(), AUTOMATA);
-    }
-
-    @Override
-    public TileEntity getBlockEntity(BlockPos p) {
-        return entitiesOnPositions.get(p);
-    }
-
-    @Override
-    public void destroyBlock(BlockPos center) {
-        destroyCalls.add(center);
-        fakeWorld[center.getX()+ WORLD_CENTER][center.getY()+ WORLD_CENTER][center.getZ()+ WORLD_CENTER] = block(AIR);
-    }
-
     public String[][][] getSurroundingIds(BlockPos p) {
         return getSurroundingIds(p.getX(), p.getY(), p.getZ());
     }
@@ -257,10 +235,6 @@ public class FakeWorld extends WorldController {
         return fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER].descriptionId;
     }
 
-    public ArrayList<BlockPos> getDestroyCalls() {
-        return destroyCalls;
-    }
-
     public void redSignalAt(BlockPos p, boolean signalState) {
         redSignalAt(p.getX(), p.getY(), p.getZ(), signalState);
     }
@@ -275,7 +249,7 @@ public class FakeWorld extends WorldController {
 
     public BlockStateHolder getAutomata() { return block(AUTOMATA); }
     public BlockStateHolder getAir() { return block(AIR); }
-    public BlockStateHolder getWater() { return block(WATER); }
-    public BlockStateHolder getLava() { return block(LAVA); }
-    public BlockStateHolder getObsidian() { return block(OBSIDIAN); }
+
+    public void setStateAt(BlockPos pos, AutomataStartState state){
+    }
 }

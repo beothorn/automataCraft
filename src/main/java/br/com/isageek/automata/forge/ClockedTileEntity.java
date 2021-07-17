@@ -1,6 +1,5 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.AutomataMod;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;

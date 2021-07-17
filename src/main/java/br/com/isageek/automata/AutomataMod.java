@@ -1,7 +1,7 @@
 package br.com.isageek.automata;
 
-import br.com.isageek.automata.automata.AutomataSearch;
-import br.com.isageek.automata.forge.BlockStateHolder;
+import br.com.isageek.automata.automata.states.AutomataSearch;
+import br.com.isageek.automata.automata.AutomataStartBlock;
 import br.com.isageek.automata.forge.ClockedTileEntity;
 import br.com.isageek.automata.forge.SystemEntityClock;
 import br.com.isageek.automata.forge.WorldController;

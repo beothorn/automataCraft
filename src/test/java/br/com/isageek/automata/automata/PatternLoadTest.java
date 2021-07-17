@@ -1,5 +1,8 @@
 package br.com.isageek.automata.automata;
 
+import br.com.isageek.automata.automata.states.AutomataSearch;
+import br.com.isageek.automata.automata.states.ExecutePattern;
+import br.com.isageek.automata.automata.states.PatternLoad;
 import br.com.isageek.automata.testSupport.FakeWorld;
 import br.com.isageek.automata.testSupport.TestHelper;
 import net.minecraft.util.math.BlockPos;
@@ -14,7 +17,7 @@ public class PatternLoadTest {
     public void nothingToLoadGoesBackToSearch(){
         FakeWorld fakeWorld = new FakeWorld();
 
-        PatternLoad patternLoad = new PatternLoad(null);
+        PatternLoad patternLoad = new PatternLoad();
 
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
@@ -27,7 +30,7 @@ public class PatternLoadTest {
     public void turnRedSignalOffGoesBackToSearch(){
         FakeWorld fakeWorld = new FakeWorld();
 
-        PatternLoad patternLoad = new PatternLoad(null);
+        PatternLoad patternLoad = new PatternLoad();
 
         BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, false);

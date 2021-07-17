@@ -1,5 +1,6 @@
-package br.com.isageek.automata.automata;
+package br.com.isageek.automata.automata.states;
 
+import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
@@ -16,9 +17,13 @@ public class AutomataSearch implements EntityTick {
     public AutomataSearch(HashSet<BlockPos> automata){
         this.automata = automata;
     }
+    public AutomataSearch(WorldController worldController, BlockPos pos, HashSet<BlockPos> automata){
+        worldController.setStateAt(pos, AutomataStartState.SEARCH);
+        this.automata = automata;
+    }
 
     public AutomataSearch(){
-        this(new HashSet<>());
+        this.automata = new HashSet<>();
     }
 
     @Override
@@ -52,7 +57,7 @@ public class AutomataSearch implements EntityTick {
             }
         }
 
-        PatternLoad patternLoad = new PatternLoad(automata);
+        PatternLoad patternLoad = new PatternLoad(worldController, center, automata);
         return patternLoad.tick(center, worldController, delta);
     }
 

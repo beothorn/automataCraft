@@ -1,6 +1,7 @@
-package br.com.isageek.automata.automata;
+package br.com.isageek.automata.automata.states;
 
 import br.com.isageek.automata.BlockTree;
+import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
@@ -25,6 +26,17 @@ public class ExecutePattern implements EntityTick {
         this.replacementPattern = replacementPattern;
     }
 
+    public ExecutePattern(
+            WorldController worldController,
+            BlockPos pos,
+            HashSet<BlockPos> automataPositions,
+            BlockTree replacementPattern
+    ) {
+        worldController.setStateAt(pos, AutomataStartState.EXECUTE);
+        this.automataPositions = automataPositions;
+        this.replacementPattern = replacementPattern;
+    }
+
     @Override
     public EntityTick tick(
             BlockPos center,
@@ -37,12 +49,10 @@ public class ExecutePattern implements EntityTick {
         if(
                 (timeSinceLastTick < minimalTickInterval)
                 || (automataPositions.size() > throttleAfterAutomataCount && timeSinceLastTick < (automataPositions.size()/2.5))) {
-            LOGGER.debug("Skipped size "+automataPositions.size()+" delta: "+ timeSinceLastTick);
             return this;
         }
-        LOGGER.debug("automataPositions.size() "+automataPositions.size());
         if(!worldController.hasNeighborSignal(center)){
-            AutomataSearch automataSearch = new AutomataSearch(automataPositions);
+            AutomataSearch automataSearch = new AutomataSearch(worldController, center, automataPositions);
             return automataSearch.tick(center, worldController, delta);
         }
 

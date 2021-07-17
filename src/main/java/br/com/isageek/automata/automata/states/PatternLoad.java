@@ -1,6 +1,7 @@
-package br.com.isageek.automata.automata;
+package br.com.isageek.automata.automata.states;
 
 import br.com.isageek.automata.BlockTree;
+import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
@@ -15,21 +16,20 @@ public class PatternLoad implements EntityTick {
 
     private HashSet<BlockPos> automataPositions;
 
-    public PatternLoad() {
-        this(new LinkedHashSet<>());
-    }
+    public PatternLoad() {}
 
-    public PatternLoad(HashSet<BlockPos> automataPositions) {
+    public PatternLoad(WorldController worldController, BlockPos pos, HashSet<BlockPos> automataPositions) {
+        worldController.setStateAt(pos, AutomataStartState.LOAD);
         this.automataPositions = automataPositions;
     }
 
     @Override
     public EntityTick tick(BlockPos center, WorldController worldController, long delta) {
-        if(!worldController.hasNeighborSignal(center)) return new AutomataSearch(automataPositions);
+        if(!worldController.hasNeighborSignal(center)) return new AutomataSearch(worldController, center, automataPositions);
         BlockPos terminatorPos = findTerminatorFor(worldController, center);
-        if(terminatorPos == null) return new AutomataSearch(automataPositions);
+        if(terminatorPos == null) return new AutomataSearch(worldController, center, automataPositions);
         BlockTree replacementPattern = loadPattern(worldController, terminatorPos, center);
-        ExecutePattern executePattern = new ExecutePattern(automataPositions, replacementPattern);
+        ExecutePattern executePattern = new ExecutePattern(worldController, center, automataPositions, replacementPattern);
         return executePattern.tick(center, worldController, delta);
     }
 

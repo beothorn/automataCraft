@@ -1,5 +1,7 @@
 package br.com.isageek.automata.automata;
 
+import br.com.isageek.automata.automata.states.AutomataSearch;
+import br.com.isageek.automata.automata.states.ExecutePattern;
 import br.com.isageek.automata.testSupport.FakeWorld;
 import br.com.isageek.automata.testSupport.TestHelper;
 import net.minecraft.util.math.BlockPos;

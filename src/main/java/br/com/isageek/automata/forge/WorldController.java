@@ -1,10 +1,11 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.AutomataBlock;
+import br.com.isageek.automata.automata.AutomataStartBlock;
+import br.com.isageek.automata.automata.AutomataStartState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.state.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -81,10 +82,6 @@ public class WorldController {
         return BlockStateHolder.block(blockState);
     }
 
-    public TileEntity getBlockEntity(BlockPos p) {
-        return world.getBlockEntity(p);
-    }
-
     public boolean isTerminator(BlockPos p) { return is(p, terminator);}
     public boolean isAutomata(BlockPos p) { return is(p, automata);}
     public boolean isAutomataStart(BlockPos p) { return is(p, start);}
@@ -92,11 +89,6 @@ public class WorldController {
 
     private boolean is(BlockPos p, Block blockType) {
         return world.getBlockState(p).getBlock() == blockType;
-    }
-
-    public boolean isAutomataStartWithRedstoneCharge(BlockPos p) {
-        if(!isAutomataStart(p)) return false;
-        return world.hasNeighborSignal(p);
     }
 
     public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder){
@@ -115,21 +107,6 @@ public class WorldController {
     public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(lavaPlaceholder); }
     public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(bedrockPlaceholder); }
     public boolean isYRotation(BlockStateHolder blockStateHolder) { return blockStateHolder.is(yRotation); }
-
-
-    public void destroyBlock(BlockPos center){
-        world.destroyBlock(center, true);
-    }
-
-    public void setBlockAutomata(BlockPos p) {
-        BlockState blockState = automata.defaultBlockState().setValue(AutomataBlock.loaded, true);
-        world.setBlock(
-            p,
-            blockState,
-            0,
-            0
-        );
-    }
 
     public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
         if(isAirPlaceholder(blockState)){
@@ -156,7 +133,9 @@ public class WorldController {
 
     public BlockStateHolder getAutomata() { return BlockStateHolder.block(automata.defaultBlockState()); }
     public BlockStateHolder getAir() { return BlockStateHolder.block(Blocks.AIR.defaultBlockState()); }
-    public BlockStateHolder getWater() { return BlockStateHolder.block(Blocks.WATER.defaultBlockState()); }
-    public BlockStateHolder getLava() { return BlockStateHolder.block(Blocks.LAVA.defaultBlockState()); }
-    public BlockStateHolder getObsidian() { return BlockStateHolder.block(Blocks.OBSIDIAN.defaultBlockState()); }
+
+    public void setStateAt(BlockPos pos, AutomataStartState state){
+        BlockState newBlockState = start.defaultBlockState().setValue(AutomataStartBlock.state, state);
+        world.setBlock(pos, newBlockState,0 ,0);
+    }
 }

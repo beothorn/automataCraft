@@ -1,6 +1,10 @@
+6.0
+
+
+========================
 5.0
 
-Huge performance and stability improvement by using a single TileEntity instead of one per automata.
-CaveAir now matches any block.
-Automatas are not destroyed anymore if start block is destroyed
-New automata block texture
+- Huge performance and stability improvement by using a single TileEntity instead of one per automata.
+- CaveAir now matches any block.
+- Automatas are not destroyed anymore if start block is destroyed
+- New automata block texture

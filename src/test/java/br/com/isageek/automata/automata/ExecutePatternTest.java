@@ -1,6 +1,8 @@
 package br.com.isageek.automata.automata;
 
 import br.com.isageek.automata.BlockTree;
+import br.com.isageek.automata.automata.states.AutomataSearch;
+import br.com.isageek.automata.automata.states.ExecutePattern;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.testSupport.FakeWorld;
