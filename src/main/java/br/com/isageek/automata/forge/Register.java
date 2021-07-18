@@ -79,6 +79,7 @@ public class Register {
 
     public static RegistryObject<Structure<NoFeatureConfig>> structure(
         String structureName,
+        int seed,
         String modId,
         IEventBus modEventBus,
         IEventBus forgeBus,
@@ -88,7 +89,7 @@ public class Register {
         RegistryObject<Structure<NoFeatureConfig>> structure = structureDeferredRegister.register(structureName, structureSupplier);
         structureDeferredRegister.register(modEventBus);
         DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, modId);
-        forgeBus.addListener(EventPriority.NORMAL, (WorldEvent.Load event) -> Register.addStructureDimensionToChunkGenerator(event, structure));
+        forgeBus.addListener(EventPriority.NORMAL, (WorldEvent.Load event) -> Register.addStructureDimensionToChunkGenerator(event, structure, seed));
         forgeBus.addListener(EventPriority.HIGH, (BiomeLoadingEvent event) -> Register.addStructureToAllBiomes(event, structure));
         modEventBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(() -> {
             String structureRegistryName = structure.get().getRegistryName().toString();
@@ -99,13 +100,13 @@ public class Register {
 
     private static <T extends IFeatureConfig> void addStructureDimensionToChunkGenerator(
             final WorldEvent.Load event,
-            RegistryObject<Structure<T>> structure
+            RegistryObject<Structure<T>> structure,
+            int seed
     ) {
         LOGGER.debug("addStructureDimensionToChunkGenerator");
         if(event.getWorld() instanceof ServerWorld){
             int averageSpawningDistance = 10;
             int minimumDistanceInChunk = 5;
-            int seed = 1234567890;
             StructureSeparationSettings structureSeparationSettings = new StructureSeparationSettings(averageSpawningDistance, minimumDistanceInChunk, seed);
             ServerWorld serverWorld = (ServerWorld)event.getWorld();
             serverWorld
