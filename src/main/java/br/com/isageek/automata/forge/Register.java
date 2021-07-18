@@ -1,20 +1,14 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.AutomataMod;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -93,9 +87,13 @@ public class Register {
         DeferredRegister<Structure<?>> structureDeferredRegister = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, modId);
         RegistryObject<Structure<NoFeatureConfig>> structure = structureDeferredRegister.register(structureName, structureSupplier);
         structureDeferredRegister.register(modEventBus);
+        DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, modId);
         forgeBus.addListener(EventPriority.NORMAL, (WorldEvent.Load event) -> Register.addStructureDimensionToChunkGenerator(event, structure));
         forgeBus.addListener(EventPriority.HIGH, (BiomeLoadingEvent event) -> Register.addStructureToAllBiomes(event, structure));
-        modEventBus.addListener((FMLCommonSetupEvent e) -> setup(e, structureName, structure));
+        modEventBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(() -> {
+            String structureRegistryName = structure.get().getRegistryName().toString();
+            Structure.STRUCTURES_REGISTRY.put(structureRegistryName, structure.get());
+        }));
         return structure;
     }
 
@@ -130,52 +128,5 @@ public class Register {
         event.getGeneration().getStructures().add(() -> structure.get().configured(IFeatureConfig.NONE));
     }
 
-    /**
-     * Here, setupStructures will be ran after registration of all structures are finished.
-     * This is important to be done here so that the Deferred Registry has already ran and
-     * registered/created our structure for us.
-     *
-     * Once after that structure instance is made, we then can now do the rest of the setup
-     * that requires a structure instance such as setting the structure spacing, creating the
-     * configured structure instance, and more.
-     */
-    public static void setup(
-            final FMLCommonSetupEvent event,
-            String structureName,
-            RegistryObject<Structure<NoFeatureConfig>> structure
-    ){
-        LOGGER.debug("setup enqueued");
-        event.enqueueWork(() -> {
-            LOGGER.debug("setup executed");
-            setupStructures(structure);
-            registerConfiguredStructures(structureName, structure);
-        });
-    }
-
-    public static void setupStructures(RegistryObject<Structure<NoFeatureConfig>> structure) {
-        LOGGER.debug("setupStructures");
-//        int averageSpawningDistance = 10;
-//        int minimumDistanceInChunk = 5;
-//        int seed = 1234567890;
-//        new StructureSeparationSettings(averageSpawningDistance, minimumDistanceInChunk, seed);
-        String structureRegistryName = structure.get().getRegistryName().toString();
-        LOGGER.debug("Registring structure "+structureRegistryName);
-        Structure.STRUCTURES_REGISTRY.put(structureRegistryName, structure.get());
-    }
-
-    /**
-     * Registers the configured structure which is what gets added to the biomes.
-     * Noticed we are not using a forge registry because there is none for configured structures.
-     *
-     * We can register configured structures at any time before a world is clicked on and made.
-     * But the best time to register configured features by code is honestly to do it in FMLCommonSetupEvent.
-     */
-    public static void registerConfiguredStructures(
-        String structureMame,
-        RegistryObject<Structure<NoFeatureConfig>> structure
-    ) {
-        LOGGER.debug("registerConfiguredStructures");
-        Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(AutomataMod.MOD_ID, structureMame), structure.get().configured(IFeatureConfig.NONE));
-    }
 
 }
