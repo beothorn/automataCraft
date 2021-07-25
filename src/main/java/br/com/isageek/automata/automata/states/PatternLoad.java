@@ -8,66 +8,49 @@ import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class PatternLoad implements EntityTick {
 
-    private HashSet<BlockPos> automataPositions;
+    private final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;
     private long timeWithoutTerminator = 0;
+    private final int AUTOMATA_BLOCK_POSITION = 13;
 
-    public PatternLoad() {
-        this.automataPositions = new HashSet<>();
+    PatternLoad() {
+        this.replaceables = new HashMap<>();
     }
 
-    public PatternLoad(WorldController worldController, BlockPos pos, HashSet<BlockPos> automataPositions) {
+    PatternLoad(final WorldController worldController, final BlockPos pos, final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables) {
         worldController.setStateAt(pos, AutomataStartState.LOAD);
-        this.automataPositions = automataPositions;
+        this.replaceables = replaceables;
     }
 
     @Override
-    public EntityTick tick(BlockPos center, WorldController worldController, long delta) {
-        if(!worldController.hasNeighborSignal(center)) return new AutomataSearch(worldController, center, automataPositions);
-        BlockPos terminatorPos = findTerminatorFor(worldController, center);
-        if(terminatorPos == null){
-            timeWithoutTerminator += delta;
-            if(timeWithoutTerminator > AutomataMod.SEARCH_AGAIN_TIMEOUT)
-                return new AutomataSearch(worldController, center, automataPositions);
-            else
-                return this;
+    public EntityTick tick(final BlockPos center, final WorldController worldController, final long delta) {
+        if(!worldController.hasNeighborSignal(center)) {
+            return new AutomataSearch(worldController, center, this.replaceables);
         }
-        BlockTree replacementPattern = loadPattern(worldController, terminatorPos, center);
-        ExecutePattern executePattern = new ExecutePattern(worldController, center, automataPositions, replacementPattern);
+        final BlockPos terminatorPos = worldController.findTerminatorFor(center);
+        if(terminatorPos == null){
+            this.timeWithoutTerminator += delta;
+            if(this.timeWithoutTerminator > AutomataMod.SEARCH_AGAIN_TIMEOUT) {
+                return new AutomataSearch(worldController, center, this.replaceables);
+            } else {
+                return this;
+            }
+        }
+        final BlockTree replacementPattern = this.loadPattern(worldController, terminatorPos, center);
+        final ExecutePattern executePattern = new ExecutePattern(worldController, center, this.replaceables, replacementPattern);
         return executePattern.tick(center, worldController, delta);
     }
 
-    private BlockPos findTerminatorFor(WorldController worldController, BlockPos start){
-        // search on each axis in intervals of 6 maximun of 128
-        BlockPos xPlus = start.offset(7, 0, 0);
-        if(worldController.isTerminator(xPlus)){
-            return xPlus;
-        }
-        BlockPos xMinus = start.offset(-7, 0, 0);
-        if(worldController.isTerminator(xMinus)){
-            return xMinus;
-        }
-        BlockPos zPlus = start.offset(0, 0, 7);
-        if(worldController.isTerminator(zPlus)){
-            return zPlus;
-        }
-        BlockPos zMinus = start.offset(0, 0, -7);
-        if(worldController.isTerminator(zMinus)){
-            return zMinus;
-        }
-
-        return null;
-    }
-
     private BlockTree loadPattern(
-            WorldController worldController,
-            BlockPos terminator,
-            BlockPos center
+            final WorldController worldController,
+            final BlockPos terminator,
+            final BlockPos center
     ) {
-        BlockTree blockTree = new BlockTree();
+        final BlockTree blockTree = new BlockTree();
 
         int xDirection = 0;
         int zDirection = 0;
@@ -92,16 +75,16 @@ public class PatternLoad implements EntityTick {
             // move 2 to next center
             cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
 
-            BlockStateHolder[] result = worldController.surrounding(cursor);
-            replaceBlockWithAnyMatcherBlock(worldController, result);
-            replacePlaceHoldersIn(worldController, result);
+            final BlockStateHolder[] result = worldController.surrounding(cursor);
+            PatternLoad.replaceBlockWithAnyMatcherBlock(worldController, result);
+            PatternLoad.replacePlaceHoldersIn(worldController, result);
             // move 3 towards terminator
             cursor = cursor.offset(xDirection * 3, 0, zDirection * 3);
             final BlockStateHolder[] match = worldController.surrounding(cursor);
-            final BlockStateHolder centerBlock = match[BlockTree.AUTOMATA_BLOCK_POSITION];
+            final BlockStateHolder centerBlock = match[this.AUTOMATA_BLOCK_POSITION];
 
-            replaceBlockWithAnyMatcherBlock(worldController, match);
-            replacePlaceHoldersIn(worldController, match);
+            PatternLoad.replaceBlockWithAnyMatcherBlock(worldController, match);
+            PatternLoad.replacePlaceHoldersIn(worldController, match);
             blockTree.addPattern(match, result);
 
             if(worldController.isYRotation(centerBlock)){
@@ -115,16 +98,16 @@ public class PatternLoad implements EntityTick {
         return blockTree;
     }
 
-    private void replaceBlockWithAnyMatcherBlock(WorldController worldController, BlockStateHolder[] blockStates) {
+    private static void replaceBlockWithAnyMatcherBlock(final WorldController worldController, final BlockStateHolder[] blockStates) {
         for (int i = 0; i < blockStates.length; i++) {
-            BlockStateHolder blockState = blockStates[i];
+            final BlockStateHolder blockState = blockStates[i];
             if(worldController.isAny(blockState)){
                 blockStates[i] = BlockTree.ANY;
             }
         }
     }
 
-    private void replacePlaceHoldersIn(WorldController worldController, BlockStateHolder[] blockStates) {
+    private static void replacePlaceHoldersIn(final WorldController worldController, final BlockStateHolder[] blockStates) {
         for (int i = 0; i < blockStates.length; i++) {
             blockStates[i] = worldController.replacePlaceholder(blockStates[i]);
         }

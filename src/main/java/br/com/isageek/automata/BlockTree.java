@@ -9,12 +9,12 @@ import java.util.Set;
 
 public class BlockTree {
 
-    public void clear() {
-        root = null;
+    void clear() {
+        this.root = null;
     }
 
     private static class Node {
-        public final LinkedHashMap<String, Node> nextBlockStateHolder = new LinkedHashMap<>();
+        final LinkedHashMap<String, Node> nextBlockStateHolder = new LinkedHashMap<>();
         public BlockStateHolder[] result;
     }
 
@@ -22,48 +22,36 @@ public class BlockTree {
 
     public static final BlockStateHolder ANY = BlockStateHolder.block("ANY");
 
-    public static final int AUTOMATA_BLOCK_POSITION = 13;
-
     public void addPatternRotateY(
-            BlockStateHolder[] match,
-            BlockStateHolder[] result
+            final BlockStateHolder[] match,
+            final BlockStateHolder[] result
     ) {
-        addPattern(match, result);
+        this.addPattern(match, result);
         final BlockStateHolder[] match90 = BlockOperations.rotateY(match);
         final BlockStateHolder[] result90 = BlockOperations.rotateY(result);
-        addPattern(match90, result90);
+        this.addPattern(match90, result90);
         final BlockStateHolder[] match180 = BlockOperations.rotateY(match90);
         final BlockStateHolder[] result180 = BlockOperations.rotateY(result90);
-        addPattern(match180, result180);
+        this.addPattern(match180, result180);
         final BlockStateHolder[] match270 = BlockOperations.rotateY(match180);
         final BlockStateHolder[] result270 = BlockOperations.rotateY(result180);
-        addPattern(match270, result270);
+        this.addPattern(match270, result270);
     }
 
     public void addPattern(
-        BlockStateHolder[] match,
-        BlockStateHolder[] result
+            final BlockStateHolder[] match,
+            final BlockStateHolder[] result
     ) {
-        if(root == null){
-            root = new Node();
+        if(this.root == null){
+            this.root = new Node();
         }
-        Node current = root;
+        Node current = this.root;
         for (int i = 0; i < match.length; i++) {
-            if(i == AUTOMATA_BLOCK_POSITION){
-                if(current.nextBlockStateHolder.containsKey(ANY.descriptionId)){
-                    current = current.nextBlockStateHolder.get(ANY.descriptionId);
-                    continue;
-                }
-                Node value = new Node();
-                current.nextBlockStateHolder.put(ANY.descriptionId, value);
-                current = value;
-                continue;
-            }
-            BlockStateHolder currentState = match[i];
+            final BlockStateHolder currentState = match[i];
             if(current.nextBlockStateHolder.containsKey(currentState.descriptionId)){
                 current = current.nextBlockStateHolder.get(currentState.descriptionId);
             }else{
-                Node value = new Node();
+                final Node value = new Node();
                 current.nextBlockStateHolder.put(currentState.descriptionId, value);
                 current = value;
             }
@@ -71,24 +59,21 @@ public class BlockTree {
         current.result = result;
     }
 
-    private BlockStateHolder[] internalGetReplacementFor(BlockStateHolder[] state, Node current, int index) {
+    private static BlockStateHolder[] internalGetReplacementFor(final BlockStateHolder[] state, Node current, final int index) {
         for (int i = index; i < state.length; i++) {
-            if(i == AUTOMATA_BLOCK_POSITION){
-                current = current.nextBlockStateHolder.get(ANY.descriptionId);
-                continue;
-            }
-
-            BlockStateHolder currentState = state[i];
+            final BlockStateHolder currentState = state[i];
             String matchingBlock = currentState.descriptionId;
 
             if(current.nextBlockStateHolder.containsKey(matchingBlock)){
                 if(current.nextBlockStateHolder.containsKey(ANY.descriptionId)){
-                    Set<Map.Entry<String, Node>> entries = current.nextBlockStateHolder.entrySet();
-                    for (Map.Entry<String, Node> entry: entries) {
-                        String descriptionId = entry.getKey();
+                    final Set<Map.Entry<String, Node>> entries = current.nextBlockStateHolder.entrySet();
+                    for (final Map.Entry<String, Node> entry: entries) {
+                        final String descriptionId = entry.getKey();
                         if(descriptionId.equals(currentState.descriptionId) || descriptionId.equals(ANY.descriptionId)){
-                            BlockStateHolder[] blockStateHolders = internalGetReplacementFor(state, entry.getValue(), i+1);
-                            if(blockStateHolders != null) return blockStateHolders;
+                            final BlockStateHolder[] blockStateHolders = internalGetReplacementFor(state, entry.getValue(), i+1);
+                            if(blockStateHolders != null) {
+                                return blockStateHolders;
+                            }
                         }
                     }
                 }
@@ -105,10 +90,27 @@ public class BlockTree {
         return current.result;
     }
 
-    public BlockStateHolder[] getReplacementFor(BlockStateHolder[] state) {
-        if(root == null){
+    public BlockStateHolder[] getReplacementFor(final BlockStateHolder[] state) {
+        if(this.root == null){
             return null;
         }
-        return internalGetReplacementFor(state, root, 0);
+        return BlockTree.internalGetReplacementFor(state, this.root, 0);
+    }
+
+    private static void printOn(final StringBuffer a, final Node n){
+        final Set<Map.Entry<String, Node>> entries = n.nextBlockStateHolder.entrySet();
+            entries.forEach( (e) -> {
+                a.append(" -> " +e.getKey());
+                a.append("\n\t");
+                printOn( a, e.getValue());
+            }
+        );
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer stringBuffer = new StringBuffer();
+        BlockTree.printOn(stringBuffer, this.root);
+        return stringBuffer.toString();
     }
 }

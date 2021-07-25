@@ -21,7 +21,7 @@ public class BlockTreeTest {
 
         BlockStateHolder[] currentState = blocksOf("a", automataBlock);
 
-        BlockStateHolder[] match1 = blocksOf("a");
+        BlockStateHolder[] match1 = blocksOf("a", automataBlock);
         BlockStateHolder[] result1 = blocksOf("b");
 
         BlockTree patterns = new BlockTree();
@@ -57,7 +57,7 @@ public class BlockTreeTest {
                 ANY, ANY, ANY,
 
                 block("a"), block("a"), block("a"),
-                block("a"), block("a"), block("a"),
+                block("a"), block(automataBlock), block("a"),
                 block("a"), block("a"), block("a"),
 
                 block("a"), block("a"), block("a"),
@@ -89,7 +89,7 @@ public class BlockTreeTest {
                 ANY, ANY, ANY,
 
                 block("a"), block("a"), block("a"),
-                block("a"), block("a"), block("a"),
+                block("a"), block(automataBlock), block("a"),
                 block("a"), block("a"), block("a"),
 
                 block("a"), block("a"), block("a"),
@@ -119,7 +119,7 @@ public class BlockTreeTest {
         BlockStateHolder[] currentState = blocksOf("a", automataBlock);
 
         // This matches first
-        BlockStateHolder[] match1 = blocksOf("a");
+        BlockStateHolder[] match1 = blocksOf("a", automataBlock);
 
         BlockStateHolder[] result1 = blocksOf("c");
 

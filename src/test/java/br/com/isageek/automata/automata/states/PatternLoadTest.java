@@ -1,8 +1,5 @@
-package br.com.isageek.automata.automata;
+package br.com.isageek.automata.automata.states;
 
-import br.com.isageek.automata.automata.states.AutomataSearch;
-import br.com.isageek.automata.automata.states.ExecutePattern;
-import br.com.isageek.automata.automata.states.PatternLoad;
 import br.com.isageek.automata.testSupport.FakeWorld;
 import br.com.isageek.automata.testSupport.TestHelper;
 import net.minecraft.util.math.BlockPos;
@@ -15,113 +12,113 @@ public class PatternLoadTest {
 
     @Test
     public void nothingToLoadGoesBackToSearch(){
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
-        PatternLoad patternLoad = new PatternLoad();
+        final PatternLoad patternLoad = new PatternLoad();
 
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 
     @Test
     public void turnRedSignalOffGoesBackToSearch(){
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
-        PatternLoad patternLoad = new PatternLoad();
+        final PatternLoad patternLoad = new PatternLoad();
 
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, false);
 
-        AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final AutomataSearch next = (AutomataSearch) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 
     @Test
     public void loadsASimplePatternXPlus(){
-        FakeWorld fakeWorld = new FakeWorld();
-        PatternLoad patternLoad = new PatternLoad();
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final FakeWorld fakeWorld = new FakeWorld();
+        final PatternLoad patternLoad = new PatternLoad();
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
-        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
+        final String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        final String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setSurrounding(2, 0, 0, replacement);
         fakeWorld.setSurrounding(5, 0, 0, matcher);
         fakeWorld.setAt(7, 0, 0, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 
     @Test
     public void loadsASimplePatternXMinus(){
-        FakeWorld fakeWorld = new FakeWorld();
-        PatternLoad patternLoad = new PatternLoad();
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final FakeWorld fakeWorld = new FakeWorld();
+        final PatternLoad patternLoad = new PatternLoad();
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
-        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
+        final String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        final String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setSurrounding(-2, 0, 0, replacement);
         fakeWorld.setSurrounding(-5, 0, 0, matcher);
         fakeWorld.setAt(-7, 0, 0, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 
     @Test
     public void loadsASimplePatternZPlus(){
-        FakeWorld fakeWorld = new FakeWorld();
-        PatternLoad patternLoad = new PatternLoad();
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final FakeWorld fakeWorld = new FakeWorld();
+        final PatternLoad patternLoad = new PatternLoad();
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
-        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
+        final String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        final String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setSurrounding(0, 0, 2, replacement);
         fakeWorld.setSurrounding(0, 0, 5, matcher);
         fakeWorld.setAt(0, 0, 7, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 
     @Test
     public void loadsASimplePatternZMinus(){
-        FakeWorld fakeWorld = new FakeWorld();
-        PatternLoad patternLoad = new PatternLoad();
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final FakeWorld fakeWorld = new FakeWorld();
+        final PatternLoad patternLoad = new PatternLoad();
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
-        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
+        final String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        final String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setSurrounding(0, 0, -2, replacement);
         fakeWorld.setSurrounding(0, 0, -5, matcher);
         fakeWorld.setAt(0, 0, -7, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 
     @Test
     public void loadsAPatternWithTwoEntries(){
-        FakeWorld fakeWorld = new FakeWorld();
-        PatternLoad patternLoad = new PatternLoad();
-        BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final FakeWorld fakeWorld = new FakeWorld();
+        final PatternLoad patternLoad = new PatternLoad();
+        final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
 
-        String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
-        String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
+        final String[][][] matcher = TestHelper.cubeWithSameBlockType("a");
+        final String[][][] replacement = TestHelper.cubeWithSameBlockType("b");
 
         fakeWorld.setSurrounding(2, 0, 0, replacement);
         fakeWorld.setSurrounding(5, 0, 0, matcher);
         fakeWorld.setAt(7, 0, 0, TERMINATOR);
         fakeWorld.setAt(14, 0, 0, TERMINATOR);
-        ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
+        final ExecutePattern next = (ExecutePattern) patternLoad.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);
         Assert.assertNotNull(next);
     }
 

@@ -1,7 +1,7 @@
 package br.com.isageek.automata.testSupport;
 
 import br.com.isageek.automata.automata.AutomataStartState;
-import br.com.isageek.automata.automata.states.AutomataSearch;
+import br.com.isageek.automata.automata.states.LoadReplaceables;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
@@ -14,21 +14,21 @@ import static br.com.isageek.automata.forge.BlockStateHolder.block;
 
 public class FakeWorld extends WorldController {
 
-    public static final String WATER = "Water";
-    public static final String LAVA = "Lava";
-    public static final String TNT = "tnt";
+    private static final String WATER = "Water";
+    private static final String LAVA = "Lava";
+    private static final String TNT = "tnt";
     public static final String STONE = "stone";
     public static final String AUTOMATA = "Automata";
     public static final String AUTOMATA_START = "AutomataStart";
     public static final String AUTOMATA_PLACEHOLDER = "AutomataPlaceholder";
     public static final String AIR_PLACEHOLDER = "AirPlaceholder";
-    public static final String WATER_PLACEHOLDER = "WaterPlaceholder";
-    public static final String LAVA_PLACEHOLDER = "LavaPlaceholder";
-    public static final String TNT_PLACEHOLDER = "TntPlaceholder";
-    public static final String BEDROCK_PLACEHOLDER = "BedrockPlaceholder";
-    public static final String AUTOMATA_Y_ROTATION = "AutomataYRotation";
+    private static final String WATER_PLACEHOLDER = "WaterPlaceholder";
+    private static final String LAVA_PLACEHOLDER = "LavaPlaceholder";
+    private static final String TNT_PLACEHOLDER = "TntPlaceholder";
+    private static final String BEDROCK_PLACEHOLDER = "BedrockPlaceholder";
+    private static final String AUTOMATA_Y_ROTATION = "AutomataYRotation";
     public static final String TERMINATOR = "Terminator";
-    public static final String BEDROCK = "Bedrock";
+    private static final String BEDROCK = "Bedrock";
     public static final String AIR = "air";
     public static final String CAVE_AIR = "caveAir";
     public static final String ANY = "air";
@@ -55,125 +55,125 @@ public class FakeWorld extends WorldController {
             null,
             null
         );
-        fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
+        this.fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
         for (int x = 0; x < WORLD_CENTER * 2; x++) {
             for (int y = 0; y < WORLD_CENTER * 2; y++) {
                 for (int z = 0; z < WORLD_CENTER * 2; z++) {
-                    fakeWorld[x][y][z] = block(AIR);
+                    this.fakeWorld[x][y][z] = block(AIR);
                 }
             }
         }
-        redstoneSignal = new boolean[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
+        this.redstoneSignal = new boolean[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
     }
 
     public void tick(){
-        Set<Map.Entry<BlockPos, FakeTileEntity>> entries = entitiesOnPositions.entrySet();
-        for (Map.Entry<BlockPos, FakeTileEntity> entry : entries) {
-            BlockPos coord = entry.getKey();
-            FakeTileEntity automataTileEntity = entry.getValue();
+        final Set<Map.Entry<BlockPos, FakeTileEntity>> entries = this.entitiesOnPositions.entrySet();
+        for (final Map.Entry<BlockPos, FakeTileEntity> entry : entries) {
+            final BlockPos coord = entry.getKey();
+            final FakeTileEntity automataTileEntity = entry.getValue();
             automataTileEntity.tick(coord, this);
         }
     }
 
-    public void setAt(BlockPos p, String id){
-        setAt(p.getX(), p.getY(), p.getZ(), id);
+    public void setAt(final BlockPos p, final String id){
+        this.setAt(p.getX(), p.getY(), p.getZ(), id);
     }
 
-    public void setAt(int x, int y, int z, String id){
-        fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
+    public void setAt(final int x, final int y, final int z, final String id){
+        this.fakeWorld[WORLD_CENTER +x][WORLD_CENTER +y][WORLD_CENTER +z] = block(id);
         if(id.equals(AUTOMATA_START)){
-            FakeTileEntity automataTileEntity = new FakeTileEntity(new AutomataSearch());
-            entitiesOnPositions.put(new BlockPos(x, y, z), automataTileEntity);
+            final FakeTileEntity automataTileEntity = new FakeTileEntity(new LoadReplaceables());
+            this.entitiesOnPositions.put(new BlockPos(x, y, z), automataTileEntity);
         }else{
-            entitiesOnPositions.remove(new BlockPos(x, y, z));
+            this.entitiesOnPositions.remove(new BlockPos(x, y, z));
         }
     }
 
     @Override
-    public void setBlock(BlockStateHolder blockState, BlockPos p) {
-        setAt(p.getX(), p.getY(), p.getZ(), blockState.descriptionId);
+    public void setBlock(final BlockStateHolder blockState, final BlockPos p) {
+        this.setAt(p.getX(), p.getY(), p.getZ(), blockState.descriptionId);
     }
 
-    public void setSurrounding(BlockPos p, String[][][] surroundingIds){
-        setSurrounding(p.getX(), p.getY(), p.getZ(), surroundingIds);
+    public void setSurrounding(final BlockPos p, final String[][][] surroundingIds){
+        this.setSurrounding(p.getX(), p.getY(), p.getZ(), surroundingIds);
     }
 
-    public void setSurrounding(int x, int y, int z, String[][][] surroundingIds){
+    public void setSurrounding(final int x, final int y, final int z, final String[][][] surroundingIds){
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER] = block(surroundingIds[ix + 1][iy + 1][iz + 1]);
+                    this.fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER] = block(surroundingIds[ix + 1][iy + 1][iz + 1]);
                 }
             }
         }
     }
 
     @Override
-    public boolean isTerminator(BlockPos p) {
-        return getAt(p.getX(), p.getY(), p.getZ()).equals(TERMINATOR);
+    public boolean isTerminator(final BlockPos p) {
+        return this.getAt(p).equals(TERMINATOR);
     }
 
     @Override
-    public boolean isAutomata(BlockPos p) {
-        return getAt(p.getX(), p.getY(), p.getZ()).equals(AUTOMATA);
+    public boolean isAutomata(final BlockPos p) {
+        return this.getAt(p).equals(AUTOMATA);
     }
 
     @Override
-    public boolean isBedrock(BlockPos p) {
-        return getAt(p.getX(), p.getY(), p.getZ()).equals(BEDROCK);
+    public boolean isBedrock(final BlockPos p) {
+        return this.getAt(p).equals(BEDROCK);
     }
 
     @Override
-    public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder) {
+    public boolean isAutomataPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(AUTOMATA_PLACEHOLDER);
     }
 
     @Override
-    public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) {
+    public boolean isAirPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(AIR_PLACEHOLDER);
     }
 
     @Override
-    public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) {
+    public boolean isWaterPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(WATER_PLACEHOLDER);
     }
 
     @Override
-    public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) {
+    public boolean isLavaPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(LAVA_PLACEHOLDER);
     }
 
     @Override
-    public boolean isTntPlaceholder(BlockStateHolder blockStateHolder) {
+    public boolean isTntPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(TNT_PLACEHOLDER);
     }
 
     @Override
-    public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) {
+    public boolean isBedrockPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(BEDROCK_PLACEHOLDER);
     }
 
     @Override
-    public boolean isYRotation(BlockStateHolder blockStateHolder) {
+    public boolean isYRotation(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(AUTOMATA_Y_ROTATION);
     }
 
     @Override
-    public boolean isAny(BlockStateHolder blockStateHolder) {
+    public boolean isAny(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(AIR) || blockStateHolder.descriptionId.equals(CAVE_AIR);
     }
 
     @Override
-    public BlockStateHolder[] surrounding(BlockPos center) {
-        int x = center.getX();
-        int y = center.getY();
-        int z = center.getZ();
-        BlockStateHolder[] result = new BlockStateHolder[27];
+    public BlockStateHolder[] surrounding(final BlockPos center) {
+        final int x = center.getX();
+        final int y = center.getY();
+        final int z = center.getZ();
+        final BlockStateHolder[] result = new BlockStateHolder[27];
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] = fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER];
+                    result[i++] = this.fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER];
                 }
             }
         }
@@ -182,33 +182,49 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
-        if(isAirPlaceholder(blockState)) return block(AIR);
-        if(isWaterPlaceholder(blockState)) return block(WATER);
-        if(isLavaPlaceholder(blockState)) return block(LAVA);
-        if(isTntPlaceholder(blockState)) return block(TNT);
-        if(isBedrockPlaceholder(blockState)) return block(BEDROCK);
-        if(isAutomataPlaceholder(blockState)) return block(AUTOMATA);
+    public BlockStateHolder replacePlaceholder(final BlockStateHolder blockState) {
+        if(this.isAirPlaceholder(blockState)) {
+            return block(AIR);
+        }
+        if(this.isWaterPlaceholder(blockState)) {
+            return block(WATER);
+        }
+        if(this.isLavaPlaceholder(blockState)) {
+            return block(LAVA);
+        }
+        if(this.isTntPlaceholder(blockState)) {
+            return block(TNT);
+        }
+        if(this.isBedrockPlaceholder(blockState)) {
+            return block(BEDROCK);
+        }
+        if(this.isAutomataPlaceholder(blockState)) {
+            return block(AUTOMATA);
+        }
         return blockState;
     }
 
-    public String[][][] getSurroundingIds(BlockPos p) {
-        return getSurroundingIds(p.getX(), p.getY(), p.getZ());
+    public String[][][] getSurroundingIds(final BlockPos p) {
+        return this.getSurroundingIds(p.getX(), p.getY(), p.getZ());
     }
 
-    public String[][][] getSurroundingIds(int x, int y, int z) {
-        String[][][] result = new String[3][3][3];
+    public String[][][] getSurroundingIds(final int x, final int y, final int z) {
+        final String[][][] result = new String[3][3][3];
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[ix+1][iy+1][iz+1] = fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER].descriptionId;
+                    result[ix+1][iy+1][iz+1] = this.fakeWorld[x+ix+ WORLD_CENTER][y+iy+ WORLD_CENTER][z+iz+ WORLD_CENTER].descriptionId;
                 }
             }
         }
         return result;
     }
 
-    public String getAt(int x, int y, int z) {
+    private String getAt(final BlockPos p) {
+        return this.getAt(p.getX(), p.getY(), p.getZ());
+    }
+
+    public String getAt(final int x, final int y, final int z) {
         if(
                 x <= -WORLD_CENTER
                 || x >= WORLD_CENTER
@@ -216,25 +232,43 @@ public class FakeWorld extends WorldController {
                 || y >= WORLD_CENTER
                 || z <= -WORLD_CENTER
                 || z >= WORLD_CENTER
-        ) return AIR;
-        return fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER].descriptionId;
+        ) {
+            return AIR;
+        }
+        return this.fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER].descriptionId;
     }
 
-    public void redSignalAt(BlockPos p, boolean signalState) {
-        redSignalAt(p.getX(), p.getY(), p.getZ(), signalState);
+    public void redSignalAt(final BlockPos p, final boolean signalState) {
+        this.redSignalAt(p.getX(), p.getY(), p.getZ(), signalState);
     }
 
-    public void redSignalAt(int x, int y, int z, boolean signalState) {
-        redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z] = signalState;
+    public void redSignalAt(final int x, final int y, final int z, final boolean signalState) {
+        this.redstoneSignal[WORLD_CENTER + x][WORLD_CENTER + y][WORLD_CENTER + z] = signalState;
     }
 
-    public boolean hasNeighborSignal(BlockPos p) {
-        return redstoneSignal[WORLD_CENTER + p.getX()][WORLD_CENTER + p.getY()][WORLD_CENTER + p.getZ()];
+    @Override
+    public boolean hasNeighborSignal(final BlockPos p) {
+        return this.redstoneSignal[WORLD_CENTER + p.getX()][WORLD_CENTER + p.getY()][WORLD_CENTER + p.getZ()];
     }
 
+    @Override
     public BlockStateHolder getAutomata() { return block(AUTOMATA); }
-    public BlockStateHolder getAir() { return block(AIR); }
+    public static BlockStateHolder getAir() { return block(AIR); }
 
-    public void setStateAt(BlockPos pos, AutomataStartState state){
+    @Override
+    public void setStateAt(final BlockPos pos, final AutomataStartState state){
+    }
+
+    @Override
+    public BlockStateHolder getBlockStateHolderAt(final BlockPos pos) {
+        final int x = pos.getX();
+        final int y = pos.getY();
+        final int z = pos.getZ();
+        return this.fakeWorld[x+ WORLD_CENTER][y+ WORLD_CENTER][z+ WORLD_CENTER];
+    }
+
+    @Override
+    public boolean is(final BlockPos p, final BlockStateHolder blockStateHolder) {
+        return this.getAt(p).equals(blockStateHolder.descriptionId);
     }
 }

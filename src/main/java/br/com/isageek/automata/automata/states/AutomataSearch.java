@@ -2,62 +2,81 @@ package br.com.isageek.automata.automata.states;
 
 import br.com.isageek.automata.AutomataMod;
 import br.com.isageek.automata.automata.AutomataStartState;
+import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class AutomataSearch implements EntityTick {
 
-    private final HashSet<BlockPos> automata;
+    private final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;
 
-    public AutomataSearch(HashSet<BlockPos> automata){
-        this.automata = automata;
+    AutomataSearch(final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables){
+        this.replaceables = replaceables;
     }
-    public AutomataSearch(WorldController worldController, BlockPos pos, HashSet<BlockPos> automata){
+
+    AutomataSearch(
+            final WorldController worldController,
+            final BlockPos pos,
+            final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables
+    ){
         worldController.setStateAt(pos, AutomataStartState.SEARCH);
-        this.automata = automata;
+        this.replaceables = replaceables;
     }
 
     public AutomataSearch(){
-        this.automata = new HashSet<>();
+        this.replaceables = new HashMap<>();
     }
 
     @Override
-    public EntityTick tick(BlockPos center, WorldController worldController, long delta) {
+    public EntityTick tick(
+            final BlockPos center,
+            final WorldController worldController,
+            final long delta
+    ) {
 
-        if(!worldController.hasNeighborSignal(center)) return this;
+        if(!worldController.hasNeighborSignal(center)) {
+            return this;
+        }
 
-        ArrayList<BlockPos> toBeRemoved = new ArrayList<>();
-        for (BlockPos p: automata) {
-            if(!worldController.isAutomata(p)){
-                toBeRemoved.add(p);
+        final Set<Map.Entry<BlockStateHolder, HashSet<BlockPos>>> entries = this.replaceables.entrySet();
+        for (final Map.Entry<BlockStateHolder, HashSet<BlockPos>> entry : entries) {
+            // Verify if blocks are still there
+            final BlockStateHolder blockToReplace = entry.getKey();
+            final HashSet<BlockPos> blockPositions = entry.getValue();
+            final HashSet<BlockPos> newBlockPositions = new HashSet<>();
+            for (final BlockPos p: blockPositions) {
+                if(worldController.is(p, blockToReplace)){
+                    newBlockPositions.add(p);
+                }
             }
-        }
 
-        for (BlockPos p: toBeRemoved) {
-            automata.remove(p);
-        }
+            // Seach for new blocks
 
-        for (int x = -AutomataMod.MAX_SEARCH_RADIUS; x <= AutomataMod.MAX_SEARCH_RADIUS; x++) {
-            for (int y = -AutomataMod.MAX_SEARCH_RADIUS; y <= AutomataMod.MAX_SEARCH_RADIUS; y++) {
-                for (int z = -AutomataMod.MAX_SEARCH_RADIUS; z <= AutomataMod.MAX_SEARCH_RADIUS; z++) {
-
-                    BlockPos currentPos = center.offset(x, y, z);
-                    if(worldController.isAutomata(currentPos)){
-                        automata.add(currentPos);
+            for (int x = -AutomataMod.MAX_SEARCH_RADIUS; x <= AutomataMod.MAX_SEARCH_RADIUS; x++) {
+                for (int y = -AutomataMod.MAX_SEARCH_RADIUS; y <= AutomataMod.MAX_SEARCH_RADIUS; y++) {
+                    for (int z = -AutomataMod.MAX_SEARCH_RADIUS; z <= AutomataMod.MAX_SEARCH_RADIUS; z++) {
+                        final BlockPos currentPos = center.offset(x, y, z);
+                        if(worldController.is(currentPos, blockToReplace)){
+                            newBlockPositions.add(currentPos);
+                        }
                     }
                 }
             }
+
+            this.replaceables.put(blockToReplace, newBlockPositions);
         }
 
-        PatternLoad patternLoad = new PatternLoad(worldController, center, automata);
+        final PatternLoad patternLoad = new PatternLoad(worldController, center, this.replaceables);
         return patternLoad.tick(center, worldController, delta);
     }
 
-    public HashSet<BlockPos> getAutomata() {
-        return automata;
+    HashMap<BlockStateHolder, HashSet<BlockPos>> getReplaceables() {
+        return this.replaceables;
     }
 }

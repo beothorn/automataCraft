@@ -24,17 +24,17 @@ public class WorldController {
     private final Block yRotation;
 
     public WorldController(
-        Block[] any,
-        Block automata,
-        Block terminator,
-        Block start,
-        Block automataPlaceholder,
-        Block airPlaceholder,
-        Block waterPlaceholder,
-        Block lavaPlaceholder,
-        Block tntPlaceholder,
-        Block bedrockPlaceholder,
-        Block yRotation
+            final Block[] any,
+            final Block automata,
+            final Block terminator,
+            final Block start,
+            final Block automataPlaceholder,
+            final Block airPlaceholder,
+            final Block waterPlaceholder,
+            final Block lavaPlaceholder,
+            final Block tntPlaceholder,
+            final Block bedrockPlaceholder,
+            final Block yRotation
     ) {
         this.any = any;
         this.automata = automata;
@@ -49,17 +49,39 @@ public class WorldController {
         this.yRotation = yRotation;
     }
 
-    public void set(World world){
+    public BlockPos findTerminatorFor(final BlockPos start){
+        // search on each axis in intervals of 6 maximun of 128
+        final BlockPos xPlus = start.offset(7, 0, 0);
+        if(this.isTerminator(xPlus)){
+            return xPlus;
+        }
+        final BlockPos xMinus = start.offset(-7, 0, 0);
+        if(this.isTerminator(xMinus)){
+            return xMinus;
+        }
+        final BlockPos zPlus = start.offset(0, 0, 7);
+        if(this.isTerminator(zPlus)){
+            return zPlus;
+        }
+        final BlockPos zMinus = start.offset(0, 0, -7);
+        if(this.isTerminator(zMinus)){
+            return zMinus;
+        }
+
+        return null;
+    }
+
+    void set(final World world){
         this.world = world;
     }
 
-    public BlockStateHolder[] surrounding(BlockPos surrounded){
-        BlockStateHolder[] result = new BlockStateHolder[27];
+    public BlockStateHolder[] surrounding(final BlockPos surrounded){
+        final BlockStateHolder[] result = new BlockStateHolder[27];
         int i = 0;
         for (int ix = -1; ix <= 1; ix++) {
             for (int iy = -1; iy <= 1; iy++) {
                 for (int iz = -1; iz <= 1; iz++) {
-                    result[i++] =  createStateHolderFor(surrounded.offset(ix, iy, iz));
+                    result[i++] = this.createStateHolderFor(surrounded.offset(ix, iy, iz));
                 }
             }
         }
@@ -68,10 +90,10 @@ public class WorldController {
     }
 
     public void setBlock(
-            BlockStateHolder blockState,
-            BlockPos p
+            final BlockStateHolder blockState,
+            final BlockPos p
     ) {
-        world.setBlock(
+        this.world.setBlock(
                 p,
                 blockState.blockState,
                 0,
@@ -79,67 +101,77 @@ public class WorldController {
         );
     }
 
-    private BlockStateHolder createStateHolderFor(BlockPos pos){
-        BlockState blockState = world.getBlockState(pos);
+    private BlockStateHolder createStateHolderFor(final BlockPos pos){
+        final BlockState blockState = this.world.getBlockState(pos);
         return BlockStateHolder.block(blockState);
     }
 
-    public boolean isTerminator(BlockPos p) { return is(p, terminator);}
-    public boolean isAutomata(BlockPos p) { return is(p, automata);}
-    public boolean isBedrock(BlockPos p) { return is(p, Blocks.BEDROCK);}
+    public boolean isTerminator(final BlockPos p) { return this.is(p, this.terminator);}
+    public boolean isAutomata(final BlockPos p) { return this.is(p, this.automata);}
+    public boolean isBedrock(final BlockPos p) { return this.is(p, Blocks.BEDROCK);}
 
-    private boolean is(BlockPos p, Block blockType) {
-        return world.getBlockState(p).getBlock() == blockType;
+    private boolean is(final BlockPos p, final Block blockType) {
+        return this.world.getBlockState(p).getBlock() == blockType;
     }
 
-    public boolean isAutomataPlaceholder(BlockStateHolder blockStateHolder){
-        return blockStateHolder.is(automataPlaceholder);
+    public boolean is(final BlockPos p, final BlockStateHolder blockType) {
+        return this.world.getBlockState(p).getBlock() == blockType.blockState.getBlock();
     }
 
-    public boolean isAny(BlockStateHolder blockStateHolder) {
-        for (Block block : any) {
-            if (blockStateHolder.is(block)) return true;
+    public boolean isAutomataPlaceholder(final BlockStateHolder blockStateHolder){
+        return blockStateHolder.is(this.automataPlaceholder);
+    }
+
+    public boolean isAny(final BlockStateHolder blockStateHolder) {
+        for (final Block block : this.any) {
+            if (blockStateHolder.is(block)) {
+                return true;
+            }
         }
         return false;
 
     }
-    public boolean isAirPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(airPlaceholder); }
-    public boolean isWaterPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(waterPlaceholder);}
-    public boolean isLavaPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(lavaPlaceholder); }
-    public boolean isTntPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(tntPlaceholder); }
-    public boolean isBedrockPlaceholder(BlockStateHolder blockStateHolder) { return blockStateHolder.is(bedrockPlaceholder); }
-    public boolean isYRotation(BlockStateHolder blockStateHolder) { return blockStateHolder.is(yRotation); }
+    public boolean isAirPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.airPlaceholder); }
+    public boolean isWaterPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.waterPlaceholder);}
+    public boolean isLavaPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.lavaPlaceholder); }
+    public boolean isTntPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.tntPlaceholder); }
+    public boolean isBedrockPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.bedrockPlaceholder); }
+    public boolean isYRotation(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.yRotation); }
 
-    public BlockStateHolder replacePlaceholder(BlockStateHolder blockState) {
-        if(isAirPlaceholder(blockState)){
+    public BlockStateHolder replacePlaceholder(final BlockStateHolder blockState) {
+        if(this.isAirPlaceholder(blockState)){
             return BlockStateHolder.block(Blocks.AIR.defaultBlockState());
         }
-        if(isWaterPlaceholder(blockState)) {
+        if(this.isWaterPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.WATER.defaultBlockState());
         }
-        if(isLavaPlaceholder(blockState)) {
+        if(this.isLavaPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.LAVA.defaultBlockState());
         }
-        if(isTntPlaceholder(blockState)) {
+        if(this.isTntPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.TNT.defaultBlockState());
         }
-        if(isBedrockPlaceholder(blockState)) {
+        if(this.isBedrockPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.BEDROCK.defaultBlockState());
         }
-        if(isAutomataPlaceholder(blockState)){
-            return BlockStateHolder.block(automata.defaultBlockState());
+        if(this.isAutomataPlaceholder(blockState)){
+            return BlockStateHolder.block(this.automata.defaultBlockState());
         }
         return blockState;
     }
 
-    public boolean hasNeighborSignal(BlockPos p) {
-        return world.hasNeighborSignal(p);
+    public boolean hasNeighborSignal(final BlockPos p) {
+        return this.world.hasNeighborSignal(p);
     }
 
-    public BlockStateHolder getAutomata() { return BlockStateHolder.block(automata.defaultBlockState()); }
+    public BlockStateHolder getAutomata() { return BlockStateHolder.block(this.automata.defaultBlockState()); }
 
-    public void setStateAt(BlockPos pos, AutomataStartState state){
-        BlockState newBlockState = start.defaultBlockState().setValue(AutomataStartBlock.state, state);
-        world.setBlock(pos, newBlockState,0 ,0);
+    public void setStateAt(final BlockPos pos, final AutomataStartState state){
+        final BlockState newBlockState = this.start.defaultBlockState().setValue(AutomataStartBlock.state, state);
+        this.world.setBlock(pos, newBlockState,0 ,0);
+    }
+
+    public BlockStateHolder getBlockStateHolderAt(final BlockPos pos) {
+        return BlockStateHolder.block(this.world.getBlockState(pos));
     }
 }

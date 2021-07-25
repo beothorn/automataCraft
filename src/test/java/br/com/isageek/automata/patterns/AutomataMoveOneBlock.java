@@ -12,7 +12,7 @@ public class AutomataMoveOneBlock {
     @Test
     public void automataMoveOneBlock(){
 
-        String[][][] result = {
+        final String[][][] result = {
             {
                 {AIR, AIR, AIR},
                 {AIR, AIR, AIR},
@@ -29,9 +29,9 @@ public class AutomataMoveOneBlock {
                 {AIR, AIR, AIR}
             }
         };
-        String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
+        final String[][][] match = TestHelper.cubeWithSameBlockType(ANY, AIR);
 
-        String[][][] expected = {
+        final String[][][] expected = {
             {
                 {AIR, AIR, AIR},
                 {AIR, AIR, AIR},
@@ -49,7 +49,7 @@ public class AutomataMoveOneBlock {
             }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
@@ -60,7 +60,7 @@ public class AutomataMoveOneBlock {
 
         fakeWorld.tick();
 
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        final String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual);
     }
 

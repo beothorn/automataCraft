@@ -1,3 +1,8 @@
+7.0
+
+- New structure: A rule30 implementation
+
+========================
 6.0
 
 - Start block has 3 textures for each state (searching automata, loading pattern and executing)
