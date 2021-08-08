@@ -49,7 +49,16 @@ public class AutomataMod
         final RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_placeholder = block("automata_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        structure("rule30", 1234567, AutomataMod.MOD_ID, modEventBus, eventBus, () -> new Rule30(NoFeatureConfig.CODEC));
+        structure(
+                "rule30",
+                1234567,
+                100,
+                5,
+                AutomataMod.MOD_ID,
+                modEventBus,
+                eventBus,
+                () -> new Rule30(NoFeatureConfig.CODEC)
+        );
 
 
         blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,

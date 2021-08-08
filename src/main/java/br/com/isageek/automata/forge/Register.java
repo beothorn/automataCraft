@@ -31,43 +31,43 @@ public class Register {
     private static final Logger LOGGER = LogManager.getLogger(Register.class);
 
     public static void blockWithTileEntity(
-            String modId,
-            IEventBus modEventBus,
-            String blockName,
-            Function<TileEntitySupplierPlaceholder, Block> blockSupplier,
-            BiFunction<RegistryObject<TileEntityType<? extends TileEntity>>, RegistryObject<Block>, ? extends TileEntity> tileEntitySupplier
+            final String modId,
+            final IEventBus modEventBus,
+            final String blockName,
+            final Function<TileEntitySupplierPlaceholder, Block> blockSupplier,
+            final BiFunction<RegistryObject<TileEntityType<? extends TileEntity>>, RegistryObject<Block>, ? extends TileEntity> tileEntitySupplier
     ) {
-        TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder = new TileEntitySupplierPlaceholder();
+        final TileEntitySupplierPlaceholder tileEntitySupplierPlaceholder = new TileEntitySupplierPlaceholder();
 
-        RegistryObject<Block> blockRegister = block(
+        final RegistryObject<Block> blockRegister = block(
             blockName,
             modId,
             modEventBus,
             () -> blockSupplier.apply(tileEntitySupplierPlaceholder)
         );
 
-        DeferredRegister<TileEntityType<?>> tileEntityTypeDeferredRegister = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, modId);
+        final DeferredRegister<TileEntityType<?>> tileEntityTypeDeferredRegister = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, modId);
 
-        RegistryObject<TileEntityType<? extends TileEntity>> tileEntityRegistry = tileEntityTypeDeferredRegister.register(blockName +"_tile_entity", () ->
+        final RegistryObject<TileEntityType<? extends TileEntity>> tileEntityRegistry = tileEntityTypeDeferredRegister.register(blockName +"_tile_entity", () ->
             TileEntityType.Builder.of(tileEntitySupplierPlaceholder, blockRegister.get()).build(null)
         );
-        Supplier<? extends TileEntity> supplier = () -> tileEntitySupplier.apply(tileEntityRegistry, blockRegister);
+        final Supplier<? extends TileEntity> supplier = () -> tileEntitySupplier.apply(tileEntityRegistry, blockRegister);
         tileEntitySupplierPlaceholder.setRealSupplier(supplier);
         tileEntityTypeDeferredRegister.register(modEventBus);
     }
 
     public static RegistryObject<Block> block(
-            String blockName,
-            String modId,
-            IEventBus modEventBus,
-            Supplier<Block> blockSupplier
+            final String blockName,
+            final String modId,
+            final IEventBus modEventBus,
+            final Supplier<Block> blockSupplier
     ) {
 
-        DeferredRegister<Block> blockDeferredRegister = DeferredRegister.create(ForgeRegistries.BLOCKS, modId);
-        RegistryObject<Block> block = blockDeferredRegister.register(blockName, blockSupplier);
+        final DeferredRegister<Block> blockDeferredRegister = DeferredRegister.create(ForgeRegistries.BLOCKS, modId);
+        final RegistryObject<Block> block = blockDeferredRegister.register(blockName, blockSupplier);
         blockDeferredRegister.register(modEventBus);
 
-        DeferredRegister<Item> itemDeferredRegister = DeferredRegister.create(ForgeRegistries.ITEMS, modId);
+        final DeferredRegister<Item> itemDeferredRegister = DeferredRegister.create(ForgeRegistries.ITEMS, modId);
         itemDeferredRegister.register(blockName+"_item", () ->
             new BlockItem(block.get(), new Item.Properties().tab(ItemGroup.TAB_BUILDING_BLOCKS))
         );
@@ -78,21 +78,29 @@ public class Register {
     }
 
     public static RegistryObject<Structure<NoFeatureConfig>> structure(
-        String structureName,
-        int seed,
-        String modId,
-        IEventBus modEventBus,
-        IEventBus forgeBus,
-        Supplier<Structure<NoFeatureConfig>> structureSupplier
+            final String structureName,
+            final int seed,
+            final int averageSpawningDistance,
+            final int minimumDistanceInChunk,
+            final String modId,
+            final IEventBus modEventBus,
+            final IEventBus forgeBus,
+            final Supplier<Structure<NoFeatureConfig>> structureSupplier
     ){
-        DeferredRegister<Structure<?>> structureDeferredRegister = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, modId);
-        RegistryObject<Structure<NoFeatureConfig>> structure = structureDeferredRegister.register(structureName, structureSupplier);
+        final DeferredRegister<Structure<?>> structureDeferredRegister = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, modId);
+        final RegistryObject<Structure<NoFeatureConfig>> structure = structureDeferredRegister.register(structureName, structureSupplier);
         structureDeferredRegister.register(modEventBus);
         DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, modId);
-        forgeBus.addListener(EventPriority.NORMAL, (WorldEvent.Load event) -> Register.addStructureDimensionToChunkGenerator(event, structure, seed));
+        forgeBus.addListener(EventPriority.NORMAL, (WorldEvent.Load event) -> Register.addStructureDimensionToChunkGenerator(
+            event,
+            structure,
+            seed,
+            averageSpawningDistance,
+            minimumDistanceInChunk
+        ));
         forgeBus.addListener(EventPriority.HIGH, (BiomeLoadingEvent event) -> Register.addStructureToAllBiomes(event, structure));
         modEventBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(() -> {
-            String structureRegistryName = structure.get().getRegistryName().toString();
+            final String structureRegistryName = structure.get().getRegistryName().toString();
             Structure.STRUCTURES_REGISTRY.put(structureRegistryName, structure.get());
         }));
         return structure;
@@ -100,15 +108,19 @@ public class Register {
 
     private static <T extends IFeatureConfig> void addStructureDimensionToChunkGenerator(
             final WorldEvent.Load event,
-            RegistryObject<Structure<T>> structure,
-            int seed
+            final RegistryObject<Structure<T>> structure,
+            final int seed,
+            final int averageSpawningDistance,
+            final int minimumDistanceInChunk
     ) {
         LOGGER.debug("addStructureDimensionToChunkGenerator");
         if(event.getWorld() instanceof ServerWorld){
-            int averageSpawningDistance = 10;
-            int minimumDistanceInChunk = 5;
-            StructureSeparationSettings structureSeparationSettings = new StructureSeparationSettings(averageSpawningDistance, minimumDistanceInChunk, seed);
-            ServerWorld serverWorld = (ServerWorld)event.getWorld();
+            final StructureSeparationSettings structureSeparationSettings = new StructureSeparationSettings(
+                averageSpawningDistance,
+                minimumDistanceInChunk,
+                seed
+            );
+            final ServerWorld serverWorld = (ServerWorld)event.getWorld();
             serverWorld
                 .getChunkSource()
                 .generator
@@ -121,9 +133,9 @@ public class Register {
         }
     }
 
-    public static void addStructureToAllBiomes(
+    private static void addStructureToAllBiomes(
             final BiomeLoadingEvent event,
-            RegistryObject<Structure<NoFeatureConfig>> structure
+            final RegistryObject<Structure<NoFeatureConfig>> structure
     ) {
         LOGGER.debug("addStructureToAllBiomes");
         event.getGeneration().getStructures().add(() -> structure.get().configured(IFeatureConfig.NONE));
