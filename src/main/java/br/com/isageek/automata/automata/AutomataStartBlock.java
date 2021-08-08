@@ -13,13 +13,13 @@ public class AutomataStartBlock extends BlockWithTileEntity {
 
     public static final EnumProperty<AutomataStartState> state = EnumProperty.create("state", AutomataStartState.class);
 
-    public AutomataStartBlock(TileEntitySupplierPlaceholder tileEntityType) {
+    public AutomataStartBlock(final TileEntitySupplierPlaceholder tileEntityType) {
         super(tileEntityType, Properties.of(Material.STONE, MaterialColor.STONE).harvestLevel(0));
-        registerDefaultState(defaultBlockState().setValue(state, AutomataStartState.SEARCH));
+        this.registerDefaultState(this.defaultBlockState().setValue(state, AutomataStartState.LOAD_REPLACEABLES));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> stateBuilder) {
+    protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> stateBuilder) {
         super.createBlockStateDefinition(stateBuilder);
         stateBuilder.add(state);
     }

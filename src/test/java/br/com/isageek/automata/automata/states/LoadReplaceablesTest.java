@@ -121,11 +121,12 @@ public class LoadReplaceablesTest {
         final HashMap<BlockStateHolder, HashSet<BlockPos>> previousReplaceables = new HashMap<>();
         final BlockPos stonePos = new BlockPos(10, 10, 10);
         previousReplaceables.put(block(STONE), new HashSet<>(singletonList(stonePos)));
-        final LoadReplaceables loadReplaceables = new LoadReplaceables(previousReplaceables);
-
         final BlockPos automataStartPos = new BlockPos(0, 0, 0);
+        final LoadReplaceables loadReplaceables = new LoadReplaceables(fakeWorld, automataStartPos, previousReplaceables);
+
         fakeWorld.redSignalAt(automataStartPos, true);
         fakeWorld.setAt(10, 10, 10, FakeWorld.STONE);
+        fakeWorld.setAt(2, 0, 0, FakeWorld.STONE);
         fakeWorld.setAt(5, 0, 0, FakeWorld.STONE);
         fakeWorld.setAt(7, 0, 0, TERMINATOR);
 

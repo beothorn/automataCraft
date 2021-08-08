@@ -3,7 +3,7 @@ package br.com.isageek.automata.automata;
 import net.minecraft.util.IStringSerializable;
 
 public enum AutomataStartState implements IStringSerializable {
-   LOAD_REPLACEABLES("loadReplaceables"),
+   LOAD_REPLACEABLES("loadreplaceables"),
    SEARCH("search"),
    LOAD("load"),
    EXECUTE("execute");

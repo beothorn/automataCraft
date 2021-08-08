@@ -12,9 +12,10 @@ import java.util.*;
 
 public class ExecutePattern implements EntityTick {
 
-    private final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;
+    private HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;
     private final BlockTree replacementPattern;
     private long timeSinceLastTick = 0;
+    private boolean firstRun = true;
 
     ExecutePattern(
             final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables,
@@ -52,20 +53,28 @@ public class ExecutePattern implements EntityTick {
             allBlocksToReplaceCount += posSet.size();
         }
 
-        if(
-                (this.timeSinceLastTick < minimalTickInterval)
-                || (allBlocksToReplaceCount > throttleAfterAutomataCount && this.timeSinceLastTick < (allBlocksToReplaceCount/2.5))) {
+        final boolean shouldWaitSoItDoesntRunTooFast = this.timeSinceLastTick < minimalTickInterval;
+        final boolean slowDownToGiveTimeToProcessBlocks = allBlocksToReplaceCount > throttleAfterAutomataCount && this.timeSinceLastTick < (allBlocksToReplaceCount / 2.5);
+        if( (shouldWaitSoItDoesntRunTooFast || slowDownToGiveTimeToProcessBlocks) && !this.firstRun) {
             return this;
         }
 
-        if(!worldController.hasNeighborSignal(center)){
-            final LoadReplaceables loadReplaceables = new LoadReplaceables(this.replaceables);
+        final boolean startBlockIsNotReceivingRedSignal = !worldController.hasNeighborSignal(center);
+        if(startBlockIsNotReceivingRedSignal){
+            final LoadReplaceables loadReplaceables = new LoadReplaceables(worldController, center, this.replaceables);
             return loadReplaceables.tick(center, worldController, delta);
         }
 
-        final Set<Map.Entry<BlockStateHolder, HashSet<BlockPos>>> entries = this.replaceables.entrySet();
+        final Set<Map.Entry<BlockStateHolder, HashSet<BlockPos>>> positionsForBlockSateHolder = this.replaceables.entrySet();
+        final Set<BlockStateHolder> blockStateHolders = this.replaceables.keySet();
 
-        for (final Map.Entry<BlockStateHolder, HashSet<BlockPos>> entry : entries) {
+        final HashMap<BlockStateHolder, HashSet<BlockPos>> newReplaceables = new HashMap<>();
+        for (final BlockStateHolder blockStateHolder: blockStateHolders) {
+            newReplaceables.put(blockStateHolder, new HashSet<>());
+        }
+
+
+        for (final Map.Entry<BlockStateHolder, HashSet<BlockPos>> entry : positionsForBlockSateHolder) {
             final HashSet<BlockPos> blockPositions = entry.getValue();
 
             final HashMap<BlockPos, BlockStateHolder> replacements = new LinkedHashMap<>();
@@ -88,20 +97,20 @@ public class ExecutePattern implements EntityTick {
                             final boolean isNotMatchAll = !blockStateHolder.descriptionId.equals(BlockTree.ANY.descriptionId);
                             final boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
                             if (shouldBeReplaced) {
-                                if (!replacements.containsKey(currentPos)) {
-                                    replacements.put(currentPos, blockStateHolder);
-                                }
+                                replacements.put(currentPos, blockStateHolder);
+                            }
+                            if(newReplaceables.containsKey(blockStateHolder)){
+                                newReplaceables.get(blockStateHolder).add(currentPos);
                             }
                         }
                     }
                 }
             }
             final Set<Map.Entry<BlockPos, BlockStateHolder>> replacementEntries = replacements.entrySet();
-            final Set<BlockStateHolder> replaceableBlocks = this.replaceables.keySet();
             for (final Map.Entry<BlockPos, BlockStateHolder> replacementEntry : replacementEntries) {
                 final BlockPos key = replacementEntry.getKey();
                 final BlockStateHolder value = replacementEntry.getValue();
-                if(replaceableBlocks.contains(value)){
+                if(blockStateHolders.contains(value)){
                     final HashSet<BlockPos> allBlockPos = this.replaceables.get(value);
                     allBlockPos.add(key);
                 }
@@ -109,7 +118,10 @@ public class ExecutePattern implements EntityTick {
             }
         }
 
+        this.replaceables = newReplaceables;
+
         this.timeSinceLastTick = 0;
+        this.firstRun = false;
         return this;
     }
 

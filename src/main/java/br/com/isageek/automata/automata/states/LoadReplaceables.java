@@ -1,5 +1,6 @@
 package br.com.isageek.automata.automata.states;
 
+import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
@@ -16,7 +17,13 @@ public class LoadReplaceables implements EntityTick {
         this.replaceables = new HashMap<>();
     }
 
-    LoadReplaceables(final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables) {
+    LoadReplaceables(
+            final WorldController worldController,
+            final BlockPos pos,
+            final HashMap<BlockStateHolder,
+            HashSet<BlockPos>> replaceables
+    ) {
+        worldController.setStateAt(pos, AutomataStartState.SEARCH);
         this.replaceables = replaceables;
     }
 

@@ -1,7 +1,7 @@
 package br.com.isageek.automata;
 
 import br.com.isageek.automata.automata.AutomataStartBlock;
-import br.com.isageek.automata.automata.states.AutomataSearch;
+import br.com.isageek.automata.automata.states.LoadReplaceables;
 import br.com.isageek.automata.forge.SystemEntityClock;
 import br.com.isageek.automata.forge.TickableTileEntityStrategy;
 import br.com.isageek.automata.forge.WorldController;
@@ -12,7 +12,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -34,22 +33,22 @@ public class AutomataMod
     public final static long SEARCH_AGAIN_TIMEOUT = 3000;
 
     public AutomataMod() {
-        IEventBus eventBus = MinecraftForge.EVENT_BUS;
+        final IEventBus eventBus = MinecraftForge.EVENT_BUS;
         eventBus.register(this);
 
-        Supplier<Block> regularBlock = () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE));
+        final Supplier<Block> regularBlock = () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE));
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        RegistryObject<Block> automata_termination = block("automata_termination", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata = block("automata", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_air_placeholder = block("automata_air_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_water_placeholder = block("automata_water_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_tnt_placeholder = block("automata_tnt_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_placeholder = block("automata_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_termination = block("automata_termination", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata = block("automata", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_air_placeholder = block("automata_air_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_water_placeholder = block("automata_water_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_tnt_placeholder = block("automata_tnt_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_placeholder = block("automata_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
         structure("rule30", 1234567, AutomataMod.MOD_ID, modEventBus, eventBus, () -> new Rule30(NoFeatureConfig.CODEC));
 
 
@@ -57,7 +56,7 @@ public class AutomataMod
             "automata_start",
             AutomataStartBlock::new,
             (tileEntityRegistry, automata_start) -> {
-                WorldController worldController = new WorldController(
+                final WorldController worldController = new WorldController(
                     new Block[]{Blocks.AIR, Blocks.CAVE_AIR},
                     automata.get(),
                     automata_termination.get(),
@@ -70,8 +69,8 @@ public class AutomataMod
                     automata_bedrock_placeholder.get(),
                     automata_y_rotation.get()
                 );
-                AutomataSearch initial = new AutomataSearch();
-                SystemEntityClock entityClock = new SystemEntityClock();
+                final LoadReplaceables initial = new LoadReplaceables();
+                final SystemEntityClock entityClock = new SystemEntityClock();
                 return new TickableTileEntityStrategy(
                     (TileEntityType<TickableTileEntityStrategy>) tileEntityRegistry.get(),
                     worldController,
