@@ -50,22 +50,37 @@ public class WorldController {
     }
 
     public BlockPos findTerminatorFor(final BlockPos start){
-        // search on each axis in intervals of 6 maximun of 128
         final BlockPos xPlus = start.offset(7, 0, 0);
         if(this.isTerminator(xPlus)){
-            return xPlus;
+            BlockPos cursor = xPlus;
+            while(this.isTerminator(cursor.offset(7, 0, 0))){
+                cursor = cursor.offset(7, 0, 0);
+            }
+            return cursor;
         }
         final BlockPos xMinus = start.offset(-7, 0, 0);
         if(this.isTerminator(xMinus)){
-            return xMinus;
+            BlockPos cursor = xMinus;
+            while(this.isTerminator(cursor.offset(-7, 0, 0))){
+                cursor = cursor.offset(-7, 0, 0);
+            }
+            return cursor;
         }
         final BlockPos zPlus = start.offset(0, 0, 7);
         if(this.isTerminator(zPlus)){
-            return zPlus;
+            BlockPos cursor = zPlus;
+            while(this.isTerminator(cursor.offset(0, 0, 7))){
+                cursor = cursor.offset(0, 0, 7);
+            }
+            return cursor;
         }
         final BlockPos zMinus = start.offset(0, 0, -7);
         if(this.isTerminator(zMinus)){
-            return zMinus;
+            BlockPos cursor = zMinus;
+            while(this.isTerminator(cursor.offset(0, 0, -7))){
+                cursor = cursor.offset(0, 0, -7);
+            }
+            return cursor;
         }
 
         return null;

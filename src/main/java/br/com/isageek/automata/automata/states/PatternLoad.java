@@ -27,7 +27,11 @@ public class PatternLoad implements EntityTick {
     }
 
     @Override
-    public EntityTick tick(final BlockPos center, final WorldController worldController, final long delta) {
+    public EntityTick tick(
+            final BlockPos center,
+            final WorldController worldController,
+            final long delta
+    ) {
         if(!worldController.hasNeighborSignal(center)) {
             return new AutomataSearch(worldController, center, this.replaceables);
         }
@@ -41,7 +45,13 @@ public class PatternLoad implements EntityTick {
             }
         }
         final BlockTree replacementPattern = this.loadPattern(worldController, terminatorPos, center);
-        final ExecutePattern executePattern = new ExecutePattern(worldController, center, this.replaceables, replacementPattern);
+        final ExecutePattern executePattern = new ExecutePattern(
+            worldController,
+            center,
+            terminatorPos,
+            this.replaceables,
+            replacementPattern
+        );
         return executePattern.tick(center, worldController, delta);
     }
 

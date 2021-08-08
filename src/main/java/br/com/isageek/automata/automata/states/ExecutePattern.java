@@ -16,6 +16,7 @@ public class ExecutePattern implements EntityTick {
     private final BlockTree replacementPattern;
     private long timeSinceLastTick = 0;
     private boolean firstRun = true;
+    private final BlockPos[][] exclusions;
 
     ExecutePattern(
             final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables,
@@ -23,17 +24,62 @@ public class ExecutePattern implements EntityTick {
     ) {
         this.replaceables = replaceables;
         this.replacementPattern = replacementPattern;
+        this.exclusions = new BlockPos[][]{};
     }
 
     ExecutePattern(
             final WorldController worldController,
             final BlockPos pos,
-            final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables,
+            final BlockPos terminator,
+            final HashMap<BlockStateHolder,
+            HashSet<BlockPos>> replaceables,
             final BlockTree replacementPattern
     ) {
         worldController.setStateAt(pos, AutomataStartState.EXECUTE);
         this.replaceables = replaceables;
         this.replacementPattern = replacementPattern;
+
+        this.exclusions = new BlockPos[9][2];
+        int count = 0;
+        if(pos.getX() == terminator.getX()){
+            final BlockPos start;
+            final BlockPos end;
+            if(pos.getZ() < terminator.getZ()){
+                start = pos;
+                end = terminator;
+            }else{
+                start = terminator;
+                end = pos;
+            }
+
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    this.exclusions[count][0] = start.offset(x, y, 0);
+                    this.exclusions[count][1] = end.offset(x, y, 0);
+                    count += 1;
+                }
+            }
+
+        }else{
+            final BlockPos start;
+            final BlockPos end;
+            if(pos.getX() < terminator.getX()){
+                start = pos;
+                end = terminator;
+            }else{
+                start = terminator;
+                end = pos;
+            }
+
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    this.exclusions[count][0] = start.offset(0, y, z);
+                    this.exclusions[count][1] = end.offset(0, y, z);
+                    count += 1;
+                }
+            }
+
+        }
     }
 
     @Override
@@ -91,8 +137,29 @@ public class ExecutePattern implements EntityTick {
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {
                         for (int z = -1; z <= 1; z++) {
-                            final BlockStateHolder blockStateHolder = replacement[i++];
                             final BlockPos currentPos = a.offset(x, y, z);
+                            boolean onExcludeArea = false;
+                            for (final BlockPos[] exclusion: this.exclusions) {
+                                final BlockPos excludeStart = exclusion[0];
+                                final BlockPos excludeEnd = exclusion[1];
+                                if(
+                                        currentPos.getX() >= excludeStart.getX()
+                                        && currentPos.getY() >= excludeStart.getY()
+                                        && currentPos.getZ() >= excludeStart.getZ()
+                                        && currentPos.getX() <= excludeEnd.getX()
+                                        && currentPos.getY() <= excludeEnd.getY()
+                                        && currentPos.getZ() <= excludeEnd.getZ()
+                                ){
+                                    onExcludeArea = true;
+                                    continue;
+                                }
+                            }
+
+                            if(onExcludeArea) {
+                                continue;
+                            }
+
+                            final BlockStateHolder blockStateHolder = replacement[i++];
                             final boolean isNotBedrock = !worldController.isBedrock(currentPos);
                             final boolean isNotMatchAll = !blockStateHolder.descriptionId.equals(BlockTree.ANY.descriptionId);
                             final boolean shouldBeReplaced = isNotBedrock && isNotMatchAll;
