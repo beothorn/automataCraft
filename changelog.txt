@@ -1,6 +1,12 @@
 7.0
 
+- Big change: any block can now be replaced, central block does not need to be an automata anymore
 - New structure: A rule30 implementation
+- Pattern is excluded from replacement so executing the automata will not brake the pattern
+
+Regressions:
+
+- Superflat world crashes
 
 ========================
 6.0

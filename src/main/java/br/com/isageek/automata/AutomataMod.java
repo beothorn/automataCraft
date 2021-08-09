@@ -52,7 +52,7 @@ public class AutomataMod
         structure(
                 "rule30",
                 1234567,
-                100,
+                10,
                 5,
                 AutomataMod.MOD_ID,
                 modEventBus,
