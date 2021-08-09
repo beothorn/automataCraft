@@ -120,10 +120,10 @@ public class ExecutePattern implements EntityTick {
         }
 
 
+        final HashMap<BlockPos, BlockStateHolder> replacements = new LinkedHashMap<>();
+
         for (final Map.Entry<BlockStateHolder, HashSet<BlockPos>> entry : positionsForBlockSateHolder) {
             final HashSet<BlockPos> blockPositions = entry.getValue();
-
-            final HashMap<BlockPos, BlockStateHolder> replacements = new LinkedHashMap<>();
 
             for (final BlockPos a : blockPositions) {
                 final BlockStateHolder[] toBeReplaced = worldController.surrounding(a);
@@ -173,16 +173,17 @@ public class ExecutePattern implements EntityTick {
                     }
                 }
             }
-            final Set<Map.Entry<BlockPos, BlockStateHolder>> replacementEntries = replacements.entrySet();
-            for (final Map.Entry<BlockPos, BlockStateHolder> replacementEntry : replacementEntries) {
-                final BlockPos key = replacementEntry.getKey();
-                final BlockStateHolder value = replacementEntry.getValue();
-                if(blockStateHolders.contains(value)){
-                    final HashSet<BlockPos> allBlockPos = this.replaceables.get(value);
-                    allBlockPos.add(key);
-                }
-                worldController.setBlock(value, key);
+        }
+
+        final Set<Map.Entry<BlockPos, BlockStateHolder>> replacementEntries = replacements.entrySet();
+        for (final Map.Entry<BlockPos, BlockStateHolder> replacementEntry : replacementEntries) {
+            final BlockPos key = replacementEntry.getKey();
+            final BlockStateHolder value = replacementEntry.getValue();
+            if(blockStateHolders.contains(value)){
+                final HashSet<BlockPos> allBlockPos = this.replaceables.get(value);
+                allBlockPos.add(key);
             }
+            worldController.setBlock(value, key);
         }
 
         this.replaceables = newReplaceables;

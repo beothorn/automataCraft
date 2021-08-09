@@ -72,7 +72,6 @@ public class LoadReplaceables implements EntityTick {
         final HashMap<BlockStateHolder, HashSet<BlockPos>> newReplaceables = new HashMap<>();
 
         while(worldController.isTerminator(cursor.offset(xDirection * 7, 0, zDirection * 7))){
-            // move 2 to next center
             cursor = cursor.offset(xDirection * 5, 0, zDirection * 5);
             BlockStateHolder blockToReplace = worldController.getBlockStateHolderAt(cursor);
             if(worldController.isAny(blockToReplace)){
@@ -88,7 +87,7 @@ public class LoadReplaceables implements EntityTick {
             }
 
             // move where start block would be if next sequence was first
-            cursor = cursor.offset(xDirection * 1, 0, zDirection * 1);
+            cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
         }
         this.replaceables = newReplaceables;
     }
