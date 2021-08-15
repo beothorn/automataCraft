@@ -66,7 +66,7 @@ public class LoadReplaceablesTest {
 
         final BlockPos automataStartPos = new BlockPos(0, 0, 0);
         fakeWorld.redSignalAt(automataStartPos, true);
-        fakeWorld.setAt(5, 0, 0, FakeWorld.STONE);
+        fakeWorld.setAt(2, 0, 0, FakeWorld.STONE);
         fakeWorld.setAt(7, 0, 0, TERMINATOR);
 
         final ExecutePattern next = (ExecutePattern) loadReplaceables.tick(automataStartPos, fakeWorld, Integer.MAX_VALUE);

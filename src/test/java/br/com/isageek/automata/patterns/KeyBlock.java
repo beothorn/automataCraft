@@ -15,7 +15,7 @@ public class KeyBlock {
          * near the automata and have a pattern that can be turned
          * on and off
          */
-        String[][][] result1 = {
+        final String[][][] result1 = {
                 {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
@@ -32,7 +32,7 @@ public class KeyBlock {
                         {AIR, AIR, AIR}
                 }
         };
-        String[][][] match1 = {
+        final String[][][] match1 = {
                 {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
@@ -50,7 +50,7 @@ public class KeyBlock {
                 }
         };
 
-        String[][][] result2 = {
+        final String[][][] result2 = {
                 {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
@@ -67,7 +67,7 @@ public class KeyBlock {
                         {AIR, AIR, AIR}
                 }
         };
-        String[][][] match2 = {
+        final String[][][] match2 = {
                 {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
@@ -85,16 +85,16 @@ public class KeyBlock {
                 }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result1);
-        fakeWorld.setSurrounding(15, 0, 0, match1);
+        fakeWorld.setSurrounding(12, 0, 0, match1);
+        fakeWorld.setSurrounding(15, 0, 0, result1);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
-        fakeWorld.setSurrounding(19, 0, 0, result2);
-        fakeWorld.setSurrounding(22, 0, 0, match2);
+        fakeWorld.setSurrounding(19, 0, 0, match2);
+        fakeWorld.setSurrounding(22, 0, 0, result2);
         fakeWorld.setAt(24, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);

@@ -18,16 +18,16 @@ public class SimpleReplaceExcludeReplacementPattern {
         fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("a"));
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        fakeWorld.setSurrounding(15, 0, 0, result);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
 
         Assert.assertArrayEquals(expected, fakeWorld.getSurroundingIds(0, 0, 0));
 
-        Assert.assertArrayEquals(result, fakeWorld.getSurroundingIds(12, 0, 0));
-        Assert.assertArrayEquals(match, fakeWorld.getSurroundingIds(15, 0, 0));
+        Assert.assertArrayEquals(result, fakeWorld.getSurroundingIds(15, 0, 0));
+        Assert.assertArrayEquals(match, fakeWorld.getSurroundingIds(12, 0, 0));
     }
 
 }

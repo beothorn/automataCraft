@@ -11,7 +11,7 @@ public class ReplaceAny {
 
     @Test
     public void replaceAny(){
-        String[][][] result = {
+        final String[][][] result = {
                 {
                         {"b", "b", "b"},
                         {"b", "b", "b"},
@@ -28,9 +28,9 @@ public class ReplaceAny {
                         {"b", "b", "b"}
                 }
         };
-        String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
+        final String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
 
-        String[][][] expected = {
+        final String[][][] expected = {
                 {
                         {"b", "b", "b"},
                         {"b", "b", "b"},
@@ -48,25 +48,25 @@ public class ReplaceAny {
                 }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("Dirt"));
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        fakeWorld.setSurrounding(15, 0, 0, result);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
 
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        final String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual);
     }
 
     @Test
     public void replaceAnyWithCaveAir(){
-        String[][][] result = {
+        final String[][][] result = {
                 {
                         {"b", "b", "b"},
                         {"b", "b", "b"},
@@ -83,9 +83,9 @@ public class ReplaceAny {
                         {"b", "b", "b"}
                 }
         };
-        String[][][] match = TestHelper.cubeWithSameBlockType(FakeWorld.CAVE_AIR);
+        final String[][][] match = TestHelper.cubeWithSameBlockType(FakeWorld.CAVE_AIR);
 
-        String[][][] expected = {
+        final String[][][] expected = {
                 {
                         {"b", "b", "b"},
                         {"b", "b", "b"},
@@ -103,19 +103,19 @@ public class ReplaceAny {
                 }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("Dirt"));
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        fakeWorld.setSurrounding(15, 0, 0, result);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
 
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        final String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual);
     }
 }

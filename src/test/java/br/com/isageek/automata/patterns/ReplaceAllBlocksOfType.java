@@ -11,7 +11,7 @@ public class ReplaceAllBlocksOfType {
 
     @Test
     public void replaceAllBlocksOfType(){
-        String[][][] result = {
+        final String[][][] result = {
                 {
                         {"b", "b", "b"},
                         {"b", "b", "b"},
@@ -28,9 +28,9 @@ public class ReplaceAllBlocksOfType {
                         {"b", "b", "b"}
                 }
         };
-        String[][][] match = TestHelper.cubeWithSameBlockType(ANY, "a");
+        final String[][][] match = TestHelper.cubeWithSameBlockType(ANY, "a");
 
-        String[][][] expected = {
+        final String[][][] expected = {
                 {
                         {"b", "b", "b"},
                         {"b", "b", "b"},
@@ -48,18 +48,18 @@ public class ReplaceAllBlocksOfType {
                 }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("a"));
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        fakeWorld.setSurrounding(15, 0, 0, result);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
 
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        final String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual);
     }
 }

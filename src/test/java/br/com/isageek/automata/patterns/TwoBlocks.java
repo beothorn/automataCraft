@@ -11,7 +11,7 @@ public class TwoBlocks {
     @Test
     public void twoBlocks(){
 
-        String[][][] match = {
+        final String[][][] match = {
                 {
                         {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
                         {AIR, AIR, AIR},
@@ -29,7 +29,7 @@ public class TwoBlocks {
                 }
         };
 
-        String[][][] result = {
+        final String[][][] result = {
                 {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
@@ -47,21 +47,21 @@ public class TwoBlocks {
                 }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(1, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        fakeWorld.setSurrounding(15, 0, 0, result);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
 
-        String actual1 = fakeWorld.getAt(0, -1, 0);
+        final String actual1 = fakeWorld.getAt(0, -1, 0);
         Assert.assertEquals(STONE, actual1);
-        String actual2 = fakeWorld.getAt(1, -1, 0);
+        final String actual2 = fakeWorld.getAt(1, -1, 0);
         Assert.assertEquals(STONE, actual2);
     }
 

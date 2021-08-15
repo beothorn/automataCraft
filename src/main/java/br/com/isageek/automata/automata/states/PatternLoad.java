@@ -85,13 +85,14 @@ public class PatternLoad implements EntityTick {
             // move 2 to next center
             cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
 
+            final BlockStateHolder[] match = worldController.surrounding(cursor);
+            final BlockStateHolder centerBlock = match[this.AUTOMATA_BLOCK_POSITION];
+
+            // move 3 towards terminator
+            cursor = cursor.offset(xDirection * 3, 0, zDirection * 3);
             final BlockStateHolder[] result = worldController.surrounding(cursor);
             PatternLoad.replaceBlockWithAnyMatcherBlock(worldController, result);
             PatternLoad.replacePlaceHoldersIn(worldController, result);
-            // move 3 towards terminator
-            cursor = cursor.offset(xDirection * 3, 0, zDirection * 3);
-            final BlockStateHolder[] match = worldController.surrounding(cursor);
-            final BlockStateHolder centerBlock = match[this.AUTOMATA_BLOCK_POSITION];
 
             PatternLoad.replaceBlockWithAnyMatcherBlock(worldController, match);
             PatternLoad.replacePlaceHoldersIn(worldController, match);

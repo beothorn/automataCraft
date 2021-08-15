@@ -11,7 +11,7 @@ public class DigDown{
 
     @Test
     public void digDown(){
-        String[][][] result = {
+        final String[][][] result = {
                 {
                         {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
                         {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER},
@@ -28,9 +28,9 @@ public class DigDown{
                         {AIR_PLACEHOLDER, AIR_PLACEHOLDER, AIR_PLACEHOLDER}
                 }
         };
-        String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
+        final String[][][] match = TestHelper.cubeWithSameBlockType(ANY);
 
-        String[][][] expected = {
+        final String[][][] expected = {
                 {
                         {AIR, AIR, AIR},
                         {AIR, AIR, AIR},
@@ -48,24 +48,24 @@ public class DigDown{
                 }
         };
 
-        FakeWorld fakeWorld = new FakeWorld();
+        final FakeWorld fakeWorld = new FakeWorld();
 
         fakeWorld.setSurrounding(0, 0, 0, TestHelper.cubeWithSameBlockType("Dirt"));
         fakeWorld.setAt(0, 0, 0, FakeWorld.AUTOMATA);
         fakeWorld.setAt(10, 0, 0, FakeWorld.AUTOMATA_START);
         fakeWorld.redSignalAt(10, 0, 0, true);
-        fakeWorld.setSurrounding(12, 0, 0, result);
-        fakeWorld.setSurrounding(15, 0, 0, match);
+        fakeWorld.setSurrounding(12, 0, 0, match);
+        fakeWorld.setSurrounding(15, 0, 0, result);
         fakeWorld.setAt(17, 0, 0, FakeWorld.TERMINATOR);
 
         fakeWorld.tick();
 
-        String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
+        final String[][][] actual = fakeWorld.getSurroundingIds(0, 0, 0);
         Assert.assertArrayEquals(expected, actual);
 
         fakeWorld.tick();
 
-        String[][][] actual2 = fakeWorld.getSurroundingIds(0, 1, 0);
+        final String[][][] actual2 = fakeWorld.getSurroundingIds(0, 1, 0);
         Assert.assertArrayEquals(expected, actual2);
     }
 }
