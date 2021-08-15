@@ -11,20 +11,19 @@ public class TickableTileEntityStrategyTest {
     @Test
     public void tick(){
 
-        AtomicInteger tickCount = new AtomicInteger(0);
+        final AtomicInteger tickCount = new AtomicInteger(0);
 
-        EntityTick initial = new EntityTick() {
+        final EntityTick initial = new EntityTick() {
             @Override
-            public EntityTick tick(BlockPos center, WorldController worldController, long delta) {
+            public EntityTick tick(final BlockPos center, final WorldController worldController, final long delta) {
                 tickCount.incrementAndGet();
                 return this;
             }
         };
-        EntityClock entityClock = () -> 1000;
-        TickableTileEntityStrategy tickableTileEntityStrategy = new TickableTileEntityStrategy(
+        final EntityClock entityClock = () -> 1000;
+        final TickableTileEntityStrategy tickableTileEntityStrategy = new TickableTileEntityStrategy(
                 null,
                 new WorldController(
-                        null,
                         null,
                         null,
                         null,

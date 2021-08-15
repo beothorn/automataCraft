@@ -47,7 +47,6 @@ public class AutomataMod
         final RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_tnt_placeholder = block("automata_tnt_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        final RegistryObject<Block> automata_placeholder = block("automata_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
         structure(
                 "rule30",
@@ -70,7 +69,6 @@ public class AutomataMod
                     automata.get(),
                     automata_termination.get(),
                     automata_start.get(),
-                    automata_placeholder.get(),
                     automata_air_placeholder.get(),
                     automata_water_placeholder.get(),
                     automata_lava_placeholder.get(),

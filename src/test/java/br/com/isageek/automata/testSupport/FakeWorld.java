@@ -52,7 +52,6 @@ public class FakeWorld extends WorldController {
             null,
             null,
             null,
-            null,
             null
         );
         this.fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
@@ -123,8 +122,7 @@ public class FakeWorld extends WorldController {
         return this.getAt(p).equals(BEDROCK);
     }
 
-    @Override
-    public boolean isAutomataPlaceholder(final BlockStateHolder blockStateHolder) {
+    private static boolean isAutomataPlaceholder(final BlockStateHolder blockStateHolder) {
         return blockStateHolder.descriptionId.equals(AUTOMATA_PLACEHOLDER);
     }
 
@@ -198,7 +196,7 @@ public class FakeWorld extends WorldController {
         if(this.isBedrockPlaceholder(blockState)) {
             return block(BEDROCK);
         }
-        if(this.isAutomataPlaceholder(blockState)) {
+        if(FakeWorld.isAutomataPlaceholder(blockState)) {
             return block(AUTOMATA);
         }
         return blockState;

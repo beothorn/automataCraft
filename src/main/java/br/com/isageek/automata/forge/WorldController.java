@@ -15,7 +15,6 @@ public class WorldController {
     private final Block automata;
     private final Block terminator;
     private final Block start;
-    private final Block automataPlaceholder;
     private final Block airPlaceholder;
     private final Block waterPlaceholder;
     private final Block lavaPlaceholder;
@@ -28,7 +27,6 @@ public class WorldController {
             final Block automata,
             final Block terminator,
             final Block start,
-            final Block automataPlaceholder,
             final Block airPlaceholder,
             final Block waterPlaceholder,
             final Block lavaPlaceholder,
@@ -40,7 +38,6 @@ public class WorldController {
         this.automata = automata;
         this.terminator = terminator;
         this.start = start;
-        this.automataPlaceholder = automataPlaceholder;
         this.airPlaceholder = airPlaceholder;
         this.waterPlaceholder = waterPlaceholder;
         this.lavaPlaceholder = lavaPlaceholder;
@@ -133,10 +130,6 @@ public class WorldController {
         return this.world.getBlockState(p).getBlock() == blockType.blockState.getBlock();
     }
 
-    public boolean isAutomataPlaceholder(final BlockStateHolder blockStateHolder){
-        return blockStateHolder.is(this.automataPlaceholder);
-    }
-
     public boolean isAny(final BlockStateHolder blockStateHolder) {
         for (final Block block : this.any) {
             if (blockStateHolder.is(block)) {
@@ -168,9 +161,6 @@ public class WorldController {
         }
         if(this.isBedrockPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.BEDROCK.defaultBlockState());
-        }
-        if(this.isAutomataPlaceholder(blockState)){
-            return BlockStateHolder.block(this.automata.defaultBlockState());
         }
         return blockState;
     }
