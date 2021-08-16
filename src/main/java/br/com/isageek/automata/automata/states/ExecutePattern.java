@@ -16,7 +16,8 @@ public class ExecutePattern implements EntityTick {
     private final BlockTree replacementPattern;
     private long timeSinceLastTick = 0;
     private boolean firstRun = true;
-    private final BlockPos[][] exclusions;
+    private final BlockPos startExclusions;
+    private final BlockPos endExclusions;
 
     ExecutePattern(
             final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables,
@@ -24,7 +25,8 @@ public class ExecutePattern implements EntityTick {
     ) {
         this.replaceables = replaceables;
         this.replacementPattern = replacementPattern;
-        this.exclusions = new BlockPos[][]{};
+        this.startExclusions = null;
+        this.endExclusions = null;
     }
 
     ExecutePattern(
@@ -38,47 +40,22 @@ public class ExecutePattern implements EntityTick {
         worldController.setStateAt(pos, AutomataStartState.EXECUTE);
         this.replaceables = replaceables;
         this.replacementPattern = replacementPattern;
-
-        this.exclusions = new BlockPos[9][2];
-        int count = 0;
         if(pos.getX() == terminator.getX()){
-            final BlockPos start;
-            final BlockPos end;
             if(pos.getZ() < terminator.getZ()){
-                start = pos;
-                end = terminator;
+                this.startExclusions = pos.offset(-1, -1, -1);
+                this.endExclusions = terminator.offset(1, 1, 1);
             }else{
-                start = terminator;
-                end = pos;
+                this.startExclusions = terminator.offset(-1, -1, -1);
+                this.endExclusions = pos.offset(1, 1, 1);
             }
-
-            for (int x = -1; x <= 1; x++) {
-                for (int y = -1; y <= 1; y++) {
-                    this.exclusions[count][0] = start.offset(x, y, 0);
-                    this.exclusions[count][1] = end.offset(x, y, 0);
-                    count += 1;
-                }
+        }else {
+            if (pos.getX() < terminator.getX()) {
+                this.startExclusions = pos.offset(-1, -1, -1);
+                this.endExclusions = terminator.offset(1, 1, 1);
+            } else {
+                this.startExclusions = terminator.offset(-1, -1, -1);
+                this.endExclusions = pos.offset(1, 1, 1);
             }
-
-        }else{
-            final BlockPos start;
-            final BlockPos end;
-            if(pos.getX() < terminator.getX()){
-                start = pos;
-                end = terminator;
-            }else{
-                start = terminator;
-                end = pos;
-            }
-
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    this.exclusions[count][0] = start.offset(0, y, z);
-                    this.exclusions[count][1] = end.offset(0, y, z);
-                    count += 1;
-                }
-            }
-
         }
     }
 
@@ -125,8 +102,21 @@ public class ExecutePattern implements EntityTick {
         for (final Map.Entry<BlockStateHolder, HashSet<BlockPos>> entry : positionsForBlockSateHolder) {
             final HashSet<BlockPos> blockPositions = entry.getValue();
 
-            for (final BlockPos a : blockPositions) {
-                final BlockStateHolder[] toBeReplaced = worldController.surrounding(a);
+            for (final BlockPos blockBeingEvaluated : blockPositions) {
+                if(
+                        this.startExclusions != null
+                        && this.endExclusions != null
+                        && blockBeingEvaluated.getX() >= this.startExclusions.getX()
+                        && blockBeingEvaluated.getY() >= this.startExclusions.getY()
+                        && blockBeingEvaluated.getZ() >= this.startExclusions.getZ()
+                        && blockBeingEvaluated.getX() <= this.endExclusions.getX()
+                        && blockBeingEvaluated.getY() <= this.endExclusions.getY()
+                        && blockBeingEvaluated.getZ() <= this.endExclusions.getZ()
+                ){
+                    continue;
+                }
+
+                final BlockStateHolder[] toBeReplaced = worldController.surrounding(blockBeingEvaluated);
                 final BlockStateHolder[] replacement = this.replacementPattern.getReplacementFor(toBeReplaced);
 
                 if (replacement == null) {
@@ -137,25 +127,17 @@ public class ExecutePattern implements EntityTick {
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {
                         for (int z = -1; z <= 1; z++) {
-                            final BlockPos currentPos = a.offset(x, y, z);
-                            boolean onExcludeArea = false;
-                            for (final BlockPos[] exclusion: this.exclusions) {
-                                final BlockPos excludeStart = exclusion[0];
-                                final BlockPos excludeEnd = exclusion[1];
-                                if(
-                                        currentPos.getX() >= excludeStart.getX()
-                                        && currentPos.getY() >= excludeStart.getY()
-                                        && currentPos.getZ() >= excludeStart.getZ()
-                                        && currentPos.getX() <= excludeEnd.getX()
-                                        && currentPos.getY() <= excludeEnd.getY()
-                                        && currentPos.getZ() <= excludeEnd.getZ()
-                                ){
-                                    onExcludeArea = true;
-                                    continue;
-                                }
-                            }
-
-                            if(onExcludeArea) {
+                            final BlockPos currentPos = blockBeingEvaluated.offset(x, y, z);
+                            if(
+                                this.startExclusions != null
+                                && this.endExclusions != null
+                                && currentPos.getX() >= this.startExclusions.getX()
+                                && currentPos.getY() >= this.startExclusions.getY()
+                                && currentPos.getZ() >= this.startExclusions.getZ()
+                                && currentPos.getX() <= this.endExclusions.getX()
+                                && currentPos.getY() <= this.endExclusions.getY()
+                                && currentPos.getZ() <= this.endExclusions.getZ()
+                            ){
                                 continue;
                             }
 

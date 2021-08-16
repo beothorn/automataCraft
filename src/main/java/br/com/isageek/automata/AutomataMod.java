@@ -42,11 +42,21 @@ public class AutomataMod
 
         final RegistryObject<Block> automata_termination = block("automata_termination", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata = block("automata", AutomataMod.MOD_ID, modEventBus, regularBlock);
+
         final RegistryObject<Block> automata_air_placeholder = block("automata_air_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_water_placeholder = block("automata_water_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_tnt_placeholder = block("automata_tnt_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+
+//        final RegistryObject<Block> automata_anvil_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+//        final RegistryObject<Block> automata_concrete_powder_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+//        final RegistryObject<Block> automata_gravel_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+//        final RegistryObject<Block> automata_pointed_dripstone_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+//        final RegistryObject<Block> automata_red_sand_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+//        final RegistryObject<Block> automata_sand_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+//        final RegistryObject<Block> automata_scaffolding_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+
         final RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
         structure(
                 "rule30",

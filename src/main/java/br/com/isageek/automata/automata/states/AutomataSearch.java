@@ -29,7 +29,7 @@ public class AutomataSearch implements EntityTick {
         this.replaceables = replaceables;
     }
 
-    public AutomataSearch(){
+    AutomataSearch(){
         this.replaceables = new HashMap<>();
     }
 
@@ -57,7 +57,6 @@ public class AutomataSearch implements EntityTick {
             }
 
             // Seach for new blocks
-
             for (int x = -AutomataMod.MAX_SEARCH_RADIUS; x <= AutomataMod.MAX_SEARCH_RADIUS; x++) {
                 for (int y = -AutomataMod.MAX_SEARCH_RADIUS; y <= AutomataMod.MAX_SEARCH_RADIUS; y++) {
                     for (int z = -AutomataMod.MAX_SEARCH_RADIUS; z <= AutomataMod.MAX_SEARCH_RADIUS; z++) {

@@ -72,7 +72,7 @@ public class LoadReplaceables implements EntityTick {
         final HashMap<BlockStateHolder, HashSet<BlockPos>> newReplaceables = new HashMap<>();
 
         while(worldController.isTerminator(cursor.offset(xDirection * 7, 0, zDirection * 7))){
-            cursor = cursor.offset(xDirection * 2, 0, zDirection * 5);
+            cursor = cursor.offset(xDirection * 2, 0, zDirection * 2);
             BlockStateHolder blockToReplace = worldController.getBlockStateHolderAt(cursor);
             if(worldController.isAny(blockToReplace)){
                 blockToReplace = worldController.getAutomata();
