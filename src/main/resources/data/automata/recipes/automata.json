@@ -2,11 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " x ",
-        "  x",
+        "x  ",
         "xxx"
     ],
     "key":{
-      "x": {"item": "minecraft:diamond_block"}
+      "x": {"item": "minecraft:dirt"}
     },
     "result": {"item": "automata:automata_item"}
 }

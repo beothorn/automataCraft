@@ -21,17 +21,37 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Rule30 extends Structure<NoFeatureConfig> {
+public class VanillaStructure extends Structure<NoFeatureConfig> {
 
-    private static final Logger LOGGER = LogManager.getLogger(Rule30.class);
+    private static final Logger LOGGER = LogManager.getLogger(VanillaStructure.class);
+    private final String resourceLocation;
 
-    public Rule30(final Codec<NoFeatureConfig> codec) {
+    public VanillaStructure(
+            final Codec<NoFeatureConfig> codec,
+            final String resourceLocation
+    ) {
         super(codec);
+        this.resourceLocation = resourceLocation;
     }
 
     @Override
     public IStartFactory<NoFeatureConfig> getStartFactory() {
-        return Rule30.Start::new;
+        return (
+            final Structure<NoFeatureConfig> structureIn,
+            final int chunkX,
+            final int chunkZ,
+            final MutableBoundingBox mutableBoundingBox,
+            final int referenceIn,
+            final long seedIn
+        ) ->  new VanillaStructure.Start(
+            structureIn,
+            chunkX,
+            chunkZ,
+            mutableBoundingBox,
+            referenceIn,
+            seedIn,
+                this.resourceLocation
+        );
     }
 
     @Override
@@ -40,22 +60,26 @@ public class Rule30 extends Structure<NoFeatureConfig> {
     }
 
     public static class Start extends StructureStart<NoFeatureConfig> {
+        private final String resourceLocation;
+
         Start(
                 final Structure<NoFeatureConfig> structureIn,
                 final int chunkX,
                 final int chunkZ,
                 final MutableBoundingBox mutableBoundingBox,
                 final int referenceIn,
-                final long seedIn
+                final long seedIn,
+                final String resourceLocation
         ) {
             super(
-                structureIn,
-                chunkX,
-                chunkZ,
-                mutableBoundingBox,
-                referenceIn,
-                seedIn
+                    structureIn,
+                    chunkX,
+                    chunkZ,
+                    mutableBoundingBox,
+                    referenceIn,
+                    seedIn
             );
+            this.resourceLocation = resourceLocation;
         }
 
         //Registry.STRUCTURE_FEATURE.get(new ResourceLocation(s.toLowerCase(Locale.ROOT)))
@@ -71,8 +95,8 @@ public class Rule30 extends Structure<NoFeatureConfig> {
                 final NoFeatureConfig config
         ) {
 
-            final String resourceLocation = "r30/start_pool";
-            this.generatePieces(dynamicRegistryManager, chunkGenerator, templateManagerIn, chunkX, chunkZ, resourceLocation);
+
+            this.generatePieces(dynamicRegistryManager, chunkGenerator, templateManagerIn, chunkX, chunkZ, this.resourceLocation);
         }
 
         private void generatePieces(final DynamicRegistries dynamicRegistryManager, final ChunkGenerator chunkGenerator, final TemplateManager templateManagerIn, final int chunkX, final int chunkZ, final String resourceLocation) {
@@ -125,13 +149,10 @@ public class Rule30 extends Structure<NoFeatureConfig> {
 
             // I use to debug and quickly find out if the structure is spawning or not and where it is.
             // This is returning the coordinates of the center starting piece.
-            Rule30.LOGGER.log(Level.DEBUG, resourceLocation + " structure at " +
+            VanillaStructure.LOGGER.log(Level.DEBUG, resourceLocation + " structure at " +
                     this.pieces.get(0).getBoundingBox().x0 + " " +
                     this.pieces.get(0).getBoundingBox().y0 + " " +
                     this.pieces.get(0).getBoundingBox().z0);
         }
     }
-
 }
-
-

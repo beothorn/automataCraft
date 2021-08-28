@@ -33,6 +33,9 @@ public class TickableTileEntityStrategyTest {
                         null,
                         null,
                         null,
+                        null,
+                        null,
+                        null,
                         null
                 ),
                 initial,

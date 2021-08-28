@@ -16,6 +16,9 @@ public class WorldController {
     private final Block terminator;
     private final Block start;
     private final Block airPlaceholder;
+    private final Block gravelPlaceholder;
+    private final Block redSandPlaceholder;
+    private final Block sandPlaceholder;
     private final Block waterPlaceholder;
     private final Block lavaPlaceholder;
     private final Block tntPlaceholder;
@@ -28,6 +31,9 @@ public class WorldController {
             final Block terminator,
             final Block start,
             final Block airPlaceholder,
+            final Block gravelPlaceholder,
+            final Block redSandPlaceholder,
+            final Block sandPlaceholder,
             final Block waterPlaceholder,
             final Block lavaPlaceholder,
             final Block tntPlaceholder,
@@ -39,6 +45,9 @@ public class WorldController {
         this.terminator = terminator;
         this.start = start;
         this.airPlaceholder = airPlaceholder;
+        this.gravelPlaceholder = gravelPlaceholder;
+        this.redSandPlaceholder = redSandPlaceholder;
+        this.sandPlaceholder = sandPlaceholder;
         this.waterPlaceholder = waterPlaceholder;
         this.lavaPlaceholder = lavaPlaceholder;
         this.tntPlaceholder = tntPlaceholder;
@@ -119,7 +128,6 @@ public class WorldController {
     }
 
     public boolean isTerminator(final BlockPos p) { return this.is(p, this.terminator);}
-    public boolean isAutomata(final BlockPos p) { return this.is(p, this.automata);}
     public boolean isBedrock(final BlockPos p) { return this.is(p, Blocks.BEDROCK);}
 
     private boolean is(final BlockPos p, final Block blockType) {
@@ -139,16 +147,28 @@ public class WorldController {
         return false;
 
     }
-    public boolean isAirPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.airPlaceholder); }
-    public boolean isWaterPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.waterPlaceholder);}
-    public boolean isLavaPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.lavaPlaceholder); }
-    public boolean isTntPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.tntPlaceholder); }
-    public boolean isBedrockPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.bedrockPlaceholder); }
+    protected boolean isAirPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.airPlaceholder); }
+    private boolean isGravelPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.gravelPlaceholder); }
+    private boolean isRedSandPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.redSandPlaceholder); }
+    private boolean isSandPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.sandPlaceholder); }
+    protected  boolean isWaterPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.waterPlaceholder);}
+    protected  boolean isLavaPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.lavaPlaceholder); }
+    protected  boolean isTntPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.tntPlaceholder); }
+    protected  boolean isBedrockPlaceholder(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.bedrockPlaceholder); }
     public boolean isYRotation(final BlockStateHolder blockStateHolder) { return blockStateHolder.is(this.yRotation); }
 
     public BlockStateHolder replacePlaceholder(final BlockStateHolder blockState) {
         if(this.isAirPlaceholder(blockState)){
             return BlockStateHolder.block(Blocks.AIR.defaultBlockState());
+        }
+        if(this.isGravelPlaceholder(blockState)){
+            return BlockStateHolder.block(Blocks.GRAVEL.defaultBlockState());
+        }
+        if(this.isRedSandPlaceholder(blockState)){
+            return BlockStateHolder.block(Blocks.RED_SAND.defaultBlockState());
+        }
+        if(this.isSandPlaceholder(blockState)){
+            return BlockStateHolder.block(Blocks.SAND.defaultBlockState());
         }
         if(this.isWaterPlaceholder(blockState)) {
             return BlockStateHolder.block(Blocks.WATER.defaultBlockState());

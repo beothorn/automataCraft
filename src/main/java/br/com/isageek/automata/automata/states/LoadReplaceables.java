@@ -87,7 +87,7 @@ public class LoadReplaceables implements EntityTick {
             }
 
             // move where start block would be if next sequence was first
-            cursor = cursor.offset(xDirection * 5, 0, zDirection * 2);
+            cursor = cursor.offset(xDirection * 5, 0, zDirection * 5);
         }
         this.replaceables = newReplaceables;
     }

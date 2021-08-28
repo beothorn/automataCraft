@@ -52,6 +52,9 @@ public class FakeWorld extends WorldController {
             null,
             null,
             null,
+            null,
+            null,
+            null,
             null
         );
         this.fakeWorld = new BlockStateHolder[WORLD_CENTER * 2][WORLD_CENTER * 2][WORLD_CENTER * 2];
@@ -110,11 +113,6 @@ public class FakeWorld extends WorldController {
     @Override
     public boolean isTerminator(final BlockPos p) {
         return this.getAt(p).equals(TERMINATOR);
-    }
-
-    @Override
-    public boolean isAutomata(final BlockPos p) {
-        return this.getAt(p).equals(AUTOMATA);
     }
 
     @Override

@@ -1,3 +1,14 @@
+8.0
+
+- Switch replace and replacement pattern so search pattern comes first
+- No more automata placeholder, pattern is protected from change so the regular automata block works
+- Gravel placeholder
+- Sand placeholder
+- Red sand placeholder
+- New structure: Rainbow pattern
+- New structure: lava trap
+
+========================
 7.0
 
 - Big change: any block can now be replaced, central block does not need to be an automata anymore

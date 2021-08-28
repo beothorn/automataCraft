@@ -5,7 +5,7 @@ import br.com.isageek.automata.automata.states.LoadReplaceables;
 import br.com.isageek.automata.forge.SystemEntityClock;
 import br.com.isageek.automata.forge.TickableTileEntityStrategy;
 import br.com.isageek.automata.forge.WorldController;
-import br.com.isageek.automata.structures.Rule30;
+import br.com.isageek.automata.structures.VanillaStructure;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -48,27 +48,43 @@ public class AutomataMod
         final RegistryObject<Block> automata_lava_placeholder = block("automata_lava_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_tnt_placeholder = block("automata_tnt_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
         final RegistryObject<Block> automata_bedrock_placeholder = block("automata_bedrock_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-
-//        final RegistryObject<Block> automata_anvil_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-//        final RegistryObject<Block> automata_concrete_powder_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-//        final RegistryObject<Block> automata_gravel_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-//        final RegistryObject<Block> automata_pointed_dripstone_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-//        final RegistryObject<Block> automata_red_sand_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-//        final RegistryObject<Block> automata_sand_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
-//        final RegistryObject<Block> automata_scaffolding_placeholder = block("automata_anvil_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_gravel_placeholder = block("automata_gravel_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_red_sand_placeholder = block("automata_red_sand_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
+        final RegistryObject<Block> automata_sand_placeholder = block("automata_sand_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
 
         final RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
         structure(
                 "rule30",
                 1234567,
+                50,
                 10,
-                5,
                 AutomataMod.MOD_ID,
                 modEventBus,
                 eventBus,
-                () -> new Rule30(NoFeatureConfig.CODEC)
+                () -> new VanillaStructure(NoFeatureConfig.CODEC, "r30/start_pool")
         );
 
+        structure(
+                "lavatrap",
+                7654321,
+                30,
+                10,
+                AutomataMod.MOD_ID,
+                modEventBus,
+                eventBus,
+                () -> new VanillaStructure(NoFeatureConfig.CODEC, "lavatrap/start_pool")
+        );
+
+        structure(
+                "rainbow",
+                5241526,
+                50,
+                10,
+                AutomataMod.MOD_ID,
+                modEventBus,
+                eventBus,
+                () -> new VanillaStructure(NoFeatureConfig.CODEC, "rainbow/start_pool")
+        );
 
         blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
             "automata_start",
@@ -80,6 +96,9 @@ public class AutomataMod
                     automata_termination.get(),
                     automata_start.get(),
                     automata_air_placeholder.get(),
+                    automata_gravel_placeholder.get(),
+                    automata_red_sand_placeholder.get(),
+                    automata_sand_placeholder.get(),
                     automata_water_placeholder.get(),
                     automata_lava_placeholder.get(),
                     automata_tnt_placeholder.get(),

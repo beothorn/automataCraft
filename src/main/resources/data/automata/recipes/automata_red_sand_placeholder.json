@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " x ",
+        "  x",
+        "xxx"
+    ],
+    "key":{
+      "x": {"item": "minecraft:red_sand"}
+    },
+    "result": {"item": "automata:automata_red_sand_placeholder_item"}
+}
