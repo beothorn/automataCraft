@@ -12,11 +12,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -53,43 +58,13 @@ public class AutomataMod
         final RegistryObject<Block> automata_sand_placeholder = block("automata_sand_placeholder", AutomataMod.MOD_ID, modEventBus, regularBlock);
 
         final RegistryObject<Block> automata_y_rotation = block("automata_y_rotation", AutomataMod.MOD_ID, modEventBus, regularBlock);
-        structure(
-                "rule30",
-                1234567,
-                50,
-                10,
-                AutomataMod.MOD_ID,
-                modEventBus,
-                eventBus,
-                () -> new VanillaStructure(NoFeatureConfig.CODEC, "r30/start_pool")
-        );
 
-        structure(
-                "lavatrap",
-                7654321,
-                30,
-                10,
-                AutomataMod.MOD_ID,
-                modEventBus,
-                eventBus,
-                () -> new VanillaStructure(NoFeatureConfig.CODEC, "lavatrap/start_pool")
-        );
-
-        structure(
-                "rainbow",
-                5241526,
-                50,
-                10,
-                AutomataMod.MOD_ID,
-                modEventBus,
-                eventBus,
-                () -> new VanillaStructure(NoFeatureConfig.CODEC, "rainbow/start_pool")
-        );
-
-        blockWithTileEntity(AutomataMod.MOD_ID, modEventBus,
+        blockWithTileEntity(
+            AutomataMod.MOD_ID,
+            modEventBus,
             "automata_start",
             AutomataStartBlock::new,
-            (tileEntityRegistry, automata_start) -> {
+            (automata_start) -> {
                 final WorldController worldController = new WorldController(
                     new Block[]{Blocks.AIR, Blocks.CAVE_AIR},
                     automata.get(),
@@ -108,7 +83,7 @@ public class AutomataMod
                 final LoadReplaceables initial = new LoadReplaceables();
                 final SystemEntityClock entityClock = new SystemEntityClock();
                 return new TickableTileEntityStrategy(
-                    (TileEntityType<TickableTileEntityStrategy>) tileEntityRegistry.get(),
+                    automata_start.get(),
                     worldController,
                     initial,
                     entityClock

@@ -1,33 +1,21 @@
 package br.com.isageek.automata.forge;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class BlockWithTileEntity extends Block {
+public class BlockWithTileEntity extends BlockEntity {
 
-    private final TileEntitySupplierPlaceholder tileEntityType;
 
     public BlockWithTileEntity(
-        TileEntitySupplierPlaceholder tileEntityType,
-        Properties props
+            BlockEntityType<?> p_155228_,
+            BlockPos p_155229_,
+            BlockState p_155230_
     ) {
-        super(props);
-        this.tileEntityType = tileEntityType;
+        super(p_155228_, p_155229_, p_155230_);
     }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return this.tileEntityType.get();
-    }
-
 }

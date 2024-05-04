@@ -6,11 +6,18 @@ import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
+/***
+ * This is the first state.
+ * In this state, in case the automata start block is receiving a red signal,
+ * it will scan the block patterns until it find a terminator.
+ * Blocks that are placeholders will be converted to the actual BlockState they refer to.
+ * The scan result is stored on a hash map and passed to the next state, {@link AutomataSearch}
+ */
 public class PatternLoad implements EntityTick {
 
     private final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;

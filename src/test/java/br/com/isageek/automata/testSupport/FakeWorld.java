@@ -4,7 +4,7 @@ import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.automata.states.LoadReplaceables;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

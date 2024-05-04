@@ -23,8 +23,8 @@ public class BlockTree {
     public static final BlockStateHolder ANY = BlockStateHolder.block("ANY");
 
     public void addPatternRotateY(
-            final BlockStateHolder[] match,
-            final BlockStateHolder[] result
+        final BlockStateHolder[] match,
+        final BlockStateHolder[] result
     ) {
         this.addPattern(match, result);
         final BlockStateHolder[] match90 = BlockOperations.rotateY(match);

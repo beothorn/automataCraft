@@ -4,7 +4,7 @@ import br.com.isageek.automata.BlockTree;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.testSupport.FakeWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
 

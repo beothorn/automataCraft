@@ -5,13 +5,17 @@ import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * In this state, a block of MAX_SEARCH_RADIUS^3 will be scanned, starting from the automata start block position.
+ *
+ */
 public class AutomataSearch implements EntityTick {
 
     private final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;
@@ -35,9 +39,9 @@ public class AutomataSearch implements EntityTick {
 
     @Override
     public EntityTick tick(
-            final BlockPos center,
-            final WorldController worldController,
-            final long delta
+        final BlockPos center,
+        final WorldController worldController,
+        final long delta
     ) {
 
         if(!worldController.hasNeighborSignal(center)) {

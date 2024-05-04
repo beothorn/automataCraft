@@ -1,8 +1,8 @@
 package br.com.isageek.automata.automata;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum AutomataStartState implements IStringSerializable {
+public enum AutomataStartState implements StringRepresentable {
    LOAD_REPLACEABLES("loadreplaceables"),
    SEARCH("search"),
    LOAD("load"),

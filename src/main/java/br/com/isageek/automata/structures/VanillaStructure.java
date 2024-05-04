@@ -17,17 +17,19 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class VanillaStructure extends Structure<NoFeatureConfig> {
+public class VanillaStructure extends Structure<NoneFeatureConfiguration> {
 
     private static final Logger LOGGER = LogManager.getLogger(VanillaStructure.class);
     private final String resourceLocation;
 
     public VanillaStructure(
-            final Codec<NoFeatureConfig> codec,
+            final Codec<NoneFeatureConfiguration> codec,
             final String resourceLocation
     ) {
         super(codec);
@@ -35,9 +37,9 @@ public class VanillaStructure extends Structure<NoFeatureConfig> {
     }
 
     @Override
-    public IStartFactory<NoFeatureConfig> getStartFactory() {
+    public IStartFactory<NoneFeatureConfiguration> getStartFactory() {
         return (
-            final Structure<NoFeatureConfig> structureIn,
+            final Structure<NoneFeatureConfiguration> structureIn,
             final int chunkX,
             final int chunkZ,
             final MutableBoundingBox mutableBoundingBox,

@@ -3,8 +3,10 @@ package br.com.isageek.automata.forge;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.event.TickEvent;
 
-public class TickableTileEntityStrategy extends TileEntity implements ITickableTileEntity {
+public class TickableTileEntityStrategy {
 
     private EntityTick current;
     private final EntityClock entityClock;
@@ -12,18 +14,17 @@ public class TickableTileEntityStrategy extends TileEntity implements ITickableT
     private long lastTick = 0;
 
     public TickableTileEntityStrategy(
-            TileEntityType<TickableTileEntityStrategy> tileEntityType,
-            WorldController worldController,
-            EntityTick initial,
-            EntityClock entityClock
+            BlockEntity be,
+        WorldController worldController,
+        EntityTick initial,
+        EntityClock entityClock
     ) {
-        super(tileEntityType);
         this.worldController = worldController;
         current = initial;
         this.entityClock = entityClock;
+        be.
     }
 
-    @Override
     public void tick() {
         worldController.set(level);
         long now = entityClock.currentTimeMillis();

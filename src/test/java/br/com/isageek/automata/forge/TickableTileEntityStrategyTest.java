@@ -1,6 +1,6 @@
 package br.com.isageek.automata.forge;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import org.junit.Assert;
 import org.junit.Test;
 
