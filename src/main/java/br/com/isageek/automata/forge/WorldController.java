@@ -1,6 +1,7 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.automata.AutomataStartBlock;
+import br.com.isageek.automata.automata.AutomataStartBaseEntityBlock;
+import br.com.isageek.automata.automata.AutomataStartBlockEntity;
 import br.com.isageek.automata.automata.AutomataStartState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -92,7 +93,7 @@ public class WorldController {
         return null;
     }
 
-    void set(final Level world){
+    public void set(final Level world){
         this.world = world;
     }
 
@@ -127,14 +128,14 @@ public class WorldController {
         return BlockStateHolder.block(blockState);
     }
 
-    public boolean isTerminator(final BlockPos p) { return this.is(p, this.terminator);}
-    public boolean isBedrock(final BlockPos p) { return this.is(p, Blocks.BEDROCK);}
+    public boolean isTerminator(final BlockPos p) { return this.blockAtPositionHasType(p, this.terminator);}
+    public boolean isBedrock(final BlockPos p) { return this.blockAtPositionHasType(p, Blocks.BEDROCK);}
 
-    private boolean is(final BlockPos p, final Block blockType) {
+    private boolean blockAtPositionHasType(final BlockPos p, final Block blockType) {
         return this.world.getBlockState(p).getBlock() == blockType;
     }
 
-    public boolean is(final BlockPos p, final BlockStateHolder blockType) {
+    public boolean blockAtPositionHasType(final BlockPos p, final BlockStateHolder blockType) {
         return this.world.getBlockState(p).getBlock() == blockType.blockState.getBlock();
     }
 
@@ -191,8 +192,11 @@ public class WorldController {
 
     public BlockStateHolder getAutomata() { return BlockStateHolder.block(this.automata.defaultBlockState()); }
 
-    public void setStateAt(final BlockPos pos, final AutomataStartState state){
-        final BlockState newBlockState = this.start.defaultBlockState().setValue(AutomataStartBlock.state, state);
+    public void setStateAt(
+        final BlockPos pos,
+        final AutomataStartState state
+    ){
+        final BlockState newBlockState = this.start.defaultBlockState().setValue(AutomataStartBaseEntityBlock.state, state);
         this.world.setBlock(pos, newBlockState,0 ,0);
     }
 

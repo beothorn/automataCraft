@@ -54,9 +54,9 @@ public class AutomataSearch implements EntityTick {
             final BlockStateHolder blockToReplace = entry.getKey();
             final HashSet<BlockPos> blockPositions = entry.getValue();
             final HashSet<BlockPos> newBlockPositions = new HashSet<>();
-            for (final BlockPos p: blockPositions) {
-                if(worldController.is(p, blockToReplace)){
-                    newBlockPositions.add(p);
+            for (final BlockPos currentPosition: blockPositions) {
+                if(worldController.blockAtPositionHasType(currentPosition, blockToReplace)){
+                    newBlockPositions.add(currentPosition);
                 }
             }
 
@@ -65,7 +65,7 @@ public class AutomataSearch implements EntityTick {
                 for (int y = -AutomataMod.MAX_SEARCH_RADIUS; y <= AutomataMod.MAX_SEARCH_RADIUS; y++) {
                     for (int z = -AutomataMod.MAX_SEARCH_RADIUS; z <= AutomataMod.MAX_SEARCH_RADIUS; z++) {
                         final BlockPos currentPos = center.offset(x, y, z);
-                        if(worldController.is(currentPos, blockToReplace)){
+                        if(worldController.blockAtPositionHasType(currentPos, blockToReplace)){
                             newBlockPositions.add(currentPos);
                         }
                     }

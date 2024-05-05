@@ -264,7 +264,7 @@ public class FakeWorld extends WorldController {
     }
 
     @Override
-    public boolean is(final BlockPos p, final BlockStateHolder blockStateHolder) {
+    public boolean blockAtPositionHasType(final BlockPos p, final BlockStateHolder blockStateHolder) {
         return this.getAt(p).equals(blockStateHolder.descriptionId);
     }
 }
