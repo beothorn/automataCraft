@@ -1,8 +1,16 @@
 {
   "variants": {
-    "state=loadreplaceables": { "model": "automata:block/automata_start_search" },
-    "state=search": { "model": "automata:block/automata_start_search" },
-    "state=load": { "model": "automata:block/automata_start_load" },
-    "state=execute": { "model": "automata:block/automata_start_execute" }
+    "state=loadreplaceables": {
+      "model": "automata:block/automata_start_search"
+    },
+    "state=search": {
+      "model": "automata:block/automata_start_search"
+    },
+    "state=load": {
+      "model": "automata:block/automata_start_load"
+    },
+    "state=execute": {
+      "model": "automata:block/automata_start_execute"
+    }
   }
 }

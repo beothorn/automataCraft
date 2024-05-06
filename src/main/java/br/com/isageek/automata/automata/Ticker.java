@@ -1,8 +1,6 @@
 package br.com.isageek.automata.automata;
 
-import br.com.isageek.automata.automata.states.LoadReplaceables;
 import br.com.isageek.automata.forge.EntityClock;
-import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.SystemEntityClock;
 import br.com.isageek.automata.forge.WorldController;
 import net.minecraft.core.BlockPos;
@@ -10,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class Ticker implements BlockEntityTicker {
 
@@ -25,11 +24,12 @@ public class Ticker implements BlockEntityTicker {
 
     @Override
     public void tick(
-        Level level,
-        BlockPos blockPos,
-        BlockState blockState,
-        BlockEntity blockEntity
+        final @NotNull Level level,
+        final @NotNull BlockPos blockPos,
+        final @NotNull BlockState blockState,
+        final @NotNull BlockEntity blockEntity
     ) {
+        System.out.println("blockState "+blockState);
         worldController.set(level);
         long now = entityClock.currentTimeMillis();
         ((AutomataStartBlockEntity) blockEntity).tick(blockPos,worldController,now);

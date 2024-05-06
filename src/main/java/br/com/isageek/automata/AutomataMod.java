@@ -1,6 +1,6 @@
 package br.com.isageek.automata;
 
-import br.com.isageek.automata.automata.AutomataStartBaseEntityBlock;
+import br.com.isageek.automata.automata.AutomataStartBlock;
 import br.com.isageek.automata.automata.AutomataStartBlockEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -72,79 +72,37 @@ public class AutomataMod
             registerBlock(blockName, modEventBus);
         }
         // This is a mess, a lot of circular dependencies for BlockEntityType
+        // BlockEntityType supplier needs AutomataStartBlockEntity
+        // AutomataStartBlockEntity supplier needs BlockEntityType
+        // AutomataStartBaseEntityBlock supplier needs AutomataStartBlockEntity
         // Using AtomicReference is a way to make it lazy
         // Having to add this on top of DeferredRegister is madness
         // but the suggested solution everywhere is static fields, so this is slightly better
-        AtomicReference<RegistryObject<BlockEntityType<?>>> typeReference = new AtomicReference<>();
+        AtomicReference<RegistryObject<BlockEntityType<?>>> blockEntityTypeHolder = new AtomicReference<>();
 
-        registerBlock("automata_start", modEventBus, () -> new AutomataStartBaseEntityBlock(typeReference, registeredBlocks));
+        registerBlock(
+            automata_start,
+            modEventBus,
+            () -> new AutomataStartBlock(blockEntityTypeHolder, registeredBlocks)
+        );
 
         final DeferredRegister<BlockEntityType<?>> blockDeferredRegister = DeferredRegister.create(
             ForgeRegistries.BLOCK_ENTITY_TYPES,
             AutomataMod.MOD_ID
         );
         RegistryObject<Block> automataStartBlockEntity = registeredBlocks.get(automata_start);
-        RegistryObject<BlockEntityType<?>> automataStartType = blockDeferredRegister.register("automata_start",
-                () -> BlockEntityType.Builder.of((p, s) -> new AutomataStartBlockEntity(typeReference, p, s), automataStartBlockEntity.get())
-                        .build(null));
-        typeReference.set(automataStartType);
+        RegistryObject<BlockEntityType<?>> automataStartType = blockDeferredRegister.register(
+            automata_start,
+            () -> BlockEntityType.Builder.of(
+                (pos, state) -> new AutomataStartBlockEntity(blockEntityTypeHolder, pos, state),
+                automataStartBlockEntity.get()
+            )
+            .build(null));
+        blockEntityTypeHolder.set(automataStartType);
 
         blockDeferredRegister.register(modEventBus);
 
-
         modEventBus.addListener(this::addCreative);
-
-
-//        public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = REGISTRAR.register("example", () -> CreativeModeTab.builder()
-//                // Set name of tab to display
-//                .title(Component.translatable("item_group." + MOD_ID + ".example"))
-//                // Set icon of creative tab
-//                .icon(() -> new ItemStack(ITEM.get()))
-//                // Add default items to tab
-//                .displayItems((params, output) -> {
-//                    output.accept(ITEM.get());
-//                    output.accept(BLOCK.get());
-//                })
-//                .build()
-//        );
-
-        // https://docs.minecraftforge.net/en/latest/legacy/porting/
-
-//https://gist.github.com/50ap5ud5/beebcf056cbdd3c922cc8993689428f4
-        //final RegistryObject<BaseEntityBlock> automata_start = block("automata_start", AutomataMod.MOD_ID, modEventBus, AutomataStartBaseEntityBlock::new);
-        // public static final BlockEntityType<BellBlockEntity> BELL = register("bell", BlockEntityType.Builder.of(BellBlockEntity::new, Blocks.BELL));
-        // net.minecraft.world.level.block.entity.BlockEntityType <--- copy from here, leave comment later
-
-        // net.minecraft.world.level.block.Blocks <------ copy from here, leave comment later
-
-//        final DeferredRegister<BlockEntityType<?>> blockDeferredRegister =
-//                DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, AutomataMod.MOD_ID);
-//        final RegistryObject<BlockEntityType<?>> block = blockDeferredRegister.register("automata_start_block_type",
-//                () -> {
-//                    return BlockEntityType.Builder.of(AutomataStartBlockEntity::new, automata_start.get());
-//                });
-//        blockDeferredRegister.register(modEventBus);
-
-        /*
-        final WorldController worldController = new WorldController(
-                new Block[]{Blocks.AIR, Blocks.CAVE_AIR},
-                automata.get(),
-                automata_termination.get(),
-                automata_start.get(),
-                automata_air_placeholder.get(),
-                automata_gravel_placeholder.get(),
-                automata_red_sand_placeholder.get(),
-                automata_sand_placeholder.get(),
-                automata_water_placeholder.get(),
-                automata_lava_placeholder.get(),
-                automata_tnt_placeholder.get(),
-                automata_bedrock_placeholder.get(),
-                automata_y_rotation.get()
-        );
-        final LoadReplaceables initial = new LoadReplaceables();
-        final SystemEntityClock entityClock = new SystemEntityClock();
-         */
-        // TODO: New ticker here
     }
 
     private void registerBlock(

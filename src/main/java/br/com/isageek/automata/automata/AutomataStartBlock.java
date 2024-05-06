@@ -17,20 +17,21 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AutomataStartBaseEntityBlock extends BaseEntityBlock {
+public class AutomataStartBlock extends BaseEntityBlock {
 
     public static final Property<AutomataStartState> state = EnumProperty.create("state", AutomataStartState.class);
     private final AtomicReference<RegistryObject<BlockEntityType<?>>> blockEntityType;
     private final Map<String, RegistryObject<Block>> registeredBlocks;
 
-    public AutomataStartBaseEntityBlock(
-            AtomicReference<RegistryObject<BlockEntityType<?>>> blockEntityType,
-            Map<String, RegistryObject<Block>> registeredBlocks
+    public AutomataStartBlock(
+        final AtomicReference<RegistryObject<BlockEntityType<?>>> blockEntityType,
+        final Map<String, RegistryObject<Block>> registeredBlocks
     ) {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
         this.blockEntityType = blockEntityType;
@@ -46,8 +47,8 @@ public class AutomataStartBaseEntityBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(
-        BlockPos blockPos,
-        BlockState blockState
+        final @NotNull BlockPos blockPos,
+        final @NotNull BlockState blockState
     ) {
         return new AutomataStartBlockEntity(blockEntityType, blockPos, blockState);
     }
@@ -55,11 +56,13 @@ public class AutomataStartBaseEntityBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-        Level level,
-        BlockState blockState,
-        BlockEntityType<T> type
+        final @NotNull Level level,
+        final @NotNull BlockState blockState,
+        final @NotNull BlockEntityType<T> type
     ) {
-        return type == blockEntityType.get().get() ? new Ticker(new WorldController(
+        if (type != blockEntityType.get().get()) return null;
+
+        return new Ticker(new WorldController(
             new Block[]{Blocks.AIR, Blocks.CAVE_AIR},
             registeredBlocks.get(AutomataMod.automata).get(),
             registeredBlocks.get(AutomataMod.automata_termination).get(),
@@ -73,7 +76,7 @@ public class AutomataStartBaseEntityBlock extends BaseEntityBlock {
             registeredBlocks.get(AutomataMod.automata_tnt_placeholder).get(),
             registeredBlocks.get(AutomataMod.automata_bedrock_placeholder).get(),
             registeredBlocks.get(AutomataMod.automata_y_rotation).get()
-        )) : null;
+        ));
     }
 
 }

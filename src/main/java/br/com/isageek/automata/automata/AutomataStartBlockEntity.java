@@ -26,9 +26,9 @@ public class AutomataStartBlockEntity extends BlockEntity {
     }
 
     public void tick(
-            BlockPos blockPos,
-            WorldController worldController,
-            long now
+        BlockPos blockPos,
+        WorldController worldController,
+        long now
     ){
         current = current.tick(blockPos, worldController, now - lastTick);
         this.lastTick = now;

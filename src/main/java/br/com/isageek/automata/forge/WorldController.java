@@ -1,7 +1,6 @@
 package br.com.isageek.automata.forge;
 
-import br.com.isageek.automata.automata.AutomataStartBaseEntityBlock;
-import br.com.isageek.automata.automata.AutomataStartBlockEntity;
+import br.com.isageek.automata.automata.AutomataStartBlock;
 import br.com.isageek.automata.automata.AutomataStartState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -27,19 +26,19 @@ public class WorldController {
     private final Block yRotation;
 
     public WorldController(
-            final Block[] any,
-            final Block automata,
-            final Block terminator,
-            final Block start,
-            final Block airPlaceholder,
-            final Block gravelPlaceholder,
-            final Block redSandPlaceholder,
-            final Block sandPlaceholder,
-            final Block waterPlaceholder,
-            final Block lavaPlaceholder,
-            final Block tntPlaceholder,
-            final Block bedrockPlaceholder,
-            final Block yRotation
+        final Block[] any,
+        final Block automata,
+        final Block terminator,
+        final Block start,
+        final Block airPlaceholder,
+        final Block gravelPlaceholder,
+        final Block redSandPlaceholder,
+        final Block sandPlaceholder,
+        final Block waterPlaceholder,
+        final Block lavaPlaceholder,
+        final Block tntPlaceholder,
+        final Block bedrockPlaceholder,
+        final Block yRotation
     ) {
         this.any = any;
         this.automata = automata;
@@ -196,7 +195,7 @@ public class WorldController {
         final BlockPos pos,
         final AutomataStartState state
     ){
-        final BlockState newBlockState = this.start.defaultBlockState().setValue(AutomataStartBaseEntityBlock.state, state);
+        final BlockState newBlockState = this.start.defaultBlockState().setValue(AutomataStartBlock.state, state);
         this.world.setBlock(pos, newBlockState,0 ,0);
     }
 
