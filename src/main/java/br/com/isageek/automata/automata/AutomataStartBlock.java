@@ -2,6 +2,7 @@ package br.com.isageek.automata.automata;
 
 import br.com.isageek.automata.AutomataMod;
 import br.com.isageek.automata.forge.WorldController;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -33,7 +34,7 @@ public class AutomataStartBlock extends BaseEntityBlock {
         final AtomicReference<RegistryObject<BlockEntityType<?>>> blockEntityType,
         final Map<String, RegistryObject<Block>> registeredBlocks
     ) {
-        super(BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F));
         this.blockEntityType = blockEntityType;
         this.registeredBlocks = registeredBlocks;
         this.registerDefaultState(this.getStateDefinition().any().setValue(state, AutomataStartState.LOAD_REPLACEABLES));
