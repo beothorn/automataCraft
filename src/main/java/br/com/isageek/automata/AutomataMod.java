@@ -92,7 +92,7 @@ public class AutomataMod
         );
         RegistryObject<Block> automataStartBlockEntity = registeredBlocks.get(automata_start);
         RegistryObject<BlockEntityType<?>> automataStartType = blockDeferredRegister.register(
-            automata_start,
+            automata_start+"_entity_type",
             () -> BlockEntityType.Builder.of(
                 (pos, state) -> new AutomataStartBlockEntity(blockEntityTypeHolder, pos, state),
                 automataStartBlockEntity.get()
