@@ -2,15 +2,15 @@ package br.com.isageek.automata.forge;
 
 import br.com.isageek.automata.automata.AutomataStartBlock;
 import br.com.isageek.automata.automata.AutomataStartState;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class WorldController {
 
-    private World world;
+    private Level world;
     private final Block[] any;
     private final Block automata;
     private final Block terminator;
@@ -26,19 +26,19 @@ public class WorldController {
     private final Block yRotation;
 
     public WorldController(
-            final Block[] any,
-            final Block automata,
-            final Block terminator,
-            final Block start,
-            final Block airPlaceholder,
-            final Block gravelPlaceholder,
-            final Block redSandPlaceholder,
-            final Block sandPlaceholder,
-            final Block waterPlaceholder,
-            final Block lavaPlaceholder,
-            final Block tntPlaceholder,
-            final Block bedrockPlaceholder,
-            final Block yRotation
+        final Block[] any,
+        final Block automata,
+        final Block terminator,
+        final Block start,
+        final Block airPlaceholder,
+        final Block gravelPlaceholder,
+        final Block redSandPlaceholder,
+        final Block sandPlaceholder,
+        final Block waterPlaceholder,
+        final Block lavaPlaceholder,
+        final Block tntPlaceholder,
+        final Block bedrockPlaceholder,
+        final Block yRotation
     ) {
         this.any = any;
         this.automata = automata;
@@ -92,7 +92,7 @@ public class WorldController {
         return null;
     }
 
-    void set(final World world){
+    public void set(final Level world){
         this.world = world;
     }
 
@@ -127,14 +127,14 @@ public class WorldController {
         return BlockStateHolder.block(blockState);
     }
 
-    public boolean isTerminator(final BlockPos p) { return this.is(p, this.terminator);}
-    public boolean isBedrock(final BlockPos p) { return this.is(p, Blocks.BEDROCK);}
+    public boolean isTerminator(final BlockPos p) { return this.blockAtPositionHasType(p, this.terminator);}
+    public boolean isBedrock(final BlockPos p) { return this.blockAtPositionHasType(p, Blocks.BEDROCK);}
 
-    private boolean is(final BlockPos p, final Block blockType) {
+    private boolean blockAtPositionHasType(final BlockPos p, final Block blockType) {
         return this.world.getBlockState(p).getBlock() == blockType;
     }
 
-    public boolean is(final BlockPos p, final BlockStateHolder blockType) {
+    public boolean blockAtPositionHasType(final BlockPos p, final BlockStateHolder blockType) {
         return this.world.getBlockState(p).getBlock() == blockType.blockState.getBlock();
     }
 
@@ -191,7 +191,10 @@ public class WorldController {
 
     public BlockStateHolder getAutomata() { return BlockStateHolder.block(this.automata.defaultBlockState()); }
 
-    public void setStateAt(final BlockPos pos, final AutomataStartState state){
+    public void setStateAt(
+        final BlockPos pos,
+        final AutomataStartState state
+    ){
         final BlockState newBlockState = this.start.defaultBlockState().setValue(AutomataStartBlock.state, state);
         this.world.setBlock(pos, newBlockState,0 ,0);
     }

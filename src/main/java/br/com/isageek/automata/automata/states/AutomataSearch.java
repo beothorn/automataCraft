@@ -5,13 +5,17 @@ import br.com.isageek.automata.automata.AutomataStartState;
 import br.com.isageek.automata.forge.BlockStateHolder;
 import br.com.isageek.automata.forge.EntityTick;
 import br.com.isageek.automata.forge.WorldController;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * In this state, a block of MAX_SEARCH_RADIUS^3 will be scanned, starting from the automata start block position.
+ *
+ */
 public class AutomataSearch implements EntityTick {
 
     private final HashMap<BlockStateHolder, HashSet<BlockPos>> replaceables;
@@ -35,9 +39,9 @@ public class AutomataSearch implements EntityTick {
 
     @Override
     public EntityTick tick(
-            final BlockPos center,
-            final WorldController worldController,
-            final long delta
+        final BlockPos center,
+        final WorldController worldController,
+        final long delta
     ) {
 
         if(!worldController.hasNeighborSignal(center)) {
@@ -50,9 +54,9 @@ public class AutomataSearch implements EntityTick {
             final BlockStateHolder blockToReplace = entry.getKey();
             final HashSet<BlockPos> blockPositions = entry.getValue();
             final HashSet<BlockPos> newBlockPositions = new HashSet<>();
-            for (final BlockPos p: blockPositions) {
-                if(worldController.is(p, blockToReplace)){
-                    newBlockPositions.add(p);
+            for (final BlockPos currentPosition: blockPositions) {
+                if(worldController.blockAtPositionHasType(currentPosition, blockToReplace)){
+                    newBlockPositions.add(currentPosition);
                 }
             }
 
@@ -61,7 +65,7 @@ public class AutomataSearch implements EntityTick {
                 for (int y = -AutomataMod.MAX_SEARCH_RADIUS; y <= AutomataMod.MAX_SEARCH_RADIUS; y++) {
                     for (int z = -AutomataMod.MAX_SEARCH_RADIUS; z <= AutomataMod.MAX_SEARCH_RADIUS; z++) {
                         final BlockPos currentPos = center.offset(x, y, z);
-                        if(worldController.is(currentPos, blockToReplace)){
+                        if(worldController.blockAtPositionHasType(currentPos, blockToReplace)){
                             newBlockPositions.add(currentPos);
                         }
                     }
