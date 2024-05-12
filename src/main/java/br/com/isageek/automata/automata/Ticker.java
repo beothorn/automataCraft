@@ -29,7 +29,6 @@ public class Ticker implements BlockEntityTicker {
         final @NotNull BlockState blockState,
         final @NotNull BlockEntity blockEntity
     ) {
-        System.out.println("blockState "+blockState);
         worldController.set(level);
         long now = entityClock.currentTimeMillis();
         ((AutomataStartBlockEntity) blockEntity).tick(blockPos,worldController,now);

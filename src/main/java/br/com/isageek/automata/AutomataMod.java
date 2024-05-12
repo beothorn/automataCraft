@@ -2,8 +2,6 @@ package br.com.isageek.automata;
 
 import br.com.isageek.automata.automata.AutomataStartBlock;
 import br.com.isageek.automata.automata.AutomataStartBlockEntity;
-import br.com.isageek.automata.structures.NamedStructure;
-import br.com.isageek.automata.structures.Rule30;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -11,13 +9,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -39,8 +34,6 @@ public class AutomataMod
     public static final int EXECUTE_MINIMAL_TICK_INTERVAL = 500;
     public static final int EXECUTE_THROTTLE_AFTER_AUTOMATA_COUNT = 8000;
     public final static long SEARCH_AGAIN_TIMEOUT = 3000;
-
-
 
     public static final String automata_start = "automata_start";
 
@@ -72,15 +65,6 @@ public class AutomataMod
         automata_y_rotation
     };
 
-    // STRUCTURES
-
-    public static final String rule30 = "r30";
-    public static final String lavaTrap = "lavatrap";
-    public static final String rainbow = "rainbow";
-
-    public static final NamedStructure[] STRUCTURES = {
-    };
-
     private final Map<String, RegistryObject<Block>> registeredBlocks = new HashMap<>();
 
     public AutomataMod() {
@@ -93,15 +77,6 @@ public class AutomataMod
         }
         registerAutomataStartBlockWithBlockEntity(modEventBus);
 
-//        for (String structureName : STRUCTURES) {
-//            registerStructure(structureName, modEventBus);
-//        }
-
-//        registerStructure(rule30, modEventBus, () -> new Rule30().type());
-
-        // https://gist.github.com/GentlemanRevvnar/98a8f191f46d28f63592672022c41497
-        // https://minecraft.wiki/w/Tutorials/Custom_structures
-        // https://github.com/TelepathicGrunt/StructureTutorialMod?tab=readme-ov-file
         DeferredRegister<StructureType<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(Registries.STRUCTURE_TYPE, AutomataMod.MOD_ID);
         DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
 
@@ -180,20 +155,5 @@ public class AutomataMod
                 event.accept(automataBlock);
             }
         }
-    }
-
-    private void registerStructure(
-        final String structureName,
-        final IEventBus modEventBus,
-        final Supplier<StructureType<?>> structureSupplier
-    ) {
-        final DeferredRegister<StructureType<?>> structureDeferredRegister = DeferredRegister.create(
-            Registries.STRUCTURE_TYPE,
-            AutomataMod.MOD_ID
-        );
-        final RegistryObject<StructureType<?>> structure = structureDeferredRegister.register(structureName, structureSupplier);
-        structureDeferredRegister.register(modEventBus);
-
-        modEventBus.addListener(EventPriority.NORMAL, (GatherDataEvent event) -> System.out.println("xxx"));
     }
 }

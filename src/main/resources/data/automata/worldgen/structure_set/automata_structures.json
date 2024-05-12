@@ -3,6 +3,12 @@
     {
       "structure": "automata:rule_thirty",
       "weight": 1
+    },{
+      "structure": "automata:lavatrap",
+      "weight": 1
+    },{
+      "structure": "automata:rainbow",
+      "weight": 1
     }
   ],
   "placement": {
