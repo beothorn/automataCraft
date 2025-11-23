@@ -13,8 +13,6 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.ForgeRegistries;
@@ -67,10 +65,7 @@ public class AutomataMod
 
     private final Map<String, RegistryObject<Block>> registeredBlocks = new HashMap<>();
 
-    public AutomataMod() {
-        final IEventBus eventBus = NeoForge.EVENT_BUS;
-        eventBus.register(this);
-        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public AutomataMod(IEventBus modEventBus) {
 
         for (String blockName : AUTOMATA_BLOCK) {
             registerBlock(blockName, modEventBus);
